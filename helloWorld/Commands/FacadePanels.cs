@@ -9,13 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection.Emit;
+using System.Collections.ObjectModel;
 
 namespace Technopark.Commands
 {
     [Transaction(TransactionMode.Manual)]
     public class FacadePanels : IExternalCommand
     {
-        IDictionary<string, double> R_wall = new Dictionary<string, double>(){
+        readonly IDictionary<string, double> R_wall = new Dictionary<string, double>(){
             {"EWS11", 0.710},
             {"EWS12", 0.710},
             {"EWS13", 0.710},
@@ -35,13 +36,13 @@ namespace Technopark.Commands
             {"door", 0.63}
         };
 
-        string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_panels_from_level.txt";
-        string pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
+        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_panels_from_level.txt";
+        readonly string pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
         string outputFileName;
 
-        List<string> archModelTitles = new List<string>() { "164_TPS_Arch_GOR_EXT_A-C_Panel_(MEP)" };
+        readonly List<string> archModelTitles = new List<string>() { "164_TPS_Arch_GOR_EXT_A-C_Panel_(MEP)" };
 
-        IDictionary<string, double> levelsHightLimit = new Dictionary<string, double>(14) {
+        readonly IDictionary<string, double> levelsHightLimit = new Dictionary<string, double>(14) {
                 {"level_1_floor" , 0.0},
                 {"level_2_floor" , 30.5},
                 {"level_3_floor" , 53.20},
@@ -161,7 +162,6 @@ namespace Technopark.Commands
 
             foreach (Element e in revitLinks)
             {
-
                 try
                 {
                     RevitLinkInstance Instance = e as RevitLinkInstance;
@@ -171,9 +171,7 @@ namespace Technopark.Commands
 
                     if (archModelTitles.Contains(docLink.Title.ToString()))
                     {
-
                         logFile.WriteLine("found right Document");  //log
-
                         try
                         {
                             IList<Element> walls = new FilteredElementCollector(docLink)
