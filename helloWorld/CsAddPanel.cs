@@ -21,8 +21,20 @@ namespace NewPanelNamespace
         public Result OnStartup(UIControlledApplication application)
         {
             RibbonPanel panel = RibbonPanel(application);
-
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
+
+
+            if (panel.AddItem(new PushButtonData("FAQ", "Info", thisAssemblyPath, "Technopark.Commands.FAQ"))
+                is PushButton buttonFAQ)
+            {
+                buttonFAQ.ToolTip = "Информация о работе плагина";
+
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "ImageFAQ.png"));
+                BitmapImage bitmapImage = new BitmapImage(uri);
+                buttonFAQ.LargeImage = bitmapImage;
+            }
+
+            panel.AddSeparator();
 
             if (panel.AddItem(new PushButtonData("Technopark.Button_0", "Get Panels info", thisAssemblyPath, "Technopark.Commands.FacadePanels"))
                 is PushButton button)
@@ -33,26 +45,9 @@ namespace NewPanelNamespace
                     + Environment.NewLine
                     + "Наружные ограждения сопоставить с размещенными инженерными спэйсами";
 
-                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Revit.ico"));
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image1.png"));
                 BitmapImage bitmapImage = new BitmapImage(uri);
                 button.LargeImage = bitmapImage;
-
-            }
-
-            panel.AddSeparator();
-
-            if (panel.AddItem(new PushButtonData("Technopark.Button_1", "Get Panels info_2", thisAssemblyPath, "Technopark.Commands.FacadePanels"))
-                is PushButton button2)
-            {
-                button2.ToolTip = "Выгрузка фасадных панелей для отопления"
-                    + Environment.NewLine
-                    + "для расчета теплопотерь."
-                    + Environment.NewLine
-                    + "Наружные ограждения сопоставить с размещенными инженерными спэйсами";
-
-                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Revit.ico"));
-                BitmapImage bitmapImage = new BitmapImage(uri);
-                button2.LargeImage = bitmapImage;
 
             }
 
@@ -105,13 +100,29 @@ namespace NewPanelNamespace
             Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Revit.ico"));
             BitmapImage bitmapImage = new BitmapImage(uri);
 
-            PushButtonData WireFrame = new PushButtonData("WireFrame", "WireFrame", thisAssemblyPath, "StackedButton.Commands.WireFrameCommand");
-            WireFrame.ToolTip = "Change visual style to WireFrame";
-            WireFrame.Image = bitmapImage;
+            Uri uri_2 = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2.png"));
+            BitmapImage bitmapImage_2 = new BitmapImage(uri_2);
 
-            PushButtonData HiddenLine = new PushButtonData("HiddenLine", "HiddenLine", thisAssemblyPath, "StackedButton.Commands.HiddenLine");
-            HiddenLine.ToolTip = "Change visual style to HiddenLine";
-            HiddenLine.Image = bitmapImage;
+            PushButtonData SpaceHeatLossesFill = new PushButtonData("Technopark.Button_3", 
+                "Заполнить теплопотери", 
+                thisAssemblyPath, 
+                "Technopark.Commands.SpaceHeatLossesFill");
+            SpaceHeatLossesFill.ToolTip = "Запись теплопотерь из расчета в Spaces";
+            SpaceHeatLossesFill.Image = bitmapImage_2;
+
+            PushButtonData ConvectorsPower_to_space_5lvl = new PushButtonData("ConvectorsPower_to_space_5lvl", 
+                "ConvectorsPower_to_space_5lvl", 
+                thisAssemblyPath, 
+                "StackedButton.Commands.ConvectorsPower_to_space_5lvl");
+            ConvectorsPower_to_space_5lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+            ConvectorsPower_to_space_5lvl.Image = bitmapImage;
+
+            PushButtonData ConvectorsPower_to_space_6lvl = new PushButtonData("ConvectorsPower_to_space_6lvl", 
+                "ConvectorsPower_to_space_6lvl", 
+                thisAssemblyPath, 
+                "StackedButton.Commands.ConvectorsPower_to_space_6lvl");
+            ConvectorsPower_to_space_6lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+            ConvectorsPower_to_space_6lvl.Image = bitmapImage;
 
             PushButtonData Shaded = new PushButtonData("Shaded", "Shaded", thisAssemblyPath, "StackedButton.Commands.Shaded");
             Shaded.ToolTip = "Change visual style to Shaded";
@@ -121,8 +132,8 @@ namespace NewPanelNamespace
             Realistic.ToolTip = "Change visual style to Realistic";
             Realistic.Image = bitmapImage;
 
-            IList<RibbonItem> ribbonItemsA = panel.AddStackedItems(WireFrame, HiddenLine);
-            IList<RibbonItem> ribbonItemsB = panel.AddStackedItems(Shaded, Realistic);
+            IList<RibbonItem> ribbonItemsA = panel.AddStackedItems(SpaceHeatLossesFill, ConvectorsPower_to_space_5lvl, ConvectorsPower_to_space_6lvl);
+            //IList<RibbonItem> ribbonItemsB = panel.AddStackedItems(Shaded, Realistic);
 
         }
 
