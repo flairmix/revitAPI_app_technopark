@@ -101,7 +101,13 @@ namespace NewPanelNamespace
             BitmapImage bitmapImage = new BitmapImage(uri);
 
             Uri uri_2 = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2.png"));
-            BitmapImage bitmapImage_2 = new BitmapImage(uri_2);
+            BitmapImage bitmapImage_2 = new BitmapImage(uri_2);            
+            
+            Uri uri_5lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image5lvl.png"));
+            BitmapImage bitmapImage_5lvl = new BitmapImage(uri_5lvl);
+
+            Uri uri_6lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image6lvl.png"));
+            BitmapImage bitmapImage_6lvl = new BitmapImage(uri_6lvl);
 
             PushButtonData SpaceHeatLossesFill = new PushButtonData("Technopark.Button_3", 
                 "Заполнить теплопотери", 
@@ -115,14 +121,14 @@ namespace NewPanelNamespace
                 thisAssemblyPath, 
                 "StackedButton.Commands.ConvectorsPower_to_space_5lvl");
             ConvectorsPower_to_space_5lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_5lvl.Image = bitmapImage;
+            ConvectorsPower_to_space_5lvl.Image = bitmapImage_5lvl;
 
             PushButtonData ConvectorsPower_to_space_6lvl = new PushButtonData("ConvectorsPower_to_space_6lvl", 
                 "ConvectorsPower_to_space_6lvl", 
                 thisAssemblyPath, 
                 "StackedButton.Commands.ConvectorsPower_to_space_6lvl");
             ConvectorsPower_to_space_6lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_6lvl.Image = bitmapImage;
+            ConvectorsPower_to_space_6lvl.Image = bitmapImage_6lvl;
 
             PushButtonData Shaded = new PushButtonData("Shaded", "Shaded", thisAssemblyPath, "StackedButton.Commands.Shaded");
             Shaded.ToolTip = "Change visual style to Shaded";
