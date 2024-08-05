@@ -81,7 +81,7 @@
     <Content Include="Resources\Image2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Image1.png">
+    <Content Include="Resources\Image_Emoji1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Revit.ico">

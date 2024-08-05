@@ -45,7 +45,7 @@ namespace NewPanelNamespace
                     + Environment.NewLine
                     + "Наружные ограждения сопоставить с размещенными инженерными спэйсами";
 
-                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image1.png"));
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji1.png"));
                 BitmapImage bitmapImage = new BitmapImage(uri);
                 button.LargeImage = bitmapImage;
 
