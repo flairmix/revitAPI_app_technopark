@@ -53,12 +53,10 @@
     <Compile Include="Commands\Faq.cs" />
     <Compile Include="Commands\ConvectorsPower_to_space_6lvl.cs" />
     <Compile Include="Commands\ConvectorsPower_to_space_5lvl.cs" />
+    <Compile Include="Commands\HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
     <Compile Include="Commands\SpaceHeatLossesFill.cs" />
     <Compile Include="Commands\HelloWorld.cs" />
-    <Compile Include="Commands\HiddenLine.cs" />
     <Compile Include="Commands\FacadePanels.cs" />
-    <Compile Include="Commands\Realistic.cs" />
-    <Compile Include="Commands\Shaded.cs" />
     <Compile Include="Commands\WireFrameCommand.cs" />
     <Compile Include="CsAddPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

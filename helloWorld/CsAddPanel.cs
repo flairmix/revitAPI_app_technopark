@@ -57,6 +57,19 @@ namespace NewPanelNamespace
 
             panel.AddSeparator();
 
+
+            if (panel.AddItem(new PushButtonData("Heating.Heating_1", "Heating_1", thisAssemblyPath, "HeatingSpecPrep.Commands.hvacHeating_SystemNameHandler"))
+                is PushButton buttonHeating_1)
+            {
+                buttonHeating_1.ToolTip = "Спецификация отопления. Перезапись имени системы";
+
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji1.png"));
+                BitmapImage bitmapImage = new BitmapImage(uri);
+                buttonHeating_1.LargeImage = bitmapImage;
+
+            }
+
+
             return Result.Succeeded;
 
         }

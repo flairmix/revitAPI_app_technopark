@@ -9,8 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Autodesk.Revit.DB.Visual;
 
-namespace Technopark.HeatingSpecPrep.Commands
+namespace HeatingSpecPrep.Commands
 {
     [Transaction(TransactionMode.Manual)]
     public class hvacHeating_SystemNameHandler : IExternalCommand
@@ -48,24 +50,126 @@ namespace Technopark.HeatingSpecPrep.Commands
             {"OST_FlexPipeCurves", 0},
             {"OST_PipeInsulations", 0}
         };
+            
+        readonly string logFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\logs_systemName\";
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiApp = commandData.Application;
-            Document doc = uiApp.ActiveUIDocument.Document;
+            Document doc = uiApp.ActiveUIDocument.Document; 
             Autodesk.Revit.DB.View activeView = doc.ActiveView;
             //Parameter param = activeView.get_Parameter(BuiltInParameter.MODEL_GRAPHICS_STYLE);
 
-            string userlog = doc.PathName;
-            string[] userlog_data = userlog.Split(new char[] { '\\' });
+            string username = doc.Title.Split('_').ToList().Last();
+            string projectNumber = doc.Title.Split('_').ToList().First();
             string datelog = DateTime.Now.ToLocalTime().ToString("yyyyMMdd_HHmmss");
-            string docBuilding = doc.Title.ToString().Replace("_" + doc.Application.Username, "").ToList().Last().ToString();
 
 
+            using (StreamWriter log = new StreamWriter(logFolder + datelog + "_" + username + "_" + "log.txt"))
+            {
+                log.WriteLine("hvacHeating_SystemNameHandler");
+                log.WriteLine("username " + username);
+                log.WriteLine("date " + datelog);
+                log.WriteLine("projectNumber " + projectNumber);
+                log.WriteLine("doc.Title " + doc.Title);
+
+                // reading csv with prepared Names of heating piping systems 
+                string path = @"P:\MOS-TLP\PROJEKTE\11692\05_HAUSTECHNIK\01_Planung\04_Genehmigungsplanung\01_HVaC\01_Documents\99_Others\";
+                string file = "11692_Dictionary_SysName_" + "A_heating";
+
+                List<string> listA = new List<string>();
+                List<string> listB = new List<string>();
+
+                Dictionary <string, string> keyValuePairs = new Dictionary<string, string>();
+                
+                //TO DO - read source file with systems 
+
+                /*            using (var reader = new System.IO.StreamReader(path + file + ".csv"))
+                            {
+
+                                while (!reader.EndOfStream)
+                                {
+                                    var values = reader.ReadLine().Split(',');
+
+                                    if (values[0] != "" && !systemsNew.Keys.Contains(values[0]))
+                                    {
+                                        systemsNew.Add(values[0], values[1]);
+
+                                        listA.Add(values[0]);
+                                        listB.Add(values[1]);
+                                    }
+                                }
+                            }*/
 
 
+                foreach (var category in categories)
+                {
+                    string temp_group = category.ToString();
+                    List<Element> filtered_elements = Select_elements(doc, worksets_user_black_list, category);
 
+                    // write parameter "ИмяСистемы"
+                    using (Transaction tr = new Transaction(doc, "tr"))
+                    {
+                        tr.Start();
 
+                        foreach (Element element in filtered_elements)
+                        {
+                            try
+                            {
+                                if (element.Category.Name == "Mechanical Equipment")
+                                {
+                                    Set_parameter_SystemName_mechanical(doc, element, "ИмяСистемы", systemsNew);
+                                    systemsCount[temp_group]++;
+                                }
+                                else
+                                {
+                                    element.LookupParameter("ИмяСистемы").Set(systemsNew[element.LookupParameter("System Name").AsString()]);
+                                    systemsCount[temp_group]++;
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                log.WriteLine("FAIL   " + e + " - element - " + element.Name + "\n");
+                            }
+                        }
+
+                        tr.Commit();
+                    }
+
+                    // group elements by category for schedules
+                    using (Transaction tr = new Transaction(doc, "tr"))
+                    {
+                        tr.Start();
+                        foreach (Element element in filtered_elements)
+                        {
+                            try
+                            {
+                                element.LookupParameter("ADSK_Группирование").Set(groupNew[temp_group]);
+                            }
+                            catch (Exception e)
+                            {
+                                log.WriteLine("!!!FAIL!!!!   " + e + " - element - " + element.Name);
+                            }
+                        }
+                        tr.Commit();
+                    }
+                }
+
+                // show TaskDialog window with count of handled elements 
+                TaskDialog td = new TaskDialog("nameTD");
+                td.MainInstruction = "";
+                List<string> keysSystemsCount = systemsCount.Keys.ToList();
+
+                foreach (var key in keysSystemsCount)
+                {
+                    td.MainInstruction += key + " --- " + systemsCount[key] + "шт.\n";
+                }
+                td.MainInstruction += doc.Title.ToString() + "\n";
+                td.MainInstruction += doc.Title.ToString().Replace("_" + doc.Application.Username, "");
+                td.MainInstruction += doc.Title.ToString().Replace("_" + doc.Application.Username, "") + "\n";
+                td.MainInstruction += doc.Title.ToString().Replace("_" + doc.Application.Username, "").ToList().Last().ToString() + "\n";
+                td.Show();
+            }
 
 
             return Result.Succeeded;
