@@ -17,6 +17,8 @@ namespace Technopark.Commands
     public class ConvectorsPower_to_space_6lvl : IExternalCommand
     {
         int levelID = 725701;
+        int worksetIdHeating = 440;
+        int phaseConvectorInt = 3;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiApp = commandData.Application;
@@ -25,6 +27,17 @@ namespace Technopark.Commands
             string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log.txt";
             string p_ADSK_Zone = "ADSK_Зона";
             string p_ADSK_HeatingPower_in_zone = "ADSK_Тепловая мощность";
+
+            PhaseArray phases = doc.Phases;
+            Phase phaseConvector = null;
+
+            foreach (Phase phase in phases)
+            {
+                if (phase.Id.IntegerValue == phaseConvectorInt)
+                {
+                    phaseConvector = phase;
+                }
+            }
 
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
@@ -66,7 +79,7 @@ namespace Technopark.Commands
                         {
                             try
                             {
-                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ) as Space;
+                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ, phaseConvector) as Space;
                                 string spaceZone = spaceWhereConvector.LookupParameter(p_ADSK_Zone).AsString();
                                 double heat_power = convectors[i].LookupParameter("MC Piping Power").AsDouble();
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
@@ -85,7 +98,7 @@ namespace Technopark.Commands
                         {
                             try
                             {
-                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ_plusY) as Space;
+                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ_plusY, phaseConvector) as Space;
                                 string spaceZone = spaceWhereConvector.LookupParameter(p_ADSK_Zone).AsString();
                                 double heat_power = convectors[i].LookupParameter("MC Piping Power").AsDouble();
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
@@ -104,7 +117,7 @@ namespace Technopark.Commands
                         {
                             try
                             {
-                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ_minusY) as Space;
+                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ_minusY, phaseConvector) as Space;
                                 string spaceZone = spaceWhereConvector.LookupParameter(p_ADSK_Zone).AsString();
                                 double heat_power = convectors[i].LookupParameter("MC Piping Power").AsDouble();
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();

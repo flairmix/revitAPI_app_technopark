@@ -14,12 +14,11 @@ using System.IO;
 namespace Technopark.Commands
 {
     [Transaction(TransactionMode.Manual)]
-    public class ConvectorsPower_to_space_5lvl : IExternalCommand
+    public class ConvectorsPower_to_space_4lvl : IExternalCommand
     {
-        int levelID = 725700;
+        int levelID = 725699;
         int worksetIdHeating = 440;
         int phaseConvectorInt = 3;
-
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiApp = commandData.Application;
@@ -50,7 +49,7 @@ namespace Technopark.Commands
                     IList<Element> convectors = new FilteredElementCollector(doc)
                         .OfCategory(BuiltInCategory.OST_MechanicalEquipment)
                         .WhereElementIsNotElementType().ToList()
-                        .Where(x => x.LookupParameter("ADSK_Обозначение") != null && x.WorksetId.IntegerValue == 410 && x.LevelId.IntegerValue == levelID)
+                        .Where(x => x.LookupParameter("ADSK_Обозначение") != null && x.WorksetId.IntegerValue == worksetIdHeating && x.LevelId.IntegerValue == levelID)
                         .ToList();
 
                     IList<Element> spaces = new FilteredElementCollector(doc)
@@ -76,8 +75,7 @@ namespace Technopark.Commands
                         XYZ convectorLocationPointZ_plusY = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y + 3.0, convectorLocationPoint.Z + 3.0);
                         XYZ convectorLocationPointZ_minusY = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y - 3.0, convectorLocationPoint.Z + 3.0);
 
-
-                        if (doc.GetSpaceAtPoint(convectorLocationPointZ) != null)
+                        if (doc.GetSpaceAtPoint(convectorLocationPointZ, phaseConvector) != null)
                         {
                             try
                             {
@@ -96,7 +94,7 @@ namespace Technopark.Commands
 
                             }
                         }
-                        else if (doc.GetSpaceAtPoint(convectorLocationPointZ_plusY, phaseConvector) != null)
+                        else if (doc.GetSpaceAtPoint(convectorLocationPointZ_plusY) != null)
                         {
                             try
                             {
@@ -119,7 +117,7 @@ namespace Technopark.Commands
                         {
                             try
                             {
-                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ_minusY) as Space;
+                                Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ_minusY, phaseConvector) as Space;
                                 string spaceZone = spaceWhereConvector.LookupParameter(p_ADSK_Zone).AsString();
                                 double heat_power = convectors[i].LookupParameter("MC Piping Power").AsDouble();
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
