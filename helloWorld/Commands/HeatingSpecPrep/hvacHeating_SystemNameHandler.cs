@@ -12,9 +12,15 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Autodesk.Revit.DB.Visual;
 
+/// <info>
+/// WIP
+/// NOT working
+/// </info>
+
 namespace HeatingSpecPrep.Commands
 {
     [Transaction(TransactionMode.Manual)]
+
     public class hvacHeating_SystemNameHandler : IExternalCommand
     {
         readonly List<string> worksets_user_black_list = new List<string>(2) { "310_Ventilation", "315_Smoke removal" };

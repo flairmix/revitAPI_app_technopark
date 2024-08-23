@@ -75,6 +75,18 @@ namespace NewPanelNamespace
 
             panel.AddSeparator();
 
+            if (panel.AddItem(new PushButtonData("Technopark.Button_2", "ConvectorZone", thisAssemblyPath, "Technopark.Commands.ADSK_Zone_by_Space"))
+                is PushButton button_ADSK_Zone_by_Space)
+            {
+                button_ADSK_Zone_by_Space.ToolTip = "Запись ADKS_Зона в конвекторы по значению из Space, в котором они находятся";
+
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji3.png"));
+                BitmapImage bitmapImage = new BitmapImage(uri);
+                button_ADSK_Zone_by_Space.LargeImage = bitmapImage;
+            }
+
+            panel.AddSeparator();
+
             // TODO TESTing - testing heating module for specification 
 
             //if (panel.AddItem(new PushButtonData("Heating.Heating_1", "Heating_1", thisAssemblyPath, "HeatingSpecPrep.Commands.hvacHeating_SystemNameHandler"))
@@ -134,6 +146,15 @@ namespace NewPanelNamespace
             Uri uri_2 = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2.png"));
             BitmapImage bitmapImage_2 = new BitmapImage(uri_2);            
             
+            Uri uri_1lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image1lvl.png"));
+            BitmapImage bitmapImage_1lvl = new BitmapImage(uri_1lvl);    
+                                    
+            Uri uri_2lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2lvl.png"));
+            BitmapImage bitmapImage_2lvl = new BitmapImage(uri_2lvl);    
+                                    
+            Uri uri_3lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image3lvl.png"));
+            BitmapImage bitmapImage_3lvl = new BitmapImage(uri_3lvl);    
+                                    
             Uri uri_4lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image4lvl.png"));
             BitmapImage bitmapImage_4lvl = new BitmapImage(uri_4lvl);    
                         
@@ -143,6 +164,27 @@ namespace NewPanelNamespace
             Uri uri_6lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image6lvl.png"));
             BitmapImage bitmapImage_6lvl = new BitmapImage(uri_6lvl);
 
+
+            PushButtonData ConvectorsPower_to_space_1lvl = new PushButtonData("ConvectorsPower_to_space_1lvl", 
+                "ConvectorsPower_to_space_1lvl", 
+                thisAssemblyPath,
+                "Technopark.Commands.ConvectorsPower_to_space_1lvl");
+            ConvectorsPower_to_space_1lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+            ConvectorsPower_to_space_1lvl.Image = bitmapImage_1lvl;
+
+            PushButtonData ConvectorsPower_to_space_2lvl = new PushButtonData("ConvectorsPower_to_space_2lvl", 
+                "ConvectorsPower_to_space_2lvl", 
+                thisAssemblyPath,
+                "Technopark.Commands.ConvectorsPower_to_space_2lvl");
+            ConvectorsPower_to_space_2lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+            ConvectorsPower_to_space_2lvl.Image = bitmapImage_2lvl;
+
+            PushButtonData ConvectorsPower_to_space_3lvl = new PushButtonData("ConvectorsPower_to_space_3lvl", 
+                "ConvectorsPower_to_space_3lvl", 
+                thisAssemblyPath,
+                "Technopark.Commands.ConvectorsPower_to_space_3lvl");
+            ConvectorsPower_to_space_3lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+            ConvectorsPower_to_space_3lvl.Image = bitmapImage_3lvl;
 
             PushButtonData ConvectorsPower_to_space_4lvl = new PushButtonData("ConvectorsPower_to_space_4lvl", 
                 "ConvectorsPower_to_space_4lvl", 
@@ -173,7 +215,7 @@ namespace NewPanelNamespace
             Realistic.ToolTip = "Change visual style to Realistic";
             Realistic.Image = bitmapImage;
 
-            //IList<RibbonItem> ribbonItemsA = panel.AddStackedItems(ConvectorsPower_to_space_3lvl, Shaded, Realistic);
+            IList<RibbonItem> ribbonItemsA = panel.AddStackedItems(ConvectorsPower_to_space_1lvl, ConvectorsPower_to_space_2lvl, ConvectorsPower_to_space_3lvl);
             IList<RibbonItem> ribbonItemsB = panel.AddStackedItems(ConvectorsPower_to_space_4lvl, ConvectorsPower_to_space_5lvl, ConvectorsPower_to_space_6lvl);
 
         }

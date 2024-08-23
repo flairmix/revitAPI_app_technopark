@@ -60,6 +60,7 @@ namespace Technopark.Commands
             };
 
         int level;
+
         IDictionary<string, int> docFileLevel = new Dictionary<string, int>(4) {
             {"11899_TPS_MEP_OT_ATP_A-C_L1-L2", 1},
             {"11899_TPS_MEP_OT_ATP_A-C_L3-L4", 3},
@@ -67,12 +68,27 @@ namespace Technopark.Commands
             {"11899_TPS_MEP_OT_ATP_A-C_L7", 7}
         };
 
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+
+
+public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiApp = commandData.Application;
             Document doc = uiApp.ActiveUIDocument.Document;
             Autodesk.Revit.DB.View activeView = doc.ActiveView;
-            //Parameter param = activeView.get_Parameter(BuiltInParameter.MODEL_GRAPHICS_STYLE);
+
+            //phase determine for finding spaces
+            int phaseConvectorInt = 3;
+
+            PhaseArray phases = doc.Phases;
+            Phase phaseConvector = null;
+
+            foreach (Phase phase in phases)
+            {
+                if (phase.Id.IntegerValue == phaseConvectorInt)
+                {
+                    phaseConvector = phase;
+                }
+            }
 
             using (StreamWriter log = new StreamWriter(pathLogs)) 
             {
@@ -95,7 +111,8 @@ namespace Technopark.Commands
                             archModelTitles, 
                             levelsHightLimit["level_" + level.ToString() + "_floor"], 
                             levelsHightLimit["level_" + level.ToString() + "_ceiling"], 
-                            60);
+                            60,
+                            phaseConvector);
 
                         MessageBox.Show("Уровень - " + level.ToString() + Environment.NewLine
                             + " - Успех" + Environment.NewLine
@@ -105,7 +122,6 @@ namespace Technopark.Commands
                     {
                         TaskDialog.Show("Error", ex.Message);
                     }
-
                 }
 
                 if(level != 7)
@@ -122,7 +138,8 @@ namespace Technopark.Commands
                                 archModelTitles,
                                 levelsHightLimit["level_" + level.ToString() + "_floor"],
                                 levelsHightLimit["level_" + level.ToString() + "_ceiling"],
-                                60);
+                                60,
+                                phaseConvector);
 
                             MessageBox.Show("Уровень - " + level.ToString() + Environment.NewLine
                                 + " - Успех" + Environment.NewLine
@@ -136,16 +153,6 @@ namespace Technopark.Commands
                     }
                 }
             }
-
-            //using (Transaction trans = new Transaction(doc))
-            //{
-            //    trans.Start("Change visual style");
-
-            //    param.Set(6);
-
-            //    trans.Commit();
-            //}
-
             return Result.Succeeded;
         }
 
@@ -155,10 +162,13 @@ namespace Technopark.Commands
                                             List<string> archModelTitles,
                                            double hightLimitDown,
                                            double hightLimitUp,
-                                           int finderRadius
+                                           int finderRadius, 
+                                           Phase phase
                                            )
         {
-            FilteredElementCollector revitLinks = new FilteredElementCollector(_doc).OfClass(typeof(RevitLinkInstance)).WhereElementIsNotElementType();
+            FilteredElementCollector revitLinks = new FilteredElementCollector(_doc)
+                .OfClass(typeof(RevitLinkInstance))
+                .WhereElementIsNotElementType();
 
             foreach (Element e in revitLinks)
             {
@@ -198,7 +208,7 @@ namespace Technopark.Commands
                                                   + "," + System.Math.Round(doorLocation.Point.X, 2).ToString()
                                                   + "," + System.Math.Round(doorLocation.Point.Y, 2).ToString()
                                                   + "," + System.Math.Round(doorLocation.Point.Z, 2).ToString()
-                                                  + "," + checkSpacesAround(_doc, doorLocation.Point, finderRadius, logFile)
+                                                  + "," + checkSpacesAround(_doc, doorLocation.Point, finderRadius, logFile, phase)
                                                   + "," + System.Math.Round(UnitUtils.ConvertFromInternalUnits(door.LookupParameter("Площадь проема").AsDouble(), UnitTypeId.SquareMeters), 3)
                                                   + "," + R_wall["door"]
                                                   + "," + door.LookupParameter("ADSK_Позиция на схеме").AsString()
@@ -235,7 +245,7 @@ namespace Technopark.Commands
                                                               + "," + System.Math.Round(center.X, 2).ToString()
                                                               + "," + System.Math.Round(center.Y, 2).ToString()
                                                               + "," + System.Math.Round(center.Z, 2).ToString()
-                                                              + "," + checkSpacesAround(_doc, center, finderRadius, logFile)
+                                                              + "," + checkSpacesAround(_doc, center, finderRadius, logFile, phase)
                                                               + "," + System.Math.Round(UnitUtils.ConvertFromInternalUnits(wall.LookupParameter("Area").AsDouble(), UnitTypeId.SquareMeters), 3).ToString()
                                                               + "," + R_wall[wall.Name.ToString()]
                                                             + "," + wall.LookupParameter("ADSK_Позиция на схеме").AsString()
@@ -243,16 +253,14 @@ namespace Technopark.Commands
                                             }
                                         }
                                     }
-                                    catch (Exception e1)
+                                    catch (Exception)
                                     {
-                                        logFile.WriteLine(e1.Message.ToString() + "упало на цикле - " + wall.Id);  //log
                                     }
                                 }
                             }
                         }
-                        catch (Exception exept1)
+                        catch (Exception)
                         {
-                            logFile.WriteLine(exept1.Message.ToString() + "упало внутри линк модели");  //log
                         }
                     }
                     else
@@ -260,23 +268,22 @@ namespace Technopark.Commands
                         logFile.WriteLine("cant find walls");  //log
                     }
                 }
-                catch (Exception exeptionLINK)
+                catch (Exception )
                 {
-                    logFile.WriteLine(exeptionLINK.Message.ToString() + "упало при выборке линк модели из листа");  //log
                 }
             }
         }
 
         
-        private string checkSpacesAround(Document _doc, XYZ point, int diff, StreamWriter logs)
+        private string checkSpacesAround(Document _doc, XYZ point, int diff, StreamWriter logs, Phase phase)
         {
 
             try
             {
-                if (_doc.GetSpaceAtPoint(point) != null)
+                if (_doc.GetSpaceAtPoint(point, phase) != null)
                 {
-                    string zone = _doc.GetSpaceAtPoint(point).LookupParameter("ADSK_Зона").AsString();
-                    string spaceName = _doc.GetSpaceAtPoint(point).Name.ToString();
+                    string zone = _doc.GetSpaceAtPoint(point, phase).LookupParameter("ADSK_Зона").AsString();
+                    string spaceName = _doc.GetSpaceAtPoint(point, phase).Name.ToString();
                     return zone + "," + spaceName;
                 }
 
@@ -288,28 +295,28 @@ namespace Technopark.Commands
                     XYZ checkPlaceRight = new XYZ(point.X, point.Y + i, point.Z - 4.0);
                     XYZ checkPlaceLeft = new XYZ(point.X, point.Y - i, point.Z - 4.0);
 
-                    if (_doc.GetSpaceAtPoint(checkPlaceUp) != null)
+                    if (_doc.GetSpaceAtPoint(checkPlaceUp, phase) != null)
                     {
-                        string zone = _doc.GetSpaceAtPoint(checkPlaceUp).LookupParameter("ADSK_Зона").AsString();
-                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceUp).Name.ToString();
+                        string zone = _doc.GetSpaceAtPoint(checkPlaceUp, phase).LookupParameter("ADSK_Зона").AsString();
+                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceUp, phase).Name.ToString();
                         return zone + "," + spaceName;
                     }
-                    else if (_doc.GetSpaceAtPoint(checkPlaceDown) != null)
+                    else if (_doc.GetSpaceAtPoint(checkPlaceDown, phase) != null)
                     {
-                        string zone = _doc.GetSpaceAtPoint(checkPlaceDown).LookupParameter("ADSK_Зона").AsString();
-                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceDown).Name.ToString();
+                        string zone = _doc.GetSpaceAtPoint(checkPlaceDown, phase).LookupParameter("ADSK_Зона").AsString();
+                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceDown, phase).Name.ToString();
                         return zone + "," + spaceName;
                     }
-                    else if (_doc.GetSpaceAtPoint(checkPlaceRight) != null)
+                    else if (_doc.GetSpaceAtPoint(checkPlaceRight, phase) != null)
                     {
-                        string zone = _doc.GetSpaceAtPoint(checkPlaceRight).LookupParameter("ADSK_Зона").AsString();
-                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceRight).Name.ToString();
+                        string zone = _doc.GetSpaceAtPoint(checkPlaceRight, phase).LookupParameter("ADSK_Зона").AsString();
+                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceRight, phase).Name.ToString();
                         return zone + "," + spaceName;
                     }
-                    else if (_doc.GetSpaceAtPoint(checkPlaceLeft) != null)
+                    else if (_doc.GetSpaceAtPoint(checkPlaceLeft, phase) != null)
                     {
-                        string zone = _doc.GetSpaceAtPoint(checkPlaceLeft).LookupParameter("ADSK_Зона").AsString();
-                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceLeft).Name.ToString();
+                        string zone = _doc.GetSpaceAtPoint(checkPlaceLeft, phase).LookupParameter("ADSK_Зона").AsString();
+                        string spaceName = _doc.GetSpaceAtPoint(checkPlaceLeft, phase).Name.ToString();
                         return zone + "," + spaceName;
                     }
                 }

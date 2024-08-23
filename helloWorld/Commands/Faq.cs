@@ -26,7 +26,7 @@ namespace Technopark.Commands
             "       - оставить главные заголовки - headers, остальное все выключить " + Environment.NewLine +
             "6 - В папке с расчетами запустить '11899_расчет теплопотерь.exe' " + Environment.NewLine +
             "7 - На выходе получится csv файл, который можно загрузить в excel'  " + Environment.NewLine +
-            "(ver_240805_0.10)";
+            "(ver_240823_0.20)";
 
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
