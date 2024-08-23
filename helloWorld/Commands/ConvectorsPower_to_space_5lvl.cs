@@ -50,7 +50,7 @@ namespace Technopark.Commands
                     IList<Element> convectors = new FilteredElementCollector(doc)
                         .OfCategory(BuiltInCategory.OST_MechanicalEquipment)
                         .WhereElementIsNotElementType().ToList()
-                        .Where(x => x.LookupParameter("ADSK_Обозначение") != null && x.WorksetId.IntegerValue == 410 && x.LevelId.IntegerValue == levelID)
+                        .Where(x => x.LookupParameter("ADSK_Обозначение") != null && x.WorksetId.IntegerValue == worksetIdHeating && x.LevelId.IntegerValue == levelID)
                         .ToList();
 
                     IList<Element> spaces = new FilteredElementCollector(doc)

@@ -9,6 +9,8 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Mechanical;
 using System.IO;
+using static Autodesk.Revit.DB.SpecTypeId;
+using System.Windows.Forms;
 
 
 namespace Technopark.Commands
@@ -19,6 +21,13 @@ namespace Technopark.Commands
         int levelID = 725698;
         int worksetIdHeating = 440;
         int phaseConvectorInt = 3;
+
+        // for report message
+        Dictionary<string, int> report = new Dictionary<string, int>();
+        string reportMessage = "";
+        int catchedConvectors = 0;
+        string catchedConvectorsID = "";
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiApp = commandData.Application;
@@ -28,6 +37,7 @@ namespace Technopark.Commands
             string p_ADSK_Zone = "ADSK_Зона";
             string p_ADSK_HeatingPower_in_zone = "ADSK_Тепловая мощность";
 
+            // determine phase of construction 
             PhaseArray phases = doc.Phases;
             Phase phaseConvector = null;
 
@@ -70,6 +80,11 @@ namespace Technopark.Commands
                     for (int i = 0; i < convectors.Count(); i++)
                     {
 
+                        string convectorZone = (convectors[i].LookupParameter(p_ADSK_Zone).AsString());
+                        if (!report.ContainsKey(convectorZone)) {
+                            report[convectorZone] = 0;
+                        }
+
                         XYZ convectorLocationPoint = (convectors[i].Location as LocationPoint).Point;
                         XYZ convectorLocationPointZ = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
                         XYZ convectorLocationPointZ_plusY = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y + 3.0, convectorLocationPoint.Z + 3.0);
@@ -85,12 +100,16 @@ namespace Technopark.Commands
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
                                 spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).Set(heat_power_was + heat_power);
 
+                                // counting for report dialog message
+                                report[convectorZone]++;
                             }
                             catch (Exception e)
                             {
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
+                                catchedConvectors++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
 
                             }
                         }
@@ -104,12 +123,17 @@ namespace Technopark.Commands
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
                                 spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).Set(heat_power_was + heat_power);
 
+                                // counting for report dialog message
+                                report[convectorZone]++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                             catch (Exception e)
                             {
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
+                                catchedConvectors++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                         }
 
@@ -123,21 +147,40 @@ namespace Technopark.Commands
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
                                 spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).Set(heat_power_was + heat_power);
 
+                                // counting for report dialog message
+                                report[convectorZone]++;
                             }
                             catch (Exception e)
                             {
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
+                                catchedConvectors++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                         }
                     }
-
 
                     tr.Commit();
 
                 } // end transaction 
             } //end StreamWriter
+
+            //report window show 
+            foreach (string zoneString in report.Keys)
+            {
+                reportMessage += (zoneString + " - " + report[zoneString].ToString() + " шт. нашли свои зоны");
+                reportMessage += Environment.NewLine;
+            }
+            reportMessage += "не нашлись - " + catchedConvectors.ToString() + "шт." 
+                + Environment.NewLine 
+                + catchedConvectorsID;
+
+            TaskDialog reportDialog = new TaskDialog("Инфо");
+            reportDialog.MainInstruction = "result";
+            reportDialog.MainContent = reportMessage;
+            reportDialog.Show();
+
 
             return Result.Succeeded;
         }
