@@ -19,6 +19,13 @@ namespace Technopark.Commands
         int levelID = 725699;
         int worksetIdHeating = 440;
         int phaseConvectorInt = 3;
+
+        // for report message
+        Dictionary<string, int> report = new Dictionary<string, int>();
+        string reportMessage = "";
+        int catchedConvectors = 0;
+        string catchedConvectorsID = "";
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiApp = commandData.Application;
@@ -41,7 +48,6 @@ namespace Technopark.Commands
 
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
-
                 using (Transaction tr = new Transaction(doc, "CopyParameter"))
                 {
                     tr.Start();
@@ -69,6 +75,12 @@ namespace Technopark.Commands
 
                     for (int i = 0; i < convectors.Count(); i++)
                     {
+                        //report dict logging
+                        string convectorZone = (convectors[i].LookupParameter(p_ADSK_Zone).AsString());
+                        if (!report.ContainsKey(convectorZone))
+                        {
+                            report[convectorZone] = 0;
+                        }
 
                         XYZ convectorLocationPoint = (convectors[i].Location as LocationPoint).Point;
                         XYZ convectorLocationPointZ = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
@@ -84,6 +96,9 @@ namespace Technopark.Commands
                                 double heat_power = convectors[i].LookupParameter("MC Piping Power").AsDouble();
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
                                 spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).Set(heat_power_was + heat_power);
+                                
+                                // counting for report dialog message
+                                report[convectorZone]++;
 
                             }
                             catch (Exception e)
@@ -91,7 +106,9 @@ namespace Technopark.Commands
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
-
+                                // counting for report dialog message
+                                catchedConvectors++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                         }
                         else if (doc.GetSpaceAtPoint(convectorLocationPointZ_plusY) != null)
@@ -103,13 +120,19 @@ namespace Technopark.Commands
                                 double heat_power = convectors[i].LookupParameter("MC Piping Power").AsDouble();
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
                                 spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).Set(heat_power_was + heat_power);
-
+                                
+                                // counting for report dialog message
+                                report[convectorZone]++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                             catch (Exception e)
                             {
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
-                                log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
+                                log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);                                
+                                // counting for report dialog message
+                                catchedConvectors++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                         }
 
@@ -123,21 +146,42 @@ namespace Technopark.Commands
                                 double heat_power_was = spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).AsDouble();
                                 spaceWhereConvector.LookupParameter(p_ADSK_HeatingPower_in_zone).Set(heat_power_was + heat_power);
 
+                                // counting for report dialog message
+                                report[convectorZone]++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
+
                             }
                             catch (Exception e)
                             {
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
+                                // counting for report dialog message
+                                catchedConvectors++;
+                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
                             }
                         }
                     }
-
 
                     tr.Commit();
 
                 } // end transaction 
             } //end StreamWriter
+
+            //report window show 
+            foreach (string zoneString in report.Keys)
+            {
+                reportMessage += (zoneString + " - " + report[zoneString].ToString() + " шт.");
+                reportMessage += Environment.NewLine;
+            }
+            reportMessage += "не нашлись - " + catchedConvectors.ToString() + "шт."
+                + Environment.NewLine
+                + catchedConvectorsID;
+
+            TaskDialog reportDialog = new TaskDialog("Инфо");
+            reportDialog.MainInstruction = "result - конвекторы нашли свои зоны";
+            reportDialog.MainContent = reportMessage;
+            reportDialog.Show();
 
             return Result.Succeeded;
         }

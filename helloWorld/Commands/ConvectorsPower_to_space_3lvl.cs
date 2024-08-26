@@ -51,7 +51,6 @@ namespace Technopark.Commands
 
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
-
                 using (Transaction tr = new Transaction(doc, "CopyParameter"))
                 {
                     tr.Start();
@@ -79,7 +78,7 @@ namespace Technopark.Commands
 
                     for (int i = 0; i < convectors.Count(); i++)
                     {
-
+                        //report dict logging
                         string convectorZone = (convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                         if (!report.ContainsKey(convectorZone)) {
                             report[convectorZone] = 0;
@@ -108,6 +107,7 @@ namespace Technopark.Commands
                                 log.WriteLine(convectors[i].Name.ToString());
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
+                                // counting for report dialog message
                                 catchedConvectors++;
                                 catchedConvectorsID += (convectors[i].Id.ToString() + " ");
 
@@ -156,7 +156,7 @@ namespace Technopark.Commands
                                 log.WriteLine(convectors[i].LookupParameter(p_ADSK_Zone).AsString());
                                 log.WriteLine(convectors[i].Id.ToString() + " - " + e.Message);
                                 catchedConvectors++;
-                                catchedConvectorsID += (convectors[i].Id.ToString() + " ");
+                                catchedConvectorsID += (convectors[i].Id.ToString() + ", ");
                             }
                         }
                     }
@@ -169,7 +169,7 @@ namespace Technopark.Commands
             //report window show 
             foreach (string zoneString in report.Keys)
             {
-                reportMessage += (zoneString + " - " + report[zoneString].ToString() + " шт. нашли свои зоны");
+                reportMessage += (zoneString + " - " + report[zoneString].ToString() + " шт.");
                 reportMessage += Environment.NewLine;
             }
             reportMessage += "не нашлись - " + catchedConvectors.ToString() + "шт." 
@@ -177,7 +177,7 @@ namespace Technopark.Commands
                 + catchedConvectorsID;
 
             TaskDialog reportDialog = new TaskDialog("Инфо");
-            reportDialog.MainInstruction = "result";
+            reportDialog.MainInstruction = "result - конвекторы нашли свои зоны";
             reportDialog.MainContent = reportMessage;
             reportDialog.Show();
 
