@@ -54,8 +54,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\ViewModel.cs" />
+    <Compile Include="RevitAPI.cs" />
     <Compile Include="Commands\ADSK_Zone_by_Space.cs" />
-    <Compile Include="Commands\WPFtest.cs" />
+    <Compile Include="UI\Command.cs" />
     <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_2lvl.cs" />
     <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_1lvl.cs" />
     <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_3lvl.cs" />
@@ -65,11 +67,10 @@
     <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_5lvl.cs" />
     <Compile Include="Commands\HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
     <Compile Include="Commands\HeatingCommands\SpaceHeatLossesFill.cs" />
-    <Compile Include="Commands\HelloWorld.cs" />
     <Compile Include="Commands\FacadePanels.cs" />
     <Compile Include="Commands\WireFrameCommand.cs" />
-    <Compile Include="CsAddPanel.cs" />
-    <Compile Include="MainView.xaml.cs">
+    <Compile Include="Application.cs" />
+    <Compile Include="UI\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,7 +81,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Image_Emoji1.png" />
     <Content Include="Resources\Image2lvl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -128,7 +128,7 @@
     <Folder Include="Commands\CoolingCommands\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainView.xaml">
+    <Page Include="UI\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
