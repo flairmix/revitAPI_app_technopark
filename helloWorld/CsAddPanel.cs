@@ -87,6 +87,16 @@ namespace NewPanelNamespace
 
             panel.AddSeparator();
 
+            if (panel.AddItem(new PushButtonData("Technopark.Button_3", "testWPF", thisAssemblyPath, "Technopark.Commands.WPFtest"))
+                is PushButton button_WPFMenu)
+            {
+                button_WPFMenu.ToolTip = "test WPF tooltip";
+
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji3.png"));
+                BitmapImage bitmapImage = new BitmapImage(uri);
+                button_WPFMenu.LargeImage = bitmapImage;
+            }
+
             // TODO TESTing - testing heating module for specification 
 
             //if (panel.AddItem(new PushButtonData("Heating.Heating_1", "Heating_1", thisAssemblyPath, "HeatingSpecPrep.Commands.hvacHeating_SystemNameHandler"))
