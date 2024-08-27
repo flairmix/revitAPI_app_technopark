@@ -82,6 +82,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ATP_tlp_4c.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Image2lvl.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
