@@ -14,9 +14,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace NewPanelNamespace
+namespace ApplicationNamespace
 {
-    public class CsAddPanel : IExternalApplication
+    public class Application : IExternalApplication
     {
         // Both OnStartup and OnShutdown must be implemented as public method
         public Result OnStartup(UIControlledApplication application)
@@ -86,6 +86,16 @@ namespace NewPanelNamespace
             }
 
             panel.AddSeparator();
+
+            if (panel.AddItem(new PushButtonData("Technopark.Button_3", "testWPF", thisAssemblyPath, "app_test_WPF.Command"))
+                is PushButton button_WPFMenu)
+            {
+                button_WPFMenu.ToolTip = "test WPF tooltip";
+
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji3.png"));
+                BitmapImage bitmapImage = new BitmapImage(uri);
+                button_WPFMenu.LargeImage = bitmapImage;
+            }
 
             // TODO TESTing - testing heating module for specification 
 
