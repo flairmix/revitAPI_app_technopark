@@ -54,23 +54,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\ViewModel.cs" />
+    <Compile Include="app_test_WPF\ViewModel.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
-    <Compile Include="Commands\ADSK_Zone_by_Space.cs" />
-    <Compile Include="UI\Command.cs" />
-    <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_2lvl.cs" />
-    <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_1lvl.cs" />
-    <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_3lvl.cs" />
-    <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_4lvl.cs" />
-    <Compile Include="Commands\Faq.cs" />
-    <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_6lvl.cs" />
-    <Compile Include="Commands\HeatingCommands\ConvectorsPower_to_space_5lvl.cs" />
-    <Compile Include="Commands\HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
-    <Compile Include="Commands\HeatingCommands\SpaceHeatLossesFill.cs" />
-    <Compile Include="Commands\FacadePanels.cs" />
-    <Compile Include="Commands\WireFrameCommand.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\ADSK_Zone_by_Space.cs" />
+    <Compile Include="app_test_WPF\Command.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_2lvl.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_1lvl.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_3lvl.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_4lvl.cs" />
+    <Compile Include="Faq.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_6lvl.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_5lvl.cs" />
+    <Compile Include="app_HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\SpaceHeatLossesFill.cs" />
+    <Compile Include="app_technopark_OT_XC\Commands\FacadePanels.cs" />
+    <Compile Include="WireFrameCommand.cs" />
     <Compile Include="Application.cs" />
-    <Compile Include="UI\MainView.xaml.cs">
+    <Compile Include="app_test_WPF\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -125,10 +126,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\CoolingCommands\" />
+    <Folder Include="app_technopark_OT_XC\Commands\CoolingCommands\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\MainView.xaml">
+    <Page Include="app_test_WPF\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

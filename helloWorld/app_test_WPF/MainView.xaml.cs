@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationNamespace
+namespace app_test_WPF
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
@@ -25,13 +25,6 @@ namespace ApplicationNamespace
         {
             InitializeComponent();
             DataContext = viewModel;
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Hide();
-            TaskDialog.Show("title",  (DataContext as ViewModel).inputString.ToString());
-            Close();
-
         }
     }
 }

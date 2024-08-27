@@ -87,7 +87,7 @@ namespace ApplicationNamespace
 
             panel.AddSeparator();
 
-            if (panel.AddItem(new PushButtonData("Technopark.Button_3", "testWPF", thisAssemblyPath, "WPFApp.Command"))
+            if (panel.AddItem(new PushButtonData("Technopark.Button_3", "testWPF", thisAssemblyPath, "app_test_WPF.Command"))
                 is PushButton button_WPFMenu)
             {
                 button_WPFMenu.ToolTip = "test WPF tooltip";

@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using ApplicationNamespace;
 
-namespace WPFApp
+namespace app_test_WPF
 {
     [Transaction(TransactionMode.Manual)]
     public class Command : IExternalCommand
@@ -27,6 +28,11 @@ namespace WPFApp
 
             var viewModel = new ViewModel(reference);
             var view = new MainView(viewModel);
+
+            viewModel.CloseRequest += (s, e) => view.Close();
+            viewModel.HideRequest += (s, e) => view.Hide();
+            viewModel.ShowRequest += (s, e) => view.ShowDialog();
+
             view.ShowDialog();
 
             return Result.Succeeded;
