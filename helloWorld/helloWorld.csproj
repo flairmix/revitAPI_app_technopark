@@ -54,6 +54,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app_technopark_XC\Commands\XC_ConvectorsPower_to_space.cs" />
+    <Compile Include="app_technopark_XC\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="app_technopark_XC\ViewModel.cs" />
     <Compile Include="app_test_WPF\ViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
@@ -112,6 +117,9 @@
     <Content Include="Resources\Image_Emoji1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Image_Emoji4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Image_Emoji3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -129,9 +137,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="app_technopark_OT_XC\Commands\CoolingCommands\" />
+    <Folder Include="app_technopark_OT\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="app_technopark_XC\MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="app_test_WPF\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
