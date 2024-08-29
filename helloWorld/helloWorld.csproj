@@ -54,7 +54,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="app_technopark_XC\Commands\XC_ConvectorsPower_to_space.cs" />
+    <Compile Include="app_technopark_XC\Commands\EquipmentPower_to_space.cs" />
     <Compile Include="app_technopark_XC\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>

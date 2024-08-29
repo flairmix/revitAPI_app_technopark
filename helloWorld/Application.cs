@@ -87,7 +87,7 @@ namespace ApplicationNamespace
 
             panel.AddSeparator();
 
-            if (panel.AddItem(new PushButtonData("Technopark.Button_4", "power_to_space", thisAssemblyPath, "app_technopark_XC.Commands.XC_ConvectorsPower_to_space"))
+            if (panel.AddItem(new PushButtonData("Technopark.Button_4", "power_to_space", thisAssemblyPath, "app_technopark_XC.Commands.EquipmentPower_to_space"))
                 is PushButton button_power_to_space)
             {
                 button_power_to_space.ToolTip = "Запись мощности конвекторов из приборов в Space";

@@ -38,7 +38,6 @@ namespace app_technopark_XC
             CollectParametersEquip(reference);
             CollectParametersSpaces();
 
-
             XC_WriteConvectorsPower_to_space_command = new RelayCommand(Write_DoubleParameter_to_space_cumulatively, TypeCheckingInputs);
         }
 

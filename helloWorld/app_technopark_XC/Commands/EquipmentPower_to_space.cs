@@ -15,7 +15,7 @@ namespace app_technopark_XC.Commands
 {
     [Transaction(TransactionMode.Manual)]
 
-    public class XC_ConvectorsPower_to_space : IExternalCommand
+    public class EquipmentPower_to_space : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {

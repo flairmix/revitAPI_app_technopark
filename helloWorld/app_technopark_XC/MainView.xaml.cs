@@ -26,5 +26,10 @@ namespace app_technopark_XC
             InitializeComponent();
             DataContext = viewModel;
         }
+
+        private void TextBlock_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
