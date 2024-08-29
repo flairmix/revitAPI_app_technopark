@@ -87,27 +87,17 @@ namespace ApplicationNamespace
 
             panel.AddSeparator();
 
-            if (panel.AddItem(new PushButtonData("Technopark.Button_3", "testWPF", thisAssemblyPath, "app_test_WPF.Command"))
-                is PushButton button_WPFMenu)
+            if (panel.AddItem(new PushButtonData("Technopark.Button_4", "power_to_space", thisAssemblyPath, "app_technopark_collectingPower.Commands.EquipmentPower_to_space"))
+                is PushButton button_power_to_space)
             {
-                button_WPFMenu.ToolTip = "test WPF tooltip";
+                button_power_to_space.ToolTip = "Запись мощности конвекторов из приборов в Space";
 
-                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji3.png"));
+                Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji4.png"));
                 BitmapImage bitmapImage = new BitmapImage(uri);
-                button_WPFMenu.LargeImage = bitmapImage;
+                button_power_to_space.LargeImage = bitmapImage;
             }
 
-            // TODO TESTing - testing heating module for specification 
-
-            //if (panel.AddItem(new PushButtonData("Heating.Heating_1", "Heating_1", thisAssemblyPath, "HeatingSpecPrep.Commands.hvacHeating_SystemNameHandler"))
-            //    is PushButton buttonHeating_1)
-            //{
-            //    buttonHeating_1.ToolTip = "Спецификация отопления. Перезапись имени системы";
-
-            //    Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image_Emoji1.png"));
-            //    BitmapImage bitmapImage = new BitmapImage(uri);
-            //    buttonHeating_1.LargeImage = bitmapImage;
-            //}
+            panel.AddSeparator();
 
 
             return Result.Succeeded;
@@ -130,7 +120,7 @@ namespace ApplicationNamespace
 
             try
             {
-                application.CreateRibbonPanel(tab, "Technopark_OT");
+                application.CreateRibbonPanel(tab, "Technopark_OT_XC");
             }
             catch (Exception ex)
             {
@@ -138,7 +128,7 @@ namespace ApplicationNamespace
             }
 
             List<RibbonPanel> panels = application.GetRibbonPanels(tab);
-            foreach (RibbonPanel p in panels.Where(p => p.Name == "Technopark_OT"))
+            foreach (RibbonPanel p in panels.Where(p => p.Name == "Technopark_OT_XC"))
             {
                 ribbonPanel = p;
             }

@@ -1,19 +1,21 @@
-﻿using Autodesk.Revit.DB;
+﻿using ApplicationNamespace;
+using Autodesk.Revit.Attributes;
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
-using Autodesk.Revit.Attributes;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autodesk.Revit.DB.Mechanical;
 
-using ApplicationNamespace;
-
-namespace app_test_WPF
+namespace app_technopark_collectingPower.Commands
 {
     [Transaction(TransactionMode.Manual)]
-    public class Command : IExternalCommand
+
+    public class EquipmentPower_to_space : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -22,9 +24,7 @@ namespace app_test_WPF
                 RevitAPI.Initialize(commandData);
             }
 
-            var activeView = RevitAPI.Document.ActiveView;
-
-            var reference = RevitAPI.UIDocument.Selection.PickObject(ObjectType.Element, "Выберите элемент для сбора параметров");
+            var reference = RevitAPI.UIDocument.Selection.PickObject(ObjectType.Element, "Выберете элемент для сбора параметров");
 
             var viewModel = new ViewModel(reference);
             var view = new MainView(viewModel);
@@ -34,6 +34,7 @@ namespace app_test_WPF
             viewModel.ShowRequest += (s, e) => view.ShowDialog();
 
             view.ShowDialog();
+
 
             return Result.Succeeded;
         }
