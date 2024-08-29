@@ -54,31 +54,26 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="app_technopark_XC\Commands\EquipmentPower_to_space.cs" />
-    <Compile Include="app_technopark_XC\MainView.xaml.cs">
+    <Compile Include="app_technopark_collectingPower\Commands\EquipmentPower_to_space.cs" />
+    <Compile Include="app_technopark_collectingPower\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="app_technopark_XC\ViewModel.cs" />
-    <Compile Include="app_test_WPF\ViewModel.cs" />
+    <Compile Include="app_technopark_collectingPower\ViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\ADSK_Zone_by_Space.cs" />
-    <Compile Include="app_test_WPF\Command.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_2lvl.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_1lvl.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_3lvl.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_4lvl.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\ADSK_Zone_by_Space.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_2lvl.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_1lvl.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_3lvl.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_4lvl.cs" />
     <Compile Include="Faq.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_6lvl.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\ConvectorsPower_to_space_5lvl.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_6lvl.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_5lvl.cs" />
     <Compile Include="app_HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\HeatingCommands\SpaceHeatLossesFill.cs" />
-    <Compile Include="app_technopark_OT_XC\Commands\FacadePanels.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\SpaceHeatLossesFill.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\FacadePanels.cs" />
     <Compile Include="WireFrameCommand.cs" />
     <Compile Include="Application.cs" />
-    <Compile Include="app_test_WPF\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -136,15 +131,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="app_technopark_OT\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="app_technopark_XC\MainView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="app_test_WPF\MainView.xaml">
+    <Page Include="app_technopark_collectingPower\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

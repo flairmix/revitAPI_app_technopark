@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace app_test_WPF
+namespace app_technopark_collectingPower
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
@@ -25,6 +25,11 @@ namespace app_test_WPF
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+
+        private void TextBlock_Selected(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

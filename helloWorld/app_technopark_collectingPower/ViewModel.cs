@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace app_technopark_XC
+namespace app_technopark_collectingPower
 {
     public class ViewModel : INotifyPropertyChanged
     {

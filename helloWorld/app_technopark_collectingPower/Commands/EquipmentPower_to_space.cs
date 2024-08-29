@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB.Mechanical;
 
-namespace app_technopark_XC.Commands
+namespace app_technopark_collectingPower.Commands
 {
     [Transaction(TransactionMode.Manual)]
 
