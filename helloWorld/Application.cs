@@ -69,13 +69,11 @@ namespace ApplicationNamespace
             }
 
 
-            panel.AddSeparator();
-
-            AddStackedButtonGroup(panel);
+            //AddStackedButtonGroup(panel);
 
             panel.AddSeparator();
 
-            if (panel.AddItem(new PushButtonData("Technopark.Button_2", "ConvectorZone", thisAssemblyPath, "Technopark.Commands.ADSK_Zone_by_Space"))
+            if (panel.AddItem(new PushButtonData("Technopark.Button_2", "ConvectorZone", thisAssemblyPath, "app_technopark_OT_XC_zones.ADSK_Zone_by_Space"))
                 is PushButton button_ADSK_Zone_by_Space)
             {
                 button_ADSK_Zone_by_Space.ToolTip = "Запись ADKS_Зона в конвекторы по значению из Space, в котором они находятся";

@@ -55,9 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="app_technopark_collectingPower\Commands\EquipmentPower_to_space.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\zonesappView.xaml.cs">
+      <DependentUpon>zonesappView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="app_technopark_collectingPower\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="app_technopark_OT_XC_panels_zones\zonesappViewModel.cs" />
     <Compile Include="app_technopark_collectingPower\ViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
@@ -133,6 +137,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="app_technopark_OT_XC_panels_zones\zonesappView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="app_technopark_collectingPower\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
