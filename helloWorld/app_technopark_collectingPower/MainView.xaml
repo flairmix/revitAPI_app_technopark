@@ -14,7 +14,7 @@
             MinHeight="500"
             MaxHeight="500"
             HorizontalAlignment="Left" 
-		    Title="TEST WPF APP" 
+		    Title="Копирование мощности конвекторов в пространства" 
 		    Cursor="AppStarting">
     <StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -24,7 +24,7 @@
                        />
             <TextBlock Margin="15"
                        Width="380"
-                       Text="Описание " 
+                       Text="Копирование мощности конвекторов в пространства " 
                        TextWrapping="Wrap"
                        />
         </StackPanel>
@@ -99,9 +99,10 @@
                            Text="Выберете параметр откуда: "
                            Width="150"/>
             <ComboBox ItemsSource="{Binding Parameters}"
-                          SelectedItem="{Binding SelectedParameter}"
-                          DisplayMemberPath="Definition.Name"
-                      Height="32"
+                      SelectedItem="{Binding SelectedParameter}"
+                    DisplayMemberPath="Definition.Name"
+                      IsEditable="True"
+                           Height="32"
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
@@ -116,6 +117,7 @@
             <ComboBox ItemsSource="{Binding ParametersSpace}"
                         SelectedItem="{Binding SelectedParameterSpace}"
                       Height="32"
+                      IsEditable="True"
                           DisplayMemberPath="Definition.Name"
                           Margin="5" 
                           Width="230" 

@@ -14,6 +14,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace app_technopark_collectingPower
 {
@@ -114,6 +115,7 @@ namespace app_technopark_collectingPower
         private void CollectLevels(Document doc)
         {
             Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements().Select(x => x as Level).ToList();
+            Levels.OrderBy(x => x.Name);
         }
         private void CollectPhases(Document doc) {
             PhaseArray phases = doc.Phases;
@@ -133,6 +135,8 @@ namespace app_technopark_collectingPower
                     Parameters.Add(parameter);
                 }
             }
+            Parameters.OrderBy(x => x.Definition.Name).ToList();
+
         }
         private void CollectParametersSpaces()
         {
@@ -147,6 +151,7 @@ namespace app_technopark_collectingPower
                     ParametersSpace.Add(parameter);
                 }
             }
+            ParametersSpace.OrderBy(x => x.Definition.Name);
         }
 
 
@@ -155,10 +160,9 @@ namespace app_technopark_collectingPower
             return SelectedWorkset != null
                 && SelectedLevel != null
                 && SelectedPhase != null
-                && SelectedParameter != null
-                && SelectedParameterSpace != null
-                && SelectedBuildInCategory != 0
-                ;
+                && (SelectedParameter != null && Parameters.Contains(SelectedParameter))
+                && (SelectedParameterSpace != null && ParametersSpace.Contains(SelectedParameterSpace))
+                && SelectedBuildInCategory != 0;
         }
 
 
@@ -179,6 +183,7 @@ namespace app_technopark_collectingPower
                     IList<Element> spaces = new FilteredElementCollector(doc)
                             .OfCategory(BuiltInCategory.OST_MEPSpaces)
                             .WhereElementIsNotElementType()
+                            .Where(x => x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
                             .ToList();
 
                     log.WriteLine("Конвекторов найдено - " + convectors.Count.ToString());
