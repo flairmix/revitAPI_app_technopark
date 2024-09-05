@@ -33,6 +33,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-ExtendedLinguisticServices.1.1.1\lib\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Sensors, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Sensors.1.1.1\lib\Microsoft.WindowsAPICodePack.Sensors.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-ShellExtensions.1.1.1\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI">
@@ -54,6 +69,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app_spaceScheduleExport\SpaceScheduleExportCommand.cs" />
+    <Compile Include="app_spaceScheduleExport\SpaceScheduleExport.xaml.cs">
+      <DependentUpon>SpaceScheduleExport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="app_spaceScheduleExport\SpaceScheduleExportViewModel.cs" />
     <Compile Include="app_technopark_collectingPower\Commands\EquipmentPower_to_space.cs" />
     <Compile Include="app_technopark_OT_XC_panels_zones\zonesappView.xaml.cs">
       <DependentUpon>zonesappView.xaml</DependentUpon>
@@ -66,15 +86,9 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
     <Compile Include="app_technopark_OT_XC_panels_zones\Commands\ADSK_Zone_by_Space.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_2lvl.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_1lvl.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_3lvl.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_4lvl.cs" />
     <Compile Include="Faq.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_6lvl.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\ConvectorsPower_to_space_5lvl.cs" />
     <Compile Include="app_HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\HeatingCommands\SpaceHeatLossesFill.cs" />
+    <Compile Include="app_technopark_OT_XC_panels_zones\Commands\SpaceHeatLossesFill.cs" />
     <Compile Include="app_technopark_OT_XC_panels_zones\Commands\FacadePanels.cs" />
     <Compile Include="WireFrameCommand.cs" />
     <Compile Include="Application.cs" />
@@ -135,8 +149,14 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="app_spaceScheduleExport\SpaceScheduleExport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="app_technopark_OT_XC_panels_zones\zonesappView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +165,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

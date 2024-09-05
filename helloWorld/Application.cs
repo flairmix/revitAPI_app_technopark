@@ -18,9 +18,11 @@ namespace ApplicationNamespace
 {
     public class Application : IExternalApplication
     {
+        
         // Both OnStartup and OnShutdown must be implemented as public method
         public Result OnStartup(UIControlledApplication application)
         {
+
             RibbonPanel panel = RibbonPanel(application);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 

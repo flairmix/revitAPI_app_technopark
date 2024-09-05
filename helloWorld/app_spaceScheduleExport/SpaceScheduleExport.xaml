@@ -1,0 +1,119 @@
+﻿<Window x:Class="app_spaceScheduleExport.SpaceScheduleExportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:app_spaceScheduleExport"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" 
+		    d:DesignWidth="600" 
+            d:DataContext= "{d:DesignInstance local:SpaceScheduleExportViewModel}"
+		    Background="#FF73777B" 
+            MinWidth="450"
+            MaxWidth="600"
+            MinHeight="500"
+            MaxHeight="500"
+            HorizontalAlignment="Left" 
+		    Title="Экспорт пространств из модели для расчетов" 
+		    Cursor="AppStarting">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock Margin="15"
+                       Width="150"
+                       Text="Описание работы:"
+                       />
+            <TextBlock Margin="15"
+                       Width="380"
+                       Text="Экспорт пространств из модели для расчетов" 
+                       TextWrapping="Wrap"
+                       />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Left">
+            <TextBlock Margin="15" 
+                           Text="Выберете Workset: "
+                           Width="150"/>
+            <ComboBox ItemsSource="{Binding Worksets}"
+                          SelectedItem="{Binding SelectedWorkset}"
+                      Height="32"
+                          DisplayMemberPath="Name"
+                          Margin="5" 
+                          Width="230" 
+                          HorizontalAlignment="Left"/>
+            <TextBlock Margin="15" 
+                           Text=""
+                           Width="150"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Left">
+            <TextBlock Margin="15" 
+                           Text="Выберете Level: "
+                           Width="150"/>
+            <ComboBox ItemsSource="{Binding Levels}"
+                          SelectedItem="{Binding SelectedLevel}"
+                            Height="32"
+                          DisplayMemberPath="Name"
+                          Margin="5" 
+                          Width="230" 
+                          HorizontalAlignment="Left"/>
+            <TextBlock Margin="15" 
+                           Text="Ручной выбор уровня, на котором нужно рассчитать "
+                           Width="150" TextWrapping="WrapWithOverflow"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Left">
+            <TextBlock Margin="15" 
+                           Text="Выберете путь сохранения: "
+                           Width="150"/>
+            <ComboBox ItemsSource="{Binding Levels}"
+                          SelectedItem="{Binding SelectedLevel}"
+                            Height="32"
+                          DisplayMemberPath="Name"
+                          Margin="5" 
+                          Width="230" 
+                          HorizontalAlignment="Left"/>
+            <Button Command="{Binding OpenDialogWindow}" 
+                        Margin="15" 
+                        Padding="5" 
+                        Content="Browse" 
+                    Width="100" 
+                    Height="30" 
+                                            />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding ExportSpaceWithInfo_relay}" 
+                    Margin="15" 
+                    Padding="5" 
+                    Content="Запуск" Width="100" Height="30" 
+                    />
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    >
+            <TextBlock Text="v2024.0.40_MID"
+                       TextBlock.FontSize="10"
+                       Height="16"
+                       VerticalAlignment="Bottom"
+                       Margin="10" RenderTransformOrigin="0.5,0.5" Width="100"
+                       >
+
+            </TextBlock>
+            <Image Height="50" 
+                       Margin="15"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       >
+                <Image.Source>
+                    <BitmapImage DecodePixelWidth="300" 
+                                 UriSource="/helloWorld;component/Resources/ATP_tlp_4c.png" />
+                </Image.Source>
+            </Image>
+        </StackPanel>
+
+    </StackPanel>
+</Window>
