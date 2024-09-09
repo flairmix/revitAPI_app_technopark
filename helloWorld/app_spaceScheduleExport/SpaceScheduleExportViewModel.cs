@@ -27,6 +27,33 @@ namespace app_spaceScheduleExport
         readonly string _version = "v2024.0.40_MID";
         readonly string _folderPath;
 
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get
+            {
+                return _isBusy;
+            }
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //private string _busyText;
+        ////Busy Text Content
+        //public string BusyText
+        //{
+        //    get { return _busyText; }
+        //    set
+        //    {
+        //        _busyText = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
         readonly string folderPath = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
 
         Document doc = RevitAPI.Document;
@@ -35,6 +62,7 @@ namespace app_spaceScheduleExport
         {
             CollectWorksets(doc);
             CollectLevels(doc);
+            IsBusy = false;
 
             _folderPath = pathFolderForSave;
 
@@ -79,17 +107,18 @@ namespace app_spaceScheduleExport
             Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements().Select(x => x as Level).ToList();
         }
 
+
         public void ExportSpaceWithInfo(object obj)
         {
+
             string datelog = DateTime.Now.ToLocalTime().ToString("yyyyMMdd_HHmmss");
             string pathlog = folderPath + datelog + "log.txt";
             string pathOutputFile = _folderPath + @"\" + SelectedLevel.Name + "_MID_SpaceLoadsScheduleHeating.csv";
-            
-            IList<string> columnsNamesSpace = new List<string>() {
-                "Level", "ADSK_Зона", "Name", "Number", "Area", "Room: Number",
-                "Room: Name", "ADSK_Температура в помещении",
-                "ADSK_Теплопотери", "ADSK_Тепловая мощность"};    
 
+            IList<string> columnsNamesSpace = new List<string>() {
+            "Level", "ADSK_Зона", "Name", "Number", "Area", "Room: Number",
+            "Room: Name", "ADSK_Температура в помещении",
+            "ADSK_Теплопотери", "ADSK_Тепловая мощность"};
 
             using (StreamWriter log = new StreamWriter(pathlog))
             {
@@ -111,7 +140,7 @@ namespace app_spaceScheduleExport
                     foreach (Element space in spaces)
                     {
                         Space tempSpace = space as Space;
-                        
+
                         string lineResult = "";
 
                         try
@@ -126,18 +155,17 @@ namespace app_spaceScheduleExport
                             lineResult += (tempSpace.LookupParameter("ADSK_Температура в помещении").AsValueString());
 
                         }
-                            catch (Exception e)
+                        catch (Exception e)
                         {
                             log.Write(space.Name + e);
                         }
 
                         outputFile.WriteLine(lineResult);
-                       
+
 
                     }
                 }
             }
-
         }
 
         public bool ExportSpaceWithInfo_CanExecute(object obj)

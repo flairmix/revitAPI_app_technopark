@@ -14,17 +14,20 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Controls;
 
 
+
 namespace app_spaceScheduleExport
 {
     [Transaction(TransactionMode.Manual)]
     public class SpaceScheduleExportCommand : IExternalCommand
     {
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             if (RevitAPI.UIApplication == null)
             {
                 RevitAPI.Initialize(commandData);
             }
+
 
 
             string folderPath = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
