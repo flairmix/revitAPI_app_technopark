@@ -5,17 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:app_spaceScheduleExport"
              mc:Ignorable="d" 
-             d:DesignHeight="500" 
-		    d:DesignWidth="600" 
             d:DataContext= "{d:DesignInstance local:SpaceScheduleExportViewModel}"
 		    Background="#FF73777B" 
             MinWidth="450"
-            MaxWidth="600"
-            MinHeight="500"
-            MaxHeight="500"
+            MaxWidth="650"
+            MinHeight="400"
+            MaxHeight="400"
             HorizontalAlignment="Left" 
 		    Title="Экспорт пространств из модели для расчетов" 
-		    Cursor="AppStarting">
+		    Cursor="AppStarting" Height="400" Width="630">
     <StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <TextBlock Margin="15"
@@ -66,28 +64,24 @@
             <TextBlock Margin="15" 
                            Text="Выберете путь сохранения: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding Levels}"
-                          SelectedItem="{Binding SelectedLevel}"
+            <TextBox Text="{Binding Folder}"
                             Height="32"
-                          DisplayMemberPath="Name"
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <Button Command="{Binding OpenDialogWindow}" 
-                        Margin="15" 
-                        Padding="5" 
-                        Content="Browse" 
-                    Width="100" 
-                    Height="30" 
-                                            />
+
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="585">
             <Button Command="{Binding ExportSpaceWithInfo_relay}" 
                     Margin="15" 
                     Padding="5" 
                     Content="Запуск" Width="100" Height="30" 
                     />
+            <TextBlock Text="{Binding Status}"
+                       TextWrapping="Wrap"
+                       Margin="15" 
+                       Width="415"/>
 
         </StackPanel>
 
@@ -95,7 +89,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     >
-            <TextBlock Text="v2024.0.40_MID"
+            <TextBlock Text="v2024.0.50_MID"
                        TextBlock.FontSize="10"
                        Height="16"
                        VerticalAlignment="Bottom"

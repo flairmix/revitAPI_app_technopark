@@ -25,7 +25,8 @@ namespace app_spaceScheduleExport
         private Workset _selectedWorkset;
         private Level _selectedLevel;
         readonly string _version = "v2024.0.40_MID";
-        readonly string _folderPath;
+        string _folderPath;
+        string _status;
 
 
         private bool _isBusy;
@@ -54,11 +55,11 @@ namespace app_spaceScheduleExport
         //    }
         //}
 
-        readonly string folderPath = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
+        readonly string folderPathDefault = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
 
         Document doc = RevitAPI.Document;
 
-        public SpaceScheduleExportViewModel(string pathFolderForSave)
+        public SpaceScheduleExportViewModel (string pathFolderForSave)
         {
             CollectWorksets(doc);
             CollectLevels(doc);
@@ -71,9 +72,23 @@ namespace app_spaceScheduleExport
 
         public RelayCommand ExportSpaceWithInfo_relay { get; set; }
 
-        public string Version
+        public string Folder
         {
-            get => _version;
+            get => _folderPath;
+            set
+            {
+                _folderPath = value;
+                OnPropertyChanged();
+            }
+        }   
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
         }        
         public Workset SelectedWorkset
         {
@@ -112,8 +127,12 @@ namespace app_spaceScheduleExport
         {
 
             string datelog = DateTime.Now.ToLocalTime().ToString("yyyyMMdd_HHmmss");
-            string pathlog = folderPath + datelog + "log.txt";
-            string pathOutputFile = _folderPath + @"\" + SelectedLevel.Name + "_MID_SpaceLoadsScheduleHeating.csv";
+            string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
+            string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
+            string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
+
+            string pathlog = folderPathDefault + datelog + "log.txt";
+            string pathOutputFile = Folder + @"\" + SelectedLevel.Name + "_MID_SpaceLoadsScheduleHeating.csv";
 
             IList<string> columnsNamesSpace = new List<string>() {
             "Level", "ADSK_Зона", "Name", "Number", "Area", "Room: Number",
@@ -166,6 +185,7 @@ namespace app_spaceScheduleExport
                     }
                 }
             }
+            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec + Environment.NewLine + pathOutputFile;
         }
 
         public bool ExportSpaceWithInfo_CanExecute(object obj)

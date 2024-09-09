@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace app_technopark_collectingPower
+namespace app_EquipmentPowerToSpace
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class MainView : Window
+    public partial class EquipmentPowerToSpaceView : Window
     {
-        public MainView(ViewModel viewModel)
+        public EquipmentPowerToSpaceView (EquipmentPowerToSpaceViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

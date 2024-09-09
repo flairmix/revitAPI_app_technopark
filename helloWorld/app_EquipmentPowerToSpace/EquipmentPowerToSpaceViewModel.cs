@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace app_technopark_collectingPower
+namespace app_EquipmentPowerToSpace
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class EquipmentPowerToSpaceViewModel : INotifyPropertyChanged
     {
         private Workset _selectedWorkset;
         private Level _selectedLevel;
@@ -26,12 +26,14 @@ namespace app_technopark_collectingPower
         private BuiltInCategory _selectedBuildInCategory;
         private Parameter _selectedParameter;
         private Parameter _selectedParameterSpace;
+        string _status;
+        string _folderPath;
 
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log.txt";
 
         Document doc = RevitAPI.Document;
 
-        public ViewModel(Reference reference)
+        public EquipmentPowerToSpaceViewModel(Reference reference)
         {
             CollectWorksets(doc);
             CollectLevels(doc);
@@ -77,6 +79,24 @@ namespace app_technopark_collectingPower
             set
             {
                 _selectedBuildInCategory = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Folder
+        {
+            get => _folderPath;
+            set
+            {
+                _folderPath = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
                 OnPropertyChanged();
             }
         }
@@ -168,6 +188,12 @@ namespace app_technopark_collectingPower
 
         public void Write_DoubleParameter_to_space_cumulatively(object obj)
         {
+
+            string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
+            string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
+            string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
+            int convectorsCount = 0;
+
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
                 using (Transaction tr = new Transaction(doc, "CopyParameter"))
@@ -217,6 +243,7 @@ namespace app_technopark_collectingPower
                                     .Set(cool_power_was_conv + UnitUtils.ConvertFromInternalUnits(convectors[i]
                                     .LookupParameter(SelectedParameter.Definition.Name)
                                     .AsDouble(), UnitTypeId.Watts));
+                                convectorsCount ++;
                             }
                             catch (Exception e)
                             {
@@ -228,6 +255,7 @@ namespace app_technopark_collectingPower
                     tr.Commit();
                 }
             }
+            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec + Environment.NewLine + "конвекторов найдено: "+ convectorsCount;
         }
 
 

@@ -11,10 +11,10 @@ using System.Windows.Forms;
 using System.Reflection.Emit;
 using System.Collections.ObjectModel;
 
-namespace Technopark.Commands
+namespace app_FacadePanelsInfo
 {
     [Transaction(TransactionMode.Manual)]
-    public class FacadePanels : IExternalCommand
+    public class FacadePanelsInfo : IExternalCommand
     {
         readonly IDictionary<string, double> R_wall = new Dictionary<string, double>(){
             {"EWS11", 0.710},

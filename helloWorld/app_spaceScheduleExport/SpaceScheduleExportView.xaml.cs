@@ -21,12 +21,11 @@ namespace app_spaceScheduleExport
     /// </summary>
     public partial class SpaceScheduleExportView : Window
     {
-        public SpaceScheduleExportView(SpaceScheduleExportViewModel viewModel)
+        public SpaceScheduleExportView (SpaceScheduleExportViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
         }
-
         private void TextBlock_Selected(object sender, RoutedEventArgs e)
         {
 

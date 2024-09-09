@@ -14,7 +14,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Controls;
 
 
-
 namespace app_spaceScheduleExport
 {
     [Transaction(TransactionMode.Manual)]
@@ -53,8 +52,8 @@ namespace app_spaceScheduleExport
                 folder = dlg.FileName;
             }
 
-            var viewModel = new SpaceScheduleExportViewModel(folder);
-            var view = new SpaceScheduleExportView(viewModel);
+            var viewModel = new SpaceScheduleExportViewModel (folder);
+            var view = new SpaceScheduleExportView (viewModel);
 
 
             viewModel.CloseRequest += (s, e) => view.Close();
