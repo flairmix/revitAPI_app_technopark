@@ -12,10 +12,10 @@ using System.IO;
 using ApplicationNamespace;
 
 
-namespace app_technopark_OT_XC_zones
+namespace app_EquipmentFindingZone
 {
     [Transaction(TransactionMode.Manual)]
-    public class ADSK_Zone_by_Space : IExternalCommand
+    public class EquipmentFindingZone : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -24,8 +24,8 @@ namespace app_technopark_OT_XC_zones
                 RevitAPI.Initialize(commandData);
             }
 
-            var viewModel = new ZonesAppViewModel();
-            var view = new ZonesappView(viewModel);
+            var viewModel = new EquipmentFindingZoneViewModel();
+            var view = new EquipmentFindingZoneView(viewModel);
 
             viewModel.CloseRequest += (s, e) => view.Close();
             viewModel.HideRequest += (s, e) => view.Hide();

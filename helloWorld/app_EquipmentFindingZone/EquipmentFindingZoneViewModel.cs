@@ -15,9 +15,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace app_technopark_OT_XC_zones
+namespace app_EquipmentFindingZone
 {
-    public class ZonesAppViewModel : INotifyPropertyChanged
+    public class EquipmentFindingZoneViewModel : INotifyPropertyChanged
     {
         private Workset _selectedWorkset;
         private Level _selectedLevel;
@@ -28,7 +28,7 @@ namespace app_technopark_OT_XC_zones
 
         Document doc = RevitAPI.Document;
 
-        public ZonesAppViewModel()
+        public EquipmentFindingZoneViewModel()
         {
             CollectWorksets(doc);
             CollectLevels(doc);

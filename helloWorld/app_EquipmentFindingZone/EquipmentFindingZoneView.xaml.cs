@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace app_technopark_OT_XC_zones
+namespace app_EquipmentFindingZone
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class ZonesappView : Window
+    public partial class EquipmentFindingZoneView : Window
     {
-        public ZonesappView(ZonesAppViewModel viewModel)
+        public EquipmentFindingZoneView(EquipmentFindingZoneViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

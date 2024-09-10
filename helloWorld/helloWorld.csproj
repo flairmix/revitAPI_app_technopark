@@ -78,17 +78,17 @@
     </Compile>
     <Compile Include="app_spaceScheduleExport\SpaceScheduleExportViewModel.cs" />
     <Compile Include="app_EquipmentPowerToSpace\EquipmentPowerToSpaceCommand.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\zonesappView.xaml.cs">
-      <DependentUpon>zonesappView.xaml</DependentUpon>
+    <Compile Include="app_EquipmentFindingZone\EquipmentFindingZoneView.xaml.cs">
+      <DependentUpon>EquipmentFindingZoneView.xaml</DependentUpon>
     </Compile>
     <Compile Include="app_EquipmentPowerToSpace\EquipmentPowerToSpaceView.xaml.cs">
       <DependentUpon>EquipmentPowerToSpaceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="app_technopark_OT_XC_panels_zones\zonesappViewModel.cs" />
+    <Compile Include="app_EquipmentFindingZone\EquipmentFindingZoneViewModel.cs" />
     <Compile Include="app_EquipmentPowerToSpace\EquipmentPowerToSpaceViewModel.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
-    <Compile Include="app_technopark_OT_XC_panels_zones\ADSK_Zone_by_Space.cs" />
+    <Compile Include="app_EquipmentFindingZone\EquipmentFindingZone.cs" />
     <Compile Include="Faq.cs" />
     <Compile Include="app_HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFill.cs" />
@@ -145,7 +145,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="app_technopark_OT_XC_panels_zones\zonesappView.xaml">
+    <Page Include="app_EquipmentFindingZone\EquipmentFindingZoneView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
