@@ -14,10 +14,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
-namespace app_technopark_collectingPower
+namespace app_EquipmentPowerToSpace
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class EquipmentPowerToSpaceViewModel : INotifyPropertyChanged
     {
         private Workset _selectedWorkset;
         private Level _selectedLevel;
@@ -25,12 +26,14 @@ namespace app_technopark_collectingPower
         private BuiltInCategory _selectedBuildInCategory;
         private Parameter _selectedParameter;
         private Parameter _selectedParameterSpace;
+        string _status;
+        string _folderPath;
 
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log.txt";
 
         Document doc = RevitAPI.Document;
 
-        public ViewModel(Reference reference)
+        public EquipmentPowerToSpaceViewModel(Reference reference)
         {
             CollectWorksets(doc);
             CollectLevels(doc);
@@ -79,6 +82,24 @@ namespace app_technopark_collectingPower
                 OnPropertyChanged();
             }
         }
+        public string Folder
+        {
+            get => _folderPath;
+            set
+            {
+                _folderPath = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
+        }
 
         public IList<Workset> Worksets { get; set; } = new List<Workset>();
         public IList<Level> Levels { get; set; } = new List<Level>();
@@ -114,6 +135,7 @@ namespace app_technopark_collectingPower
         private void CollectLevels(Document doc)
         {
             Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements().Select(x => x as Level).ToList();
+            Levels.OrderBy(x => x.Name);
         }
         private void CollectPhases(Document doc) {
             PhaseArray phases = doc.Phases;
@@ -133,6 +155,8 @@ namespace app_technopark_collectingPower
                     Parameters.Add(parameter);
                 }
             }
+            Parameters.OrderBy(x => x.Definition.Name).ToList();
+
         }
         private void CollectParametersSpaces()
         {
@@ -147,6 +171,7 @@ namespace app_technopark_collectingPower
                     ParametersSpace.Add(parameter);
                 }
             }
+            ParametersSpace.OrderBy(x => x.Definition.Name);
         }
 
 
@@ -155,15 +180,20 @@ namespace app_technopark_collectingPower
             return SelectedWorkset != null
                 && SelectedLevel != null
                 && SelectedPhase != null
-                && SelectedParameter != null
-                && SelectedParameterSpace != null
-                && SelectedBuildInCategory != 0
-                ;
+                && (SelectedParameter != null && Parameters.Contains(SelectedParameter))
+                && (SelectedParameterSpace != null && ParametersSpace.Contains(SelectedParameterSpace))
+                && SelectedBuildInCategory != 0;
         }
 
 
         public void Write_DoubleParameter_to_space_cumulatively(object obj)
         {
+
+            string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
+            string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
+            string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
+            int convectorsCount = 0;
+
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
                 using (Transaction tr = new Transaction(doc, "CopyParameter"))
@@ -179,6 +209,7 @@ namespace app_technopark_collectingPower
                     IList<Element> spaces = new FilteredElementCollector(doc)
                             .OfCategory(BuiltInCategory.OST_MEPSpaces)
                             .WhereElementIsNotElementType()
+                            .Where(x => x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
                             .ToList();
 
                     log.WriteLine("Конвекторов найдено - " + convectors.Count.ToString());
@@ -212,6 +243,7 @@ namespace app_technopark_collectingPower
                                     .Set(cool_power_was_conv + UnitUtils.ConvertFromInternalUnits(convectors[i]
                                     .LookupParameter(SelectedParameter.Definition.Name)
                                     .AsDouble(), UnitTypeId.Watts));
+                                convectorsCount ++;
                             }
                             catch (Exception e)
                             {
@@ -223,6 +255,7 @@ namespace app_technopark_collectingPower
                     tr.Commit();
                 }
             }
+            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec + Environment.NewLine + "конвекторов найдено: "+ convectorsCount;
         }
 
 

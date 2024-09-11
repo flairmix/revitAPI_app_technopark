@@ -11,11 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB.Mechanical;
 
-namespace app_technopark_collectingPower.Commands
+namespace app_EquipmentPowerToSpace
 {
     [Transaction(TransactionMode.Manual)]
 
-    public class EquipmentPower_to_space : IExternalCommand
+    public class EquipmentPowerToSpaceCommand : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -26,8 +26,8 @@ namespace app_technopark_collectingPower.Commands
 
             var reference = RevitAPI.UIDocument.Selection.PickObject(ObjectType.Element, "Выберете элемент для сбора параметров");
 
-            var viewModel = new ViewModel(reference);
-            var view = new MainView(viewModel);
+            var viewModel = new EquipmentPowerToSpaceViewModel(reference);
+            var view = new EquipmentPowerToSpaceView(viewModel);
 
             viewModel.CloseRequest += (s, e) => view.Close();
             viewModel.HideRequest += (s, e) => view.Hide();

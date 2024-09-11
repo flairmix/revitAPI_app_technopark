@@ -11,10 +11,10 @@ using System.Windows.Forms;
 using System.Reflection.Emit;
 using System.Collections.ObjectModel;
 
-namespace Technopark.Commands
+namespace app_FacadePanelsInfo
 {
     [Transaction(TransactionMode.Manual)]
-    public class FacadePanels : IExternalCommand
+    public class FacadePanelsInfo : IExternalCommand
     {
         readonly IDictionary<string, double> R_wall = new Dictionary<string, double>(){
             {"EWS11", 0.710},
@@ -204,13 +204,14 @@ public Result Execute(ExternalCommandData commandData, ref string message, Eleme
                                 if ((doorLocation.Point.Z + 7.0) > hightLimitDown && (doorLocation.Point.Z + 7.0) < hightLimitUp)
                                 {
                                     outputFile.WriteLine(door.Id.ToString()
-                                                  + "," + door.Name.ToString()
-                                                  + "," + System.Math.Round(doorLocation.Point.X, 2).ToString()
-                                                  + "," + System.Math.Round(doorLocation.Point.Y, 2).ToString()
-                                                  + "," + System.Math.Round(doorLocation.Point.Z, 2).ToString()
+                                                  + "," + door.Name.ToString().Replace(',', '.')
+                                                  + "," + Math.Round(doorLocation.Point.X, 2).ToString().Replace(',', '.')
+                                                  + "," + Math.Round(doorLocation.Point.Y, 2).ToString().Replace(',', '.')
+                                                  + "," + Math.Round(doorLocation.Point.Z, 2).ToString().Replace(',', '.')
                                                   + "," + checkSpacesAround(_doc, doorLocation.Point, finderRadius, logFile, phase)
-                                                  + "," + System.Math.Round(UnitUtils.ConvertFromInternalUnits(door.LookupParameter("Площадь проема").AsDouble(), UnitTypeId.SquareMeters), 3)
-                                                  + "," + R_wall["door"]
+                                                  + "," + Math.Round(UnitUtils.ConvertFromInternalUnits(door.LookupParameter("Площадь проема").AsDouble(), UnitTypeId.SquareMeters), 3)
+                                                    .ToString().Replace(',', '.')
+                                                  + "," + R_wall["door"].ToString().Replace(",", ".")
                                                   + "," + door.LookupParameter("ADSK_Позиция на схеме").AsString()
                                         );
                                 }
@@ -241,14 +242,16 @@ public Result Execute(ExternalCommandData commandData, ref string message, Eleme
 
                                             if (center.Z > hightLimitDown && center.Z < hightLimitUp && wall.LookupParameter("ADSK_Позиция на схеме").AsString().Length > 0)
                                             {
-                                                outputFile.WriteLine(wall.Id.ToString() + "," + wall.Name.ToString()
-                                                              + "," + System.Math.Round(center.X, 2).ToString()
-                                                              + "," + System.Math.Round(center.Y, 2).ToString()
-                                                              + "," + System.Math.Round(center.Z, 2).ToString()
-                                                              + "," + checkSpacesAround(_doc, center, finderRadius, logFile, phase)
-                                                              + "," + System.Math.Round(UnitUtils.ConvertFromInternalUnits(wall.LookupParameter("Area").AsDouble(), UnitTypeId.SquareMeters), 3).ToString()
-                                                              + "," + R_wall[wall.Name.ToString()]
-                                                            + "," + wall.LookupParameter("ADSK_Позиция на схеме").AsString()
+                                                outputFile.WriteLine(wall.Id.ToString() + "," 
+                                                    + wall.Name.ToString().Replace(',', '.')
+                                                    + "," + System.Math.Round(center.X, 2).ToString().Replace(',', '.')
+                                                    + "," + System.Math.Round(center.Y, 2).ToString().Replace(',', '.')
+                                                    + "," + System.Math.Round(center.Z, 2).ToString().Replace(',', '.')
+                                                    + "," + checkSpacesAround(_doc, center, finderRadius, logFile, phase)
+                                                    + "," + System.Math.Round(UnitUtils.ConvertFromInternalUnits(wall.LookupParameter("Area")
+                                                                            .AsDouble(), UnitTypeId.SquareMeters), 3).ToString().Replace(',', '.')
+                                                    + "," + R_wall[wall.Name.ToString()].ToString().Replace(",", ".")
+                                                    + "," + wall.LookupParameter("ADSK_Позиция на схеме").AsString()
                                                 );
                                             }
                                         }
