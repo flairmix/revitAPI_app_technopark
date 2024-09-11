@@ -27,7 +27,7 @@ namespace ApplicationNamespace
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
 
-            if (panel.AddItem(new PushButtonData("FAQ", "Info", thisAssemblyPath, "Technopark.Commands.FAQ"))
+            if (panel.AddItem(new PushButtonData("FAQ", "Info", thisAssemblyPath, "ApplicationNamespace.FAQ"))
                 is PushButton buttonFAQ)
             {
                 buttonFAQ.ToolTip = "Информация о работе плагина";

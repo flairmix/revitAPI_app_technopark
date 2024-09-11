@@ -10,9 +10,9 @@
             d:DataContext= "{d:DesignInstance local:EquipmentPowerToSpaceViewModel}"
 		    Background="#FF73777B" 
             MinWidth="650"
-            MinHeight="500"            
+            MinHeight="550"            
             MaxWidth="650"
-            MaxHeight="500"
+            MaxHeight="550"
         
             HorizontalAlignment="Left" 
 		    Title="Копирование мощности конвекторов в пространства" 
@@ -144,13 +144,13 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     >
-            <TextBlock Text="v2024.0.21_MID"
-                       TextBlock.FontSize="10"
-                       Height="16"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Bottom"
-                       Margin="10"
-                       />
+            <TextBlock Text="{Binding Version}"
+                           TextBlock.FontSize="10"
+                           Height="16"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           Margin="10"
+                           />
             <Image Height="50" 
                        Margin="15"
                        HorizontalAlignment="Right"

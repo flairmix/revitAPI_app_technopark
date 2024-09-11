@@ -97,18 +97,22 @@
                                Width="150"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Command="{Binding OT_XC_write_zones_to_equipment}" 
+                    <Button Command="{Binding OT_XC_write_zones_to_equipment}" 
                         Margin="15" 
                         Padding="5" 
                         Content="Запуск" Width="100" Height="30" 
                         />
+                            <TextBlock Text="{Binding Status}"
+                       TextWrapping="Wrap"
+                       Margin="15" 
+                       Width="415"/>
 
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         >
-                <TextBlock Text="v2024.0.31_MID"
+                <TextBlock Text="{Binding Version}"
                            TextBlock.FontSize="10"
                            Height="16"
                            HorizontalAlignment="Left"

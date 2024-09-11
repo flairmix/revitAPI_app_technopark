@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Technopark.Commands
+namespace ApplicationNamespace
 {
     [Transaction(TransactionMode.Manual)]
     public class FAQ : IExternalCommand
     {
+
         string textFAQ = "Для актуализации таблицы теплопотерь выполнить: " + Environment.NewLine +
             "1 - Находиться в модели ОТ " + Environment.NewLine +
             "2 - Включить следующие рабочие наборы и линк.модели:" + Environment.NewLine +
@@ -26,15 +27,16 @@ namespace Technopark.Commands
             "       - оставить главные заголовки - headers, остальное все выключить " + Environment.NewLine +
             "6 - В папке с расчетами запустить '11899_расчет теплопотерь.exe' " + Environment.NewLine +
             "7 - На выходе получится csv файл, который можно загрузить в excel'  " + Environment.NewLine +
-            "(ver_240828_0.30)";
+            "(ver_240911_0.50_MID)";
 
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+            
             TaskDialog info = new TaskDialog("Инфо");
-            info.MainInstruction = "Как использовать это для расчета теплопотерь";
-            info.MainContent = textFAQ;
-            info.Show();
+                info.MainInstruction = "Как использовать это для расчета теплопотерь";
+                info.MainContent = textFAQ;
+                info.Show();
 
             return Result.Succeeded;
         }

@@ -23,8 +23,11 @@ namespace app_EquipmentFindingZone
         private Level _selectedLevel;
         private Phase _selectedPhase;
         private BuiltInCategory _selectedBuildInCategory;
+        string _status;
+        private string _version = "ver_240911_0.50_MID";
 
-        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log.txt";
+        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_EquipmentFindingZoneViewModel_"
+            + DateTime.Now.ToString("yyMMdd_HHmmss") +".txt";
 
         Document doc = RevitAPI.Document;
 
@@ -75,6 +78,25 @@ namespace app_EquipmentFindingZone
                 OnPropertyChanged();
             }
         }
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
+        }        
+        
+        public string Version
+        {
+            get => _version;
+            set
+            {
+                _version = value;
+                OnPropertyChanged();
+            }
+        }
 
         public IList<Workset> Worksets { get; set; } = new List<Workset>();
         public IList<Level> Levels { get; set; } = new List<Level>();
@@ -103,9 +125,7 @@ namespace app_EquipmentFindingZone
             return SelectedWorkset != null
                 && SelectedLevel != null
                 && SelectedPhase != null
-                && SelectedBuildInCategory != 0
-                && (SelectedWorkset.Owner == null || SelectedWorkset.Owner == "");
-                ;
+                && SelectedBuildInCategory != 0;
         }
         
         public void ADSK_Zone_by_Space(object obj)
@@ -115,52 +135,82 @@ namespace app_EquipmentFindingZone
             int countConvectorZoneNoChanges = 0;
             string convectorsNotWithZone = "";
 
-            using (Transaction tr = new Transaction(doc, "CopyParameter"))
+            string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
+            string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
+            string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
+
+            using (StreamWriter log = new StreamWriter(pathLogs))
             {
 
-                tr.Start();
-
-                IList<Element> convectors = new FilteredElementCollector(doc)
-                        .OfCategory(BuiltInCategory.OST_MechanicalEquipment)
-                        .WhereElementIsNotElementType().ToList()
-                        .Where(x => ((x.WorksetId.IntegerValue == SelectedWorkset.Id.IntegerValue) 
-                        && x.LevelId.IntegerValue == SelectedLevel.LevelId.IntegerValue)).ToList();
-
-                IList<Element> spaces = new FilteredElementCollector(doc)
-                        .OfCategory(BuiltInCategory.OST_MEPSpaces)
-                        .WhereElementIsNotElementType()
-                        .ToList();
-
-                for (int i = 0; i < convectors.Count(); i++)
+                using (Transaction tr = new Transaction(doc, "CopyParameter"))
                 {
 
-                    XYZ convectorLocationPoint = (convectors[i].Location as LocationPoint).Point;
-                    XYZ convectorLocationPointZ = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
+                    tr.Start();
 
-                    try
+                    IList<Element> convectors = new FilteredElementCollector(doc)
+                            .OfCategory(BuiltInCategory.OST_MechanicalEquipment)
+                            .WhereElementIsNotElementType().Where(x => (x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue &&
+                            x.WorksetId.IntegerValue == SelectedWorkset.Id.IntegerValue)).ToList();
+
+                    IList<Element> spaces = new FilteredElementCollector(doc)
+                            .OfCategory(BuiltInCategory.OST_MEPSpaces)
+                            .WhereElementIsNotElementType().Where(x => (x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue))
+                            .ToList();
+
+                    log.WriteLine("app used - " + "app_EquipmentFindingZone" + Environment.NewLine +
+                                    "document used - " +  doc.PathName + Environment.NewLine +
+                                    "user - " + doc.Application.Username + Environment.NewLine +
+                                    "date - " + DateTime.Now.ToLocalTime().ToString("yyMMdd_ddd_HHmmss"));
+
+                    log.WriteLine("SelectedLevel.LevelId.IntegerValue - " + SelectedLevel.Id.IntegerValue);
+                    log.WriteLine("convectors.Count - " + convectors.Count);
+                    log.WriteLine("spaces.Count - " + spaces.Count);
+
+                    for (int i = 0; i < convectors.Count(); i++)
                     {
-                        Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ, SelectedPhase) as Space;
-                        string spaceZone = spaceWhereConvector.LookupParameter(p_ADSK_Zone).AsString();
-
-                        if (convectors[i].LookupParameter(p_ADSK_Zone).AsString() == spaceZone)
+                        try
                         {
-                            countConvectorZoneNoChanges++;
+                            convectors[i].LookupParameter(p_ADSK_Zone).Set(0.0);
                         }
-                        else
+                        catch (Exception e1)
                         {
-                            convectors[i].LookupParameter(p_ADSK_Zone).Set(spaceZone);
-                            countConvectorZoneChanges++;
+                            log.WriteLine(convectors[i].Name.ToString() + " - " + e1.Message);
                         }
                     }
-                    catch (Exception)
+
+                    for (int i = 0; i < convectors.Count(); i++)
                     {
+
+                        XYZ convectorLocationPoint = (convectors[i].Location as LocationPoint).Point;
+                        XYZ convectorLocationPointZ = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
+
+                        try
+                        {
+                            Space spaceWhereConvector = doc.GetSpaceAtPoint(convectorLocationPointZ, SelectedPhase) as Space;
+                            string spaceZone = spaceWhereConvector.LookupParameter(p_ADSK_Zone).AsString();
+
+                            if (convectors[i].LookupParameter(p_ADSK_Zone).AsString() == spaceZone)
+                            {
+                                countConvectorZoneNoChanges++;
+                            }
+                            else
+                            {
+                                convectors[i].LookupParameter(p_ADSK_Zone).Set(spaceZone);
+                                countConvectorZoneChanges++;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log.WriteLine("error - " + e.Message + "ID - " + convectors[i].Id);
+                        }
                     }
+                    tr.Commit();
                 }
-                tr.Commit();
-                TaskDialog.Show("Result",
-                    "Конвекторов без изменения параметра ADKS_Зона: " + countConvectorZoneNoChanges + Environment.NewLine +
-                    "Конвекторов c изменением параметра ADKS_Зона: " + countConvectorZoneChanges + Environment.NewLine + convectorsNotWithZone) ;
+
             }
+            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec + Environment.NewLine 
+                + "конвекторов без изменения параметра: " + countConvectorZoneNoChanges + Environment.NewLine
+                + "конвекторов с изменением параметра: " + countConvectorZoneChanges + Environment.NewLine;
         }
 
 

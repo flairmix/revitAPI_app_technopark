@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
+
 namespace app_EquipmentPowerToSpace
 {
     public class EquipmentPowerToSpaceViewModel : INotifyPropertyChanged
@@ -28,8 +29,10 @@ namespace app_EquipmentPowerToSpace
         private Parameter _selectedParameterSpace;
         string _status;
         string _folderPath;
+        private string _version = "ver_240911_0.50_MID";
 
-        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log.txt";
+        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_EquipmentPowerToSpaceViewModel_"
+            + DateTime.Now.ToString("yyMMdd_HHmmss") + ".txt";
 
         Document doc = RevitAPI.Document;
 
@@ -42,7 +45,9 @@ namespace app_EquipmentPowerToSpace
             CollectParametersSpaces();
 
             XC_WriteConvectorsPower_to_space_command = new RelayCommand(Write_DoubleParameter_to_space_cumulatively, TypeCheckingInputs);
+
         }
+
 
         public RelayCommand XC_WriteConvectorsPower_to_space_command { get; set; }
 
@@ -100,7 +105,15 @@ namespace app_EquipmentPowerToSpace
                 OnPropertyChanged();
             }
         }
-
+        public string Version
+        {
+            get => _version;
+            set
+            {
+                _version = value;
+                OnPropertyChanged();
+            }
+        }
         public IList<Workset> Worksets { get; set; } = new List<Workset>();
         public IList<Level> Levels { get; set; } = new List<Level>();
         public IList<Phase> Phases { get; set; } = new List<Phase>();
@@ -132,6 +145,7 @@ namespace app_EquipmentPowerToSpace
         private void CollectWorksets(Document doc) {
             Worksets = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset).Where(x => x.IsOpen && !x.Name.Contains("000")).ToList();
         }
+
         private void CollectLevels(Document doc)
         {
             Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements().Select(x => x as Level).ToList();
@@ -193,6 +207,7 @@ namespace app_EquipmentPowerToSpace
             string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
             string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
             int convectorsCount = 0;
+            int convectorsLostCount = 0;
 
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
@@ -212,9 +227,15 @@ namespace app_EquipmentPowerToSpace
                             .Where(x => x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
                             .ToList();
 
+                    log.WriteLine("app used - " + "app_EquipmentPowerToSpace" + Environment.NewLine +
+                                    "document used - " + doc.PathName + Environment.NewLine +
+                                    "user - " + doc.Application.Username + Environment.NewLine +
+                                    "date - " + DateTime.Now.ToLocalTime().ToString("yyMMdd_ddd_HHmmss"));
+
                     log.WriteLine("Конвекторов найдено - " + convectors.Count.ToString());
                     log.WriteLine("Spaces найдено - " + spaces.Count.ToString());
 
+                    // null old values of parameter
                     foreach (var space in spaces)
                     {
                         try
@@ -232,6 +253,25 @@ namespace app_EquipmentPowerToSpace
                         XYZ convectorLocationPoint = (convectors[i].Location as LocationPoint).Point;
                         XYZ convectorLocationPointZ = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
 
+                        XYZ convectorLocationPoint_PlusZMinusY = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y - 3.0, convectorLocationPoint.Z + 3.0);
+                        XYZ convectorLocationPoint_PlusZPlusY = new XYZ(convectorLocationPoint.X, convectorLocationPoint.Y + 3.0, convectorLocationPoint.Z + 3.0);
+                        XYZ convectorLocationPoint_PlusZPlusX = new XYZ(convectorLocationPoint.X + 3.0, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
+                        XYZ convectorLocationPoint_PlusZPMinusX = new XYZ(convectorLocationPoint.X -3.0, convectorLocationPoint.Y, convectorLocationPoint.Z + 3.0);
+
+                        // check if space not just above convector, but closely 
+                        if (doc.GetSpaceAtPoint(convectorLocationPointZ, SelectedPhase) == null)
+                        {
+                            if (doc.GetSpaceAtPoint(convectorLocationPoint_PlusZMinusY, SelectedPhase) != null) {
+                                convectorLocationPointZ = convectorLocationPoint_PlusZMinusY;
+                            } else if (doc.GetSpaceAtPoint(convectorLocationPoint_PlusZPlusY, SelectedPhase) != null) {
+                                convectorLocationPointZ = convectorLocationPoint_PlusZPlusY;
+                            } else if (doc.GetSpaceAtPoint(convectorLocationPoint_PlusZPlusX, SelectedPhase) != null) {
+                                convectorLocationPointZ = convectorLocationPoint_PlusZPlusX;
+                            } else if (doc.GetSpaceAtPoint(convectorLocationPoint_PlusZPMinusX, SelectedPhase) != null) {
+                                convectorLocationPointZ = convectorLocationPoint_PlusZPMinusX;
+                            }
+                        }
+
                         if (SelectedPhase != null && doc.GetSpaceAtPoint(convectorLocationPointZ, SelectedPhase) != null)
                         {
                             try
@@ -240,22 +280,27 @@ namespace app_EquipmentPowerToSpace
                                 double cool_power_was_conv = spaceWhereConvector.LookupParameter(SelectedParameterSpace.Definition.Name).AsDouble();
 
                                 spaceWhereConvector.LookupParameter(SelectedParameterSpace.Definition.Name)
-                                    .Set(cool_power_was_conv + UnitUtils.ConvertFromInternalUnits(convectors[i]
-                                    .LookupParameter(SelectedParameter.Definition.Name)
-                                    .AsDouble(), UnitTypeId.Watts));
+                                    .Set(cool_power_was_conv + convectors[i].LookupParameter(SelectedParameter.Definition.Name).AsDouble());
                                 convectorsCount ++;
                             }
                             catch (Exception e)
                             {
-                                log.WriteLine(e);
+                                log.WriteLine(e.Message + convectors[i].Id.IntegerValue);
                             }
+                        }
+                        else
+                        {
+                            log.WriteLine(convectors[i].Id +" - " + convectors[i].LookupParameter("ADSK_Зона").AsString() +  " - did't found Space");
+                            convectorsLostCount++;
                         }
                     }
 
                     tr.Commit();
                 }
             }
-            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec + Environment.NewLine + "конвекторов найдено: "+ convectorsCount;
+            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec 
+                + Environment.NewLine + "конвекторов найдено: " + convectorsCount 
+                + Environment.NewLine + "конвекторов не нашедших space: " + convectorsLostCount;
         }
 
 
