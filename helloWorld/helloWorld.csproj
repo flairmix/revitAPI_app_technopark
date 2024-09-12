@@ -72,6 +72,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app_FacadePanelsInfo\OrientWall.cs" />
+    <Compile Include="app_FacadePanelsInfo\WallOrientCommand.cs" />
     <Compile Include="app_spaceScheduleExport\SpaceScheduleExportCommand.cs" />
     <Compile Include="app_spaceScheduleExport\SpaceScheduleExportView.xaml.cs">
       <DependentUpon>SpaceScheduleExportView.xaml</DependentUpon>
