@@ -105,12 +105,10 @@ namespace app_FacadePanelsInfo
                        "wall.Name",
                        "ADSK_Позиция на схеме",
                        "area_m2",
-                       "orientFaceMatchSurface",
                        "Normalize_X",
                        "Normalize_Y",
                        "Normalize_Z",
                        "AngleToY",
-                       "FaceNormal.X > 0.0",
                        "FaceNormal.Z < 0.45"
                     };
 
@@ -120,74 +118,33 @@ namespace app_FacadePanelsInfo
                     logWalls.Write("\n");
 
                     // finding angle to true north
-                    IList<Element> walls = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).WhereElementIsNotElementType().ToList();
+                    IList<Element> wall_elements = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).WhereElementIsNotElementType().ToList();
 
-                    foreach (var wall in walls)
+                    foreach (Element wall in wall_elements)
                     {
-                        Options opt = new Options();
-                        opt.DetailLevel = ViewDetailLevel.Coarse;
-                        Solid wallSolid = null;
 
-                        foreach (GeometryObject obj in wall.get_Geometry(opt))
+
+                        OrientedWall orientedWall = new OrientedWall( wall, angleTrueNorth, 0.45, true );
+
+                        if (orientedWall.IsValidObject)
                         {
-                            Solid s = obj as Solid;
-                            if (s != null)
-                            {
-                                wallSolid = s;
-                            }
-                        }
-                        
-                        // only for PlanarFace
-                        Face biggestOne = null;
-
-
-                        if (wallSolid != null)
-                        {
-                            foreach (Face face in wallSolid.Faces) {
-
-                                if (face.OrientationMatchesSurfaceOrientation && 
-                                        (biggestOne == null || (Math.Round(biggestOne.Area, 5) <= Math.Round(face.Area, 5))))
-                                {
-                                    biggestOne = face;
-                                }
-                            }
-                        }
-
-                        if (biggestOne != null && biggestOne.ToString() == "Autodesk.Revit.DB.PlanarFace")
-                        {
-                                    
-                            PlanarFace biggestOnePlanarFace = biggestOne as PlanarFace;
-
-                            XYZ biggestOnePlanarFace_XY = new XYZ(biggestOnePlanarFace.FaceNormal.X, biggestOnePlanarFace.FaceNormal.Y, 0.0);
-                            XYZ biggestOnePlanarFace_XZ = new XYZ(biggestOnePlanarFace.FaceNormal.X, 0.0, biggestOnePlanarFace.FaceNormal.Z);
-
-                            XYZ ProjNorth_XY = new XYZ(0.0, 1.0, 0.0);
 
                             logWalls.WriteLine(wall.Id + ","
-                                          + wall.Name + ","
-                                          + wall.LookupParameter("ADSK_Позиция на схеме").AsString() + ","
-                                          + UnitUtils.ConvertFromInternalUnits(biggestOne.Area, UnitTypeId.SquareMeters) + ","
-                                          + biggestOnePlanarFace.OrientationMatchesSurfaceOrientation + ","
-                                          + biggestOnePlanarFace.FaceNormal.Normalize().X + ","
-                                          + biggestOnePlanarFace.FaceNormal.Normalize().Y + ","
-                                          + biggestOnePlanarFace.FaceNormal.Normalize().Z + ","
-                                          + (short)(UnitUtils.ConvertFromInternalUnits(biggestOnePlanarFace_XY.AngleTo(ProjNorth_XY), UnitTypeId.Degrees)) + ","
-                                          + (biggestOnePlanarFace.FaceNormal.X > 0.0) + ","
-                                          + (biggestOnePlanarFace.FaceNormal.Z < 0.45)
-                                         );
-
-
+                                  + wall.Name + ","
+                                  + wall.LookupParameter("ADSK_Позиция на схеме").AsString() + ","
+                                  + Math.Round(UnitUtils.ConvertFromInternalUnits(orientedWall.FaceArea, UnitTypeId.SquareMeters), 2) + ","
+                                  + Math.Round(orientedWall.FaceNormal.X, 2) + ","
+                                  + Math.Round(orientedWall.FaceNormal.Y, 2) + ","
+                                  + Math.Round(orientedWall.FaceNormal.Z, 2) + ","
+                                  + orientedWall.AngleToTrueNorth + ","
+                                  + orientedWall.IsClerestory + ","
+                                  + orientedWall.TrueNorthVector + ","
+                                 );
                         }
                     }
-
                 }
-
-
-
-
                 return Result.Succeeded;
             }
-
         }
 
 
