@@ -108,8 +108,10 @@ namespace app_FacadePanelsInfo
                        "Normalize_X",
                        "Normalize_Y",
                        "Normalize_Z",
-                       "AngleToY",
-                       "FaceNormal.Z < 0.45"
+                       "AngleToTrueNorth",
+                       "AnglesToCardinal",
+                       "IsClerestory",
+                       "FaceOrientationCardial"
                     };
 
                     foreach (string column in columns) {
@@ -137,8 +139,10 @@ namespace app_FacadePanelsInfo
                                   + Math.Round(orientedWall.FaceNormal.Y, 2) + ","
                                   + Math.Round(orientedWall.FaceNormal.Z, 2) + ","
                                   + orientedWall.AngleToTrueNorth + ","
+                                  + orientedWall.AnglesToCardinal + ","
                                   + orientedWall.IsClerestory + ","
-                                  + orientedWall.TrueNorthVector + ","
+                                  + orientedWall.FaceOrientationCardial
+
                                  );
                         }
                     }

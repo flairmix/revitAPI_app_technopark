@@ -26,10 +26,5 @@ namespace app_EquipmentPowerToSpace
             InitializeComponent();
             DataContext = viewModel;
         }
-
-        private void TextBlock_Selected(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
