@@ -72,6 +72,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app_FacadePanelsInfo\FacadePanelsInfo.cs" />
+    <Compile Include="app_FacadePanelsInfo\FacadePanelsInfoViewModel.cs" />
+    <Compile Include="app_FacadePanelsInfo\FacadePanelsInfoView.xaml.cs">
+      <DependentUpon>FacadePanelsInfoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="app_FacadePanelsInfo\OrientedWall.cs" />
     <Compile Include="app_FacadePanelsInfo\WallOrientCommand.cs" />
     <Compile Include="app_spaceScheduleExport\SpaceScheduleExportCommand.cs" />
@@ -94,7 +99,7 @@
     <Compile Include="Faq.cs" />
     <Compile Include="app_HeatingSpecPrep\hvacHeating_SystemNameHandler.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFill.cs" />
-    <Compile Include="app_FacadePanelsInfo\FacadePanelsInfo.cs" />
+    <Compile Include="app_FacadePanelsInfo\FacadePanelsInfoCommand.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -142,6 +147,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="app_FacadePanelsInfo\FacadePanelsInfoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="app_spaceScheduleExport\SpaceScheduleExportView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

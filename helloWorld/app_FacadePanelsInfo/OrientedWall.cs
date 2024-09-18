@@ -26,6 +26,15 @@ namespace app_FacadePanelsInfo
         private double _anglesToCardinal;
         private IDictionary<string, XYZ> _cardinalVectors = new Dictionary<string, XYZ>();
 
+        public enum PlaneType
+        {
+            Planar,
+            Revolved,
+            Ruled,
+            Cylindrical
+        }
+        private PlaneType _planeType;
+
         //curve walls
         private RevolvedFace _revolvedFace;
         private RuledFace _ruledFace;
@@ -55,6 +64,7 @@ namespace app_FacadePanelsInfo
 
             if (_planarFace != null)
             {
+                _planeType = PlaneType.Planar;
                 _angleToProjectNorth = GetAngleToProjectNorth();
                 _angleToTrueNorth = GetAngleToTrueNorth();
                 _isClerestory = _planarFace.FaceNormal.Z > pitchValue;
@@ -72,12 +82,12 @@ namespace app_FacadePanelsInfo
                 _isValidObject = true;
             }
 
-            else if (_revolvedFace != null) { 
+            else if (_revolvedFace != null) {
                 // get Mesh and calculate sum of normal vectors 
-                
+                _planeType = PlaneType.Revolved;
+                _faceNormal = GetRevolvedFaceNormal(_revolvedFace);
 
-
-
+                _isValidObject = true;
             }
 
             else {
@@ -116,6 +126,10 @@ namespace app_FacadePanelsInfo
         public double AnglesToCardinal
         {
             get => _anglesToCardinal;
+        }        
+        public PlaneType CurrentPlaneType
+        {
+            get => _planeType;
         }           
         
         public IDictionary<string, XYZ> CardinalVectors
@@ -239,9 +253,14 @@ namespace app_FacadePanelsInfo
             _faceOrientationCardial = anglesToCardinal[_anglesToCardinal];
         }
 
-        private void GetRevolvedFaceNormal()
+        private XYZ GetRevolvedFaceNormal(RevolvedFace revolvedFace)
         {
+            Mesh mesh = revolvedFace.Triangulate();
 
+            BoundingBoxUV box = revolvedFace.GetBoundingBox();
+            UV faceCenter = (box.Max + box.Min) / 2;
+
+            return revolvedFace.ComputeNormal(faceCenter).Normalize().Negate(); 
         }
 
 
