@@ -43,12 +43,10 @@ namespace app_FacadePanelsInfo
 
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_panels_from_level.txt";
         readonly string pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
-        string outputFileName;
-
-        readonly List<string> archModelTitles = new List<string>() { "164_TPS_Arch_GOR_EXT_A-C_Panel_(MEP)" };
 
         private Document _selectedLinkWithWalls;
         private Level _selectedLevelFloor;
+        private Workset _selectedWorksetWithSpaces;
         private Level _selectedLevelCeiling;
         private double _selectedLevelFloorIndent;
         private double _selectedLevelCeilingIndent;
@@ -62,6 +60,7 @@ namespace app_FacadePanelsInfo
         {
             _version = "ver_240918_0.60_MID";
             CollectLinkDocuments(doc);
+            CollectWorksetsWithSpaces(doc);
             CollectLevels(doc);
             SelectedLevelFloorIndent = 0.0;
             SelectedLevelCeilingIndent = 0.0;
@@ -116,6 +115,15 @@ namespace app_FacadePanelsInfo
                 _selectedLevelCeilingIndent = value;
                 OnPropertyChanged();
             }
+        }       
+        public Workset SelectedWorksetWithSpaces
+        {
+            get => _selectedWorksetWithSpaces;
+            set
+            {
+                _selectedWorksetWithSpaces = value;
+                OnPropertyChanged();
+            }
         }
         public Phase SelectedPhase
         {
@@ -141,14 +149,14 @@ namespace app_FacadePanelsInfo
         }
 
 
-        public IList<Workset> Worksets { get; set; } = new List<Workset>();
+        public IList<Workset> WorksetsWithSpaces { get; set; } = new List<Workset>();
         public IList<Level> Levels { get; set; } = new List<Level>();
         public IList<Phase> Phases { get; set; } = new List<Phase>();
         public IList<Document> DocumentLinks { get; set; } = new List<Document>();
 
-        private void CollectWorksets(Document doc)
+        private void CollectWorksetsWithSpaces(Document doc)
         {
-            Worksets = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset).Where(x => x.IsOpen).ToList();
+            WorksetsWithSpaces = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset).Where(x => x.IsOpen).ToList();
         }        
         private void CollectLinkDocuments(Document doc)
         {
@@ -169,9 +177,6 @@ namespace app_FacadePanelsInfo
                 }
                 catch (Exception) { }
             }
-
-
-                    Worksets = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset).Where(x => x.IsOpen).ToList();
         }
         private void CollectLevels(Document doc)
         {
@@ -189,9 +194,10 @@ namespace app_FacadePanelsInfo
         private bool TypeCheckingInputs(object obj)
         {
             return SelectedLinkWithWalls != null
+                && SelectedPhase != null
                 && SelectedLevelFloor != null
                 && SelectedLevelCeiling != null
-                && SelectedPhase != null;
+                ;
         }
 
 

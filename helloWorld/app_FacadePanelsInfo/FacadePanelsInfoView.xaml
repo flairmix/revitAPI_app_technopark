@@ -20,46 +20,47 @@
 
     <xctk:BusyIndicator IsBusy="{Binding isBusy}">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="893*"/>
-                <ColumnDefinition Width="107*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.ColumnSpan="1">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock Margin="15"
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="473*"/>
+                <ColumnDefinition Width="27*"/>
+            </Grid.ColumnDefinitions>-->
+            <Border Margin="14,10,14,10" CornerRadius="7" BorderBrush="DarkGray"  BorderThickness="2" Grid.ColumnSpan="2">
+                <StackPanel Grid.ColumnSpan="1">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Margin="15"
                            Width="150"
                            Text="Описание работы:"
                            />
-                    <TextBlock Margin="15"
+                        <TextBlock Margin="15"
                            Width="380"
                            Text="Ассоциация наружный стен здания с пространствами" 
                            TextWrapping="Wrap"
                            />
-                </StackPanel>
-                <Separator/>
-                <StackPanel Orientation="Horizontal" 
+                    </StackPanel>
+                    <Separator/>
+                    <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
-                    <TextBlock Margin="15" 
+                        <TextBlock Margin="15" 
                                Text="Выберете Link со стенами: "
                                Width="150"
                            TextWrapping="Wrap"/>
-                    <ComboBox ItemsSource="{Binding DocumentLinks}"
+                        <ComboBox ItemsSource="{Binding DocumentLinks}"
                               SelectedItem="{Binding SelectedLinkWithWalls}"
                           Height="32"
                               DisplayMemberPath="Title"
                               Margin="5" 
                               Width="250" 
                               HorizontalAlignment="Left"/>
-                    <TextBlock Margin="15" 
+                        <TextBlock Margin="15" 
                                Text=""
                                Width="150"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" 
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
-                    <TextBlock Margin="15" 
+                        <TextBlock Margin="15" 
                                Text="Выберете Phase: "
                                Width="150"/>
-                    <ComboBox ItemsSource="{Binding Phases}"
+                        <ComboBox ItemsSource="{Binding Phases}"
                               SelectedItem="{Binding SelectedPhase}"
                           Height="32"
                       
@@ -67,36 +68,37 @@
                               Margin="5" 
                               Width="250" 
                               HorizontalAlignment="Left"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" 
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
-                    <TextBlock Margin="15" 
+                        <TextBlock Margin="15" 
                                Text="Выберете Level (floor): "
                                Width="150"/>
-                    <ComboBox ItemsSource="{Binding Levels}"
+                        <ComboBox ItemsSource="{Binding Levels}"
                               SelectedItem="{Binding SelectedLevelFloor}"
                                 Height="32"
                               DisplayMemberPath="Name"
                               Margin="5" 
                               Width="250" 
                               HorizontalAlignment="Left"/>
-                    <TextBlock Margin="15" 
+                        <TextBlock Margin="15" 
                                Text="Выберете Level (ceiling): "
                                Width="150"/>
-                    <ComboBox ItemsSource="{Binding Levels}"
+                        <ComboBox ItemsSource="{Binding Levels}"
                               SelectedItem="{Binding SelectedLevelCeiling}"
                                 Height="32"
                               DisplayMemberPath="Name"
                               Margin="5" 
                               Width="250" 
                               HorizontalAlignment="Left"/>
-                </StackPanel>
-                    <Border CornerRadius="7" BorderBrush="DarkGray"  BorderThickness="2" DockPanel.Dock="Top">
+                    </StackPanel>
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Margin="15" 
                                        Text="Отступ от нижнего уровня "
                                        Width="150"/>
                         <TextBox Text="{Binding SelectedLevelFloorIndent}"
+                                 
                                       Height="32"
                                       Margin="5" 
                                       Width="250" 
@@ -110,47 +112,66 @@
                                       Width="250" 
                                       HorizontalAlignment="Left"/>
                     </StackPanel>
-                    </Border>
+
+                    <Separator/>
+                    <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left">
+                        <TextBlock Margin="15" 
+                               Text="Выберете Workset с пространствами: "
+                               Width="150"
+                           TextWrapping="Wrap"/>
+                        <ComboBox ItemsSource="{Binding WorksetsWithSpaces}"
+                              SelectedItem="{Binding SelectedWorksetWithSpaces}"
+                          Height="32"
+                              DisplayMemberPath="Name"
+                              Margin="5" 
+                              Width="250" 
+                              HorizontalAlignment="Left"/>
+                        <TextBlock Margin="15" 
+                               Text=""
+                               Width="150"/>
+                    </StackPanel>
 
 
+                    <Separator/>
 
-
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="888" Height="90">
-                    <Button Command="{Binding CollectExternalWallInfo_Command}" 
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="888" Height="90">
+                        <Button Command="{Binding CollectExternalWallInfo_Command}" 
                         Margin="15" 
                         Padding="5" 
                         Content="Запуск" Width="100" Height="30" 
                         />
-                    <TextBlock Text="{Binding Status}"
+                        <TextBlock Text="{Binding Status}"
                        TextWrapping="Wrap"
                        Margin="15" 
                        Width="734"/>
 
-                </StackPanel>
-                <StackPanel Orientation="Horizontal"
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         >
-                    <TextBlock Text="{Binding Version}"
+                        <TextBlock Text="{Binding Version}"
                            TextBlock.FontSize="10"
                            Height="16"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
                            Margin="10"
                            />
-                    <Image Height="50" 
+                        <Image Height="50" 
                            Margin="15"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Bottom"
                            >
-                        <Image.Source>
-                            <BitmapImage DecodePixelWidth="300" 
+                            <Image.Source>
+                                <BitmapImage DecodePixelWidth="300" 
                                      UriSource="/helloWorld;component/Resources/ATP_tlp_4c.png" />
-                        </Image.Source>
-                    </Image>
+                            </Image.Source>
+                        </Image>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Border>
+
         </Grid>
     </xctk:BusyIndicator>
 </Window>
