@@ -65,7 +65,11 @@ namespace app_FacadePanelsInfo
             {"11899_TPS_MEP_OT_ATP_A-C_L1-L2", 1},
             {"11899_TPS_MEP_OT_ATP_A-C_L3-L4", 3},
             {"11899_TPS_MEP_OT_ATP_A-C_L5-L6", 5},
-            {"11899_TPS_MEP_OT_ATP_A-C_L7", 7}
+            {"11899_TPS_MEP_OT_ATP_A-C_L7", 7},           
+            {"11899_TPS_MEP_XC_ATP_A-C_L1-L2", 1},
+            {"11899_TPS_MEP_XC_ATP_A-C_L3-L4", 3},
+            {"11899_TPS_MEP_XC_ATP_A-C_L5-L6", 5},
+            {"11899_TPS_MEP_XC_ATP_A-C_L7", 7}
         };
 
 
@@ -99,7 +103,7 @@ public Result Execute(ExternalCommandData commandData, ref string message, Eleme
                     }
                 }
 
-                outputFileName = "Panels_level_" + level.ToString() + "_OT.txt";
+                outputFileName = "Panels_level_" + level.ToString() + ".txt";
 
                 using (StreamWriter outputFile = new StreamWriter(pathLevelOutputFolder + outputFileName))
                 {
@@ -127,7 +131,7 @@ public Result Execute(ExternalCommandData commandData, ref string message, Eleme
                 if(level != 7)
                 {
                     level += 1;
-                    outputFileName = "Panels_level_" + level.ToString() + "_OT.txt";
+                    outputFileName = "Panels_level_" + level.ToString() + ".txt";
                     using (StreamWriter outputFile = new StreamWriter(pathLevelOutputFolder + outputFileName))
                     {
                         try

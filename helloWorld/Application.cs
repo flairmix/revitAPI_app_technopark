@@ -39,12 +39,12 @@ namespace ApplicationNamespace
 
             panel.AddSeparator();
 
-            if (panel.AddItem(new PushButtonData("Technopark.Button_0", "Get Panels info", thisAssemblyPath, "app_FacadePanelsInfo.FacadePanelsInfo"))
+            if (panel.AddItem(new PushButtonData("Technopark.Button_0", "Get Panels info", thisAssemblyPath, "app_FacadePanelsInfo.FacadePanelsInfoCommand"))
                 is PushButton button)
             {
-                button.ToolTip = "Выгрузка фасадных панелей для отопления"
+                button.ToolTip = "Выгрузка инфо о наружных ограждениях"
                     + Environment.NewLine
-                    + "для расчета теплопотерь."
+                    + "для расчета теплопотерь / теплоппоступлений."
                     + Environment.NewLine
                     + "Наружные ограждения сопоставить с размещенными инженерными спэйсами";
 

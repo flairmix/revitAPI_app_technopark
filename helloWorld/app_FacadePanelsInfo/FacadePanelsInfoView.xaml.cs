@@ -14,14 +14,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace app_EquipmentPowerToSpace
+namespace app_FacadePanelsInfo
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class EquipmentPowerToSpaceView : Window
+    public partial class FacadePanelsInfoView : Window
     {
-        public EquipmentPowerToSpaceView (EquipmentPowerToSpaceViewModel viewModel)
+        public FacadePanelsInfoView(FacadePanelsInfoViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
