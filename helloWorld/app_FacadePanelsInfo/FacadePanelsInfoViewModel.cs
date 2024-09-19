@@ -3,14 +3,17 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -42,7 +45,7 @@ namespace app_FacadePanelsInfo
         };
 
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_panels_from_level.txt";
-        readonly string pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
+        private string _pathLevelOutputFolder;
 
         private Document _selectedLinkWithWalls;
         private Level _selectedLevelFloor;
@@ -50,7 +53,10 @@ namespace app_FacadePanelsInfo
         private Level _selectedLevelCeiling;
         private double _selectedLevelFloorIndent;
         private double _selectedLevelCeilingIndent;
+        private double _selectedRadiusOfFind;
         private Phase _selectedPhase;
+        private Parameter _selectedParameterWall;
+
         string _status;
         private string _version;
 
@@ -59,17 +65,21 @@ namespace app_FacadePanelsInfo
         public FacadePanelsInfoViewModel()
         {
             _version = "ver_240918_0.60_MID";
+            _pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs";
             CollectLinkDocuments(doc);
             CollectWorksetsWithSpaces(doc);
             CollectLevels(doc);
             SelectedLevelFloorIndent = 0.0;
             SelectedLevelCeilingIndent = 0.0;
+            _selectedRadiusOfFind = 5.0;
             CollectPhases(doc);
 
             CollectExternalWallInfo_Command = new RelayCommand(CollectExternalWallInfo, TypeCheckingInputs);
+            Dialog_Command = new RelayCommand(Dialog, TypeCheckingInputs);
         }
 
         public RelayCommand CollectExternalWallInfo_Command { get; set; }
+        public RelayCommand Dialog_Command { get; set; }
 
         public Document SelectedLinkWithWalls
         {
@@ -77,6 +87,7 @@ namespace app_FacadePanelsInfo
             set
             {
                 _selectedLinkWithWalls = value;
+                CollectParametersWallsObservable(value);  
                 OnPropertyChanged();
             }
         }
@@ -115,6 +126,15 @@ namespace app_FacadePanelsInfo
                 _selectedLevelCeilingIndent = value;
                 OnPropertyChanged();
             }
+        }         
+        public double SelectedRadiusOfFind
+        {
+            get => _selectedRadiusOfFind;
+            set
+            {
+                _selectedRadiusOfFind = value;
+                OnPropertyChanged();
+            }
         }       
         public Workset SelectedWorksetWithSpaces
         {
@@ -133,7 +153,25 @@ namespace app_FacadePanelsInfo
                 _selectedPhase = value;
                 OnPropertyChanged();
             }
+        }        
+        public Parameter SelectedParameterWall
+        {
+            get => _selectedParameterWall;
+            set
+            {
+                _selectedParameterWall = value;
+                OnPropertyChanged();
+            }
         }
+        public string PathLevelOutputFolder
+        {
+            get => _pathLevelOutputFolder;
+            set
+            {
+                _pathLevelOutputFolder = value;
+                OnPropertyChanged();
+            }
+        }        
         public string Status
         {
             get => _status;
@@ -153,6 +191,7 @@ namespace app_FacadePanelsInfo
         public IList<Level> Levels { get; set; } = new List<Level>();
         public IList<Phase> Phases { get; set; } = new List<Phase>();
         public IList<Document> DocumentLinks { get; set; } = new List<Document>();
+        public ObservableCollection<Parameter> ParametersWallsObservable { get; set; } = new ObservableCollection<Parameter>();
 
         private void CollectWorksetsWithSpaces(Document doc)
         {
@@ -190,6 +229,23 @@ namespace app_FacadePanelsInfo
                 Phases.Add(phase);
             }
         }
+        private void CollectParametersWallsObservable(Document doc)
+        {
+            Element element = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).WhereElementIsNotElementType()
+                 .FirstOrDefault();
+            ParameterSet parameterSet = element.Parameters;
+            ParametersWallsObservable.Clear();
+
+            foreach (Parameter paramObj in parameterSet)
+            {
+                var parameter = (Parameter)paramObj;
+                if (!parameter.IsReadOnly && parameter.StorageType != StorageType.ElementId)
+                {
+                    ParametersWallsObservable.Add(parameter);
+                }
+            }
+            ParametersWallsObservable.OrderBy(x => x.Definition.Name).ToList();
+        }     
 
         private bool TypeCheckingInputs(object obj)
         {
@@ -229,11 +285,11 @@ namespace app_FacadePanelsInfo
         public void CollectExternalWallInfo(object obj)
         {
             string datelog_status = DateTime.Now.ToLocalTime().ToString("HH:mm:ss");
-            string outputFileName = "Walls_level_" + SelectedLevelFloor.Name + ".txt";
+            string outputFileName = "\\Walls_level_" + SelectedLevelFloor.Name + ".txt";
 
             using (StreamWriter log = new StreamWriter(pathLogs))
             {
-                using (StreamWriter outputFile = new StreamWriter(pathLevelOutputFolder + outputFileName))
+                using (StreamWriter outputFile = new StreamWriter(PathLevelOutputFolder + outputFileName))
                 {
                     try
                     {
@@ -243,19 +299,19 @@ namespace app_FacadePanelsInfo
                             log,
                             SelectedLevelFloor.Elevation + UnitUtils.ConvertToInternalUnits(SelectedLevelFloorIndent, UnitTypeId.Meters),
                             SelectedLevelCeiling.Elevation + UnitUtils.ConvertToInternalUnits(SelectedLevelCeilingIndent, UnitTypeId.Meters),
-                            60,
+                            UnitUtils.ConvertToInternalUnits(SelectedRadiusOfFind, UnitTypeId.Meters),
                             SelectedPhase);
                     }
                     catch (Exception ex)
                     {
-                        TaskDialog.Show("Error", ex.Message);
+                        MessageBox.Show("Error", ex.Message);
                     }
                 }
             }
             Status = "Успех - " + datelog_status + Environment.NewLine  
                 + " Для уровня: от " + SelectedLevelFloor.Name + " + " + SelectedLevelFloorIndent 
                 + " до " + SelectedLevelCeiling.Name + " + " + SelectedLevelCeilingIndent + Environment.NewLine
-                + "Cохранено по пути:  " + pathLevelOutputFolder + outputFileName;
+                + "Cохранено по пути:  " + PathLevelOutputFolder + outputFileName;
         }
 
         private void PanelsHeatingZoneFind(Document _doc,
@@ -264,7 +320,7 @@ namespace app_FacadePanelsInfo
                                     StreamWriter logFile,
                                    double hightLimitDown,
                                    double hightLimitUp,
-                                   int finderRadius,
+                                   double finderRadius,
                                    Phase phase
                                    )
         {
@@ -294,11 +350,11 @@ namespace app_FacadePanelsInfo
                                         + "," + Math.Round(doorLocation.Point.X, 2).ToString().Replace(',', '.')
                                         + "," + Math.Round(doorLocation.Point.Y, 2).ToString().Replace(',', '.')
                                         + "," + Math.Round(doorLocation.Point.Z, 2).ToString().Replace(',', '.')
-                                        + "," + CheckSpacesAround(_doc, doorLocation.Point, finderRadius, logFile, phase)
+                                        + "," + CheckSpacesAroundOLD(_doc, doorLocation.Point, finderRadius, logFile, phase)
                                         + "," + Math.Round(UnitUtils.ConvertFromInternalUnits(door.LookupParameter("Площадь проема").AsDouble(), UnitTypeId.SquareMeters), 3)
                                         .ToString().Replace(',', '.')
                                         + "," + R_wall["door"].ToString().Replace(",", ".")
-                                        + "," + door.LookupParameter("ADSK_Позиция на схеме").AsString()
+                                        + "," + door.LookupParameter(SelectedParameterWall.Definition.Name).AsString()
                             );
                     }
                 }
@@ -328,18 +384,18 @@ namespace app_FacadePanelsInfo
 
                                 if (center.Z > hightLimitDown 
                                     && center.Z < hightLimitUp 
-                                    && wall.LookupParameter("ADSK_Позиция на схеме").AsString().Length > 0)
+                                    && wall.LookupParameter(SelectedParameterWall.Definition.Name).AsString().Length > 0)
                                 {
                                     outputFile.WriteLine(wall.Id.ToString() + ","
                                         + wall.Name.ToString().Replace(',', '.')
                                         + "," + Math.Round(center.X, 2).ToString().Replace(',', '.')
                                         + "," + Math.Round(center.Y, 2).ToString().Replace(',', '.')
                                         + "," + Math.Round(center.Z, 2).ToString().Replace(',', '.')
-                                        + "," + CheckSpacesAround(_doc, center, finderRadius, logFile, phase)
+                                        + "," + CheckSpacesAroundOLD(_doc, center, finderRadius, logFile, phase)
                                         + "," + Math.Round(UnitUtils.ConvertFromInternalUnits(wall.LookupParameter("Area")
                                                                 .AsDouble(), UnitTypeId.SquareMeters), 3).ToString().Replace(',', '.')
                                         + "," + R_wall[wall.Name.ToString()].ToString().Replace(",", ".")
-                                        + "," + wall.LookupParameter("ADSK_Позиция на схеме").AsString()
+                                        + "," + wall.LookupParameter(SelectedParameterWall.Definition.Name).AsString()
                                     );
                                 }
                             }
@@ -351,10 +407,52 @@ namespace app_FacadePanelsInfo
             catch (Exception) { }
         }
 
-
-        private string CheckSpacesAround(Document _doc, XYZ point, int diff, StreamWriter logs, Phase phase)
+        // TODO change to spin by angle with sin and cos angle 
+        private string CheckSpacesAround(Document _doc, XYZ point, double radius_ft, StreamWriter logs, Phase phase)
         {
+            double angleToRotate = Math.PI / 2;
+            try
+            {
+                if (_doc.GetSpaceAtPoint(point, phase) != null)
+                {
+                    string zone = _doc.GetSpaceAtPoint(point, phase).LookupParameter("ADSK_Зона").AsString();
+                    string spaceName = _doc.GetSpaceAtPoint(point, phase).Name.ToString();
+                    return zone + "," + spaceName;
+                }
 
+                double prev_X = point.X;
+                double prev_Y = point.Y;
+
+                for (int radiusDelta = 1; radiusDelta < (int)radius_ft; radiusDelta += (int)(radius_ft / 10))
+                {
+                    for (int angleDelta = 1; angleDelta < 5; angleDelta++)
+                    {
+                        double rotatedX = prev_X * Math.Cos(angleToRotate* angleDelta) - prev_Y * Math.Sin(angleToRotate * angleDelta);
+                        double rotatedY = prev_X * Math.Sin(angleToRotate* angleDelta) + prev_Y * Math.Cos(angleToRotate * angleDelta);
+
+                        XYZ checkPlace = new XYZ(rotatedX, rotatedY, point.Z).Normalize() * radiusDelta;
+
+                        if (_doc.GetSpaceAtPoint(checkPlace, phase) != null)
+                        {
+                            string zone = _doc.GetSpaceAtPoint(checkPlace, phase).LookupParameter("ADSK_Зона").AsString();
+                            string spaceName = _doc.GetSpaceAtPoint(checkPlace, phase).Name.ToString();
+                            return zone + "," + spaceName;
+                        }
+
+                        prev_X = rotatedX;
+                        prev_Y = rotatedY;
+                    } 
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return ("not found, not found");
+
+        }
+
+        private string CheckSpacesAroundOLD(Document _doc, XYZ point, double diff, StreamWriter logs, Phase phase)
+        {
             try
             {
                 if (_doc.GetSpaceAtPoint(point, phase) != null)
@@ -405,5 +503,30 @@ namespace app_FacadePanelsInfo
         }
 
 
+
+        private void Dialog(object obj)
+        {
+
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "Выберите место сохранения файла:";
+            dlg.IsFolderPicker = true;
+            dlg.InitialDirectory = _pathLevelOutputFolder;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.DefaultDirectory = _pathLevelOutputFolder;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                PathLevelOutputFolder = dlg.FileName;
+            }
+        }
     }
 }

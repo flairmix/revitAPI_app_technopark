@@ -6,16 +6,16 @@
              xmlns:local="clr-namespace:app_FacadePanelsInfo"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="1000" 
-		    d:DesignWidth="1000" 
+             d:DesignHeight="650" 
+		    d:DesignWidth="950" 
             d:DataContext= "{d:DesignInstance local:FacadePanelsInfoViewModel}"
 		    Background="#FF73777B" 
-            MinWidth="1000"
-            MaxWidth="1000"
-            MinHeight="1000"
-            MaxHeight="1000"
+            MinWidth="900"
+            MaxWidth="950"
+            MinHeight="650"
+            MaxHeight="650"
             HorizontalAlignment="Left" 
-		    Title="Ассоциация наружный стен здания с пространствами" 
+		    Title="Ассоциация наружных стен здания с пространствами" 
 		    Cursor="AppStarting">
 
     <xctk:BusyIndicator IsBusy="{Binding isBusy}">
@@ -112,24 +112,51 @@
                                       Width="250" 
                                       HorizontalAlignment="Left"/>
                     </StackPanel>
-
-                    <Separator/>
                     <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
                         <TextBlock Margin="15" 
-                               Text="Выберете Workset с пространствами: "
-                               Width="150"
-                           TextWrapping="Wrap"/>
-                        <ComboBox ItemsSource="{Binding WorksetsWithSpaces}"
-                              SelectedItem="{Binding SelectedWorksetWithSpaces}"
-                          Height="32"
-                              DisplayMemberPath="Name"
+                               Text="Параметр стен с ориентацией: "
+                               TextWrapping="Wrap"
+                               Width="150"/>
+                        <ComboBox ItemsSource="{Binding ParametersWallsObservable}"
+                                SelectedItem="{Binding SelectedParameterWall}"
+                                Height="32"
+                                  IsEditable="True"
+                              DisplayMemberPath="Definition.Name"
                               Margin="5" 
                               Width="250" 
                               HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Margin="15" 
-                               Text=""
+                                       Text="Радиус поиска пространства, м. "
+                                   TextWrapping="Wrap"
+                                       Width="150"/>
+                        <TextBox Text="{Binding SelectedRadiusOfFind}"
+                                      Height="32"
+                                      Margin="5" 
+                                      Width="250" 
+                                      HorizontalAlignment="Left"/>
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left">
+                        <TextBlock Margin="15" 
+                               Text="Выбор места сохранения: "
+                               TextWrapping="Wrap"
                                Width="150"/>
+                        <TextBox Text="{Binding PathLevelOutputFolder}"
+                                Height="32"
+                              Margin="5" 
+                              Width="250" 
+                              HorizontalAlignment="Left"/>
+                        <Button Command="{Binding Dialog_Command}" 
+                        Margin="15" 
+                        Padding="5" 
+                        Content="Browse" Width="100" Height="30" 
+                        />
                     </StackPanel>
 
 
