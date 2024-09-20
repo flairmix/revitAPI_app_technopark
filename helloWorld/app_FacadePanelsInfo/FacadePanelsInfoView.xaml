@@ -18,7 +18,7 @@
 		    Title="Ассоциация наружных стен здания с пространствами" 
 		    Cursor="AppStarting">
 
-    <xctk:BusyIndicator IsBusy="{Binding isBusy}">
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy}" >
         <Grid>
             <!--<Grid.ColumnDefinitions>
                 <ColumnDefinition Width="473*"/>

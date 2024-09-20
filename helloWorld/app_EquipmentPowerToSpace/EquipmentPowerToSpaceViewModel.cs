@@ -6,6 +6,7 @@ using Autodesk.Revit.UI.Selection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -28,28 +29,29 @@ namespace app_EquipmentPowerToSpace
         private Parameter _selectedParameter;
         private Parameter _selectedParameterSpace;
         string _status;
-        string _folderPath;
-        private string _version = "ver_240911_0.50_MID";
+        private string _version = "ver_240920_0.60_MID";
+        private Reference _reference;
 
-        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_EquipmentPowerToSpaceViewModel_"
+        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\
+            log_app_EquipmentPowerToSpace\log_EquipmentPowerToSpaceViewModel_"
             + DateTime.Now.ToString("yyMMdd_HHmmss") + ".txt";
 
         Document doc = RevitAPI.Document;
 
-        public EquipmentPowerToSpaceViewModel(Reference reference)
+        public EquipmentPowerToSpaceViewModel()
         {
             CollectWorksets(doc);
             CollectLevels(doc);
             CollectPhases(doc);
-            CollectParametersEquip(reference);
             CollectParametersSpaces();
 
-            XC_WriteConvectorsPower_to_space_command = new RelayCommand(Write_DoubleParameter_to_space_cumulatively, TypeCheckingInputs);
-
+            WriteConvectorsPowerToSpace = new RelayCommand(Write_DoubleParameter_to_space_cumulatively, TypeCheckingInputs);
+            GetElement = new RelayCommand(GetReference, x=>true);
         }
 
 
-        public RelayCommand XC_WriteConvectorsPower_to_space_command { get; set; }
+        public RelayCommand WriteConvectorsPowerToSpace { get; set; }
+        public RelayCommand GetElement { get; set; }
 
         public Workset SelectedWorkset
         {
@@ -57,6 +59,16 @@ namespace app_EquipmentPowerToSpace
             set
             {
                 _selectedWorkset = value;
+                OnPropertyChanged();
+            }
+        }        
+        public Reference ReferenceElement
+        {
+            get => _reference;
+            set
+            {
+                _reference = value;
+                CollectParametersEquip(value);
                 OnPropertyChanged();
             }
         }
@@ -87,15 +99,6 @@ namespace app_EquipmentPowerToSpace
                 OnPropertyChanged();
             }
         }
-        public string Folder
-        {
-            get => _folderPath;
-            set
-            {
-                _folderPath = value;
-                OnPropertyChanged();
-            }
-        }
         public string Status
         {
             get => _status;
@@ -114,10 +117,12 @@ namespace app_EquipmentPowerToSpace
                 OnPropertyChanged();
             }
         }
+
         public IList<Workset> Worksets { get; set; } = new List<Workset>();
         public IList<Level> Levels { get; set; } = new List<Level>();
         public IList<Phase> Phases { get; set; } = new List<Phase>();
-        public IList<Parameter> Parameters { get; set; } = new List<Parameter>();
+        public ObservableCollection<Parameter> Parameters { get; set; } = new ObservableCollection<Parameter>();
+
         public IList<Parameter> ParametersSpace { get; set; } = new List<Parameter>();
         public IList<BuiltInCategory> BuiltInCategory_Categories { get; set; } = new List<BuiltInCategory>()
         {
@@ -138,17 +143,20 @@ namespace app_EquipmentPowerToSpace
             set
             {
                 _selectedParameterSpace = value;
+
                 OnPropertyChanged();
             }
         }
 
         private void CollectWorksets(Document doc) {
-            Worksets = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset).Where(x => x.IsOpen && !x.Name.Contains("000")).ToList();
+            Worksets = new FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset)
+                .Where(x => x.IsOpen && !x.Name.Contains("000")).ToList();
         }
 
         private void CollectLevels(Document doc)
         {
-            Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements().Select(x => x as Level).ToList();
+            Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels)
+                .ToElements().Select(x => x as Level).ToList();
             Levels.OrderBy(x => x.Name);
         }
         private void CollectPhases(Document doc) {
@@ -161,6 +169,8 @@ namespace app_EquipmentPowerToSpace
         {
             var element = RevitAPI.Document.GetElement(reference);
             ParameterSet parameterSet = element.Parameters;
+            Parameters.Clear(); 
+
             foreach (Parameter paramObj in parameterSet)
             {
                 var parameter = (Parameter)paramObj;
@@ -191,7 +201,8 @@ namespace app_EquipmentPowerToSpace
 
         private bool TypeCheckingInputs(object obj)
         {
-            return SelectedWorkset != null
+            return ReferenceElement != null 
+                && SelectedWorkset != null
                 && SelectedLevel != null
                 && SelectedPhase != null
                 && (SelectedParameter != null && Parameters.Contains(SelectedParameter))
@@ -199,6 +210,13 @@ namespace app_EquipmentPowerToSpace
                 && SelectedBuildInCategory != 0;
         }
 
+        public void GetReference(object obj)
+        {
+            RaiseHideRequest();
+            ReferenceElement = RevitAPI.UIDocument.Selection
+                .PickObject(ObjectType.Element, "Выберете элемент для сбора параметров");
+            RaiseShowRequest();
+        }
 
         public void Write_DoubleParameter_to_space_cumulatively(object obj)
         {

@@ -56,6 +56,7 @@ namespace app_FacadePanelsInfo
         private double _selectedRadiusOfFind;
         private Phase _selectedPhase;
         private Parameter _selectedParameterWall;
+        private bool _isBusy;
 
         string _status;
         private string _version;
@@ -64,6 +65,7 @@ namespace app_FacadePanelsInfo
 
         public FacadePanelsInfoViewModel()
         {
+            _isBusy = false;
             _version = "ver_240918_0.60_MID";
             _pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs";
             CollectLinkDocuments(doc);
@@ -77,6 +79,7 @@ namespace app_FacadePanelsInfo
             CollectExternalWallInfo_Command = new RelayCommand(CollectExternalWallInfo, TypeCheckingInputs);
             Dialog_Command = new RelayCommand(Dialog, TypeCheckingInputs);
         }
+
 
         public RelayCommand CollectExternalWallInfo_Command { get; set; }
         public RelayCommand Dialog_Command { get; set; }
@@ -160,6 +163,15 @@ namespace app_FacadePanelsInfo
             set
             {
                 _selectedParameterWall = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool isBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
                 OnPropertyChanged();
             }
         }
@@ -308,8 +320,8 @@ namespace app_FacadePanelsInfo
                     }
                 }
             }
-            Status = "Успех - " + datelog_status + Environment.NewLine  
-                + " Для уровня: от " + SelectedLevelFloor.Name + " + " + SelectedLevelFloorIndent 
+            Status = "Успех - " + datelog_status + Environment.NewLine
+                + " Для уровня: от " + SelectedLevelFloor.Name + " + " + SelectedLevelFloorIndent
                 + " до " + SelectedLevelCeiling.Name + " + " + SelectedLevelCeilingIndent + Environment.NewLine
                 + "Cохранено по пути:  " + PathLevelOutputFolder + outputFileName;
         }

@@ -29,7 +29,16 @@
                        TextWrapping="Wrap"
                        />
         </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock Margin="15" 
+                           Text="Выберете элемент: "
+                           Width="150"/>
+            <Button Command="{Binding GetElement}" 
+                    Margin="15" 
+                    Content="Выбор элемента" Width="100" Height="30" 
+                    />
 
+        </StackPanel>
         <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
             <TextBlock Margin="15" 
@@ -128,7 +137,7 @@
                            Width="150"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding XC_WriteConvectorsPower_to_space_command}" 
+            <Button Command="{Binding WriteConvectorsPowerToSpace}" 
                     Margin="15" 
                     Padding="5" 
                     Content="Запуск" Width="100" Height="30" 

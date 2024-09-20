@@ -24,9 +24,9 @@ namespace app_EquipmentPowerToSpace
                 RevitAPI.Initialize(commandData);
             }
 
-            var reference = RevitAPI.UIDocument.Selection.PickObject(ObjectType.Element, "Выберете элемент для сбора параметров");
+            //var reference = RevitAPI.UIDocument.Selection.PickObject(ObjectType.Element, "Выберете элемент для сбора параметров");
 
-            var viewModel = new EquipmentPowerToSpaceViewModel(reference);
+            var viewModel = new EquipmentPowerToSpaceViewModel();
             var view = new EquipmentPowerToSpaceView(viewModel);
 
             viewModel.CloseRequest += (s, e) => view.Close();
