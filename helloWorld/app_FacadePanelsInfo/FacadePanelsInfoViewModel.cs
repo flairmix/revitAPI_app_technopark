@@ -351,7 +351,7 @@ namespace app_FacadePanelsInfo
                 logFile.WriteLine("walls found - " + walls.Count.ToString());  //log
                 logFile.WriteLine("doors found - " + doors.Count.ToString());  //log
 
-                foreach (var door in doors)
+                foreach (var door in doors) 
                 {
                     LocationPoint doorLocation = door.Location as LocationPoint;
 

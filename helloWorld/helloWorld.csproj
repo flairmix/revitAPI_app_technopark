@@ -79,6 +79,10 @@
     </Compile>
     <Compile Include="app_OrientWalls\OrientedWall.cs" />
     <Compile Include="app_OrientWalls\WallOrientCommand.cs" />
+    <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillViewModel.cs" />
+    <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillView.xaml.cs">
+      <DependentUpon>SpaceHeatLossesFillView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="app_spaceScheduleExport\SpaceScheduleExportCommand.cs" />
     <Compile Include="app_spaceScheduleExport\SpaceScheduleExportView.xaml.cs">
       <DependentUpon>SpaceScheduleExportView.xaml</DependentUpon>
@@ -148,6 +152,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="app_FacadePanelsInfo\FacadePanelsInfoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
