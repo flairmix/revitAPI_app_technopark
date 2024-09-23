@@ -28,33 +28,8 @@ namespace app_spaceScheduleExport
             }
 
 
-
-            string folderPath = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
-            var dlg = new CommonOpenFileDialog();
-            dlg.Title = "Выберите место сохранения файла:";
-            dlg.IsFolderPicker = true;
-            dlg.InitialDirectory = folderPath;
-
-            dlg.AddToMostRecentlyUsedList = false;
-            dlg.AllowNonFileSystemItems = false;
-            dlg.DefaultDirectory = folderPath;
-            dlg.EnsureFileExists = true;
-            dlg.EnsurePathExists = true;
-            dlg.EnsureReadOnly = false;
-            dlg.EnsureValidNames = true;
-            dlg.Multiselect = false;
-            dlg.ShowPlacesList = true;
-
-            string folder = null;
-
-            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
-            {
-                folder = dlg.FileName;
-            }
-
-            var viewModel = new SpaceScheduleExportViewModel (folder);
+            var viewModel = new SpaceScheduleExportViewModel ();
             var view = new SpaceScheduleExportView (viewModel);
-
 
             viewModel.CloseRequest += (s, e) => view.Close();
             viewModel.HideRequest += (s, e) => view.Hide();

@@ -72,7 +72,7 @@ namespace ApplicationNamespace
             panel.AddSeparator();
 
 
-            if (panel.AddItem(new PushButtonData("Technopark.Button_2", "Fill Spaces", thisAssemblyPath, "app_SpaceHeatLossesFill.SpaceHeatLossesFill"))
+            if (panel.AddItem(new PushButtonData("Technopark.Button_2", "Fill Spaces", thisAssemblyPath, "app_SpaceHeatLossesFill.SpaceHeatLossesFillCommand"))
                 is PushButton buttonSpaceHeatLossesFill)
             {
                 buttonSpaceHeatLossesFill.ToolTip = "Запись теплопотерь из расчета в Spaces" +
@@ -152,89 +152,89 @@ namespace ApplicationNamespace
             return ribbonPanel;
         }
 
-        private void AddStackedButtonGroup(RibbonPanel panel)
-        {
-            string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
+        //private void AddStackedButtonGroup(RibbonPanel panel)
+        //{
+        //    string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
 
-            Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Revit.ico"));
-            BitmapImage bitmapImage = new BitmapImage(uri);
+        //    Uri uri = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Revit.ico"));
+        //    BitmapImage bitmapImage = new BitmapImage(uri);
 
-            Uri uri_2 = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2.png"));
-            BitmapImage bitmapImage_2 = new BitmapImage(uri_2);            
+        //    Uri uri_2 = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2.png"));
+        //    BitmapImage bitmapImage_2 = new BitmapImage(uri_2);            
             
-            Uri uri_1lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image1lvl.png"));
-            BitmapImage bitmapImage_1lvl = new BitmapImage(uri_1lvl);    
+        //    Uri uri_1lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image1lvl.png"));
+        //    BitmapImage bitmapImage_1lvl = new BitmapImage(uri_1lvl);    
                                     
-            Uri uri_2lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2lvl.png"));
-            BitmapImage bitmapImage_2lvl = new BitmapImage(uri_2lvl);    
+        //    Uri uri_2lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image2lvl.png"));
+        //    BitmapImage bitmapImage_2lvl = new BitmapImage(uri_2lvl);    
                                     
-            Uri uri_3lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image3lvl.png"));
-            BitmapImage bitmapImage_3lvl = new BitmapImage(uri_3lvl);    
+        //    Uri uri_3lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image3lvl.png"));
+        //    BitmapImage bitmapImage_3lvl = new BitmapImage(uri_3lvl);    
                                     
-            Uri uri_4lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image4lvl.png"));
-            BitmapImage bitmapImage_4lvl = new BitmapImage(uri_4lvl);    
+        //    Uri uri_4lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image4lvl.png"));
+        //    BitmapImage bitmapImage_4lvl = new BitmapImage(uri_4lvl);    
                         
-            Uri uri_5lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image5lvl.png"));
-            BitmapImage bitmapImage_5lvl = new BitmapImage(uri_5lvl);
+        //    Uri uri_5lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image5lvl.png"));
+        //    BitmapImage bitmapImage_5lvl = new BitmapImage(uri_5lvl);
 
-            Uri uri_6lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image6lvl.png"));
-            BitmapImage bitmapImage_6lvl = new BitmapImage(uri_6lvl);
+        //    Uri uri_6lvl = new Uri(Path.Combine(Path.GetDirectoryName(thisAssemblyPath), "Resources", "Image6lvl.png"));
+        //    BitmapImage bitmapImage_6lvl = new BitmapImage(uri_6lvl);
 
 
-            PushButtonData ConvectorsPower_to_space_1lvl = new PushButtonData("ConvectorsPower_to_space_1lvl", 
-                "ConvectorsPower_to_space_1lvl", 
-                thisAssemblyPath,
-                "Technopark.Commands.ConvectorsPower_to_space_1lvl");
-            ConvectorsPower_to_space_1lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_1lvl.Image = bitmapImage_1lvl;
+        //    PushButtonData ConvectorsPower_to_space_1lvl = new PushButtonData("ConvectorsPower_to_space_1lvl", 
+        //        "ConvectorsPower_to_space_1lvl", 
+        //        thisAssemblyPath,
+        //        "Technopark.Commands.ConvectorsPower_to_space_1lvl");
+        //    ConvectorsPower_to_space_1lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+        //    ConvectorsPower_to_space_1lvl.Image = bitmapImage_1lvl;
 
-            PushButtonData ConvectorsPower_to_space_2lvl = new PushButtonData("ConvectorsPower_to_space_2lvl", 
-                "ConvectorsPower_to_space_2lvl", 
-                thisAssemblyPath,
-                "Technopark.Commands.ConvectorsPower_to_space_2lvl");
-            ConvectorsPower_to_space_2lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_2lvl.Image = bitmapImage_2lvl;
+        //    PushButtonData ConvectorsPower_to_space_2lvl = new PushButtonData("ConvectorsPower_to_space_2lvl", 
+        //        "ConvectorsPower_to_space_2lvl", 
+        //        thisAssemblyPath,
+        //        "Technopark.Commands.ConvectorsPower_to_space_2lvl");
+        //    ConvectorsPower_to_space_2lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+        //    ConvectorsPower_to_space_2lvl.Image = bitmapImage_2lvl;
 
-            PushButtonData ConvectorsPower_to_space_3lvl = new PushButtonData("ConvectorsPower_to_space_3lvl", 
-                "ConvectorsPower_to_space_3lvl", 
-                thisAssemblyPath,
-                "Technopark.Commands.ConvectorsPower_to_space_3lvl");
-            ConvectorsPower_to_space_3lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_3lvl.Image = bitmapImage_3lvl;
+        //    PushButtonData ConvectorsPower_to_space_3lvl = new PushButtonData("ConvectorsPower_to_space_3lvl", 
+        //        "ConvectorsPower_to_space_3lvl", 
+        //        thisAssemblyPath,
+        //        "Technopark.Commands.ConvectorsPower_to_space_3lvl");
+        //    ConvectorsPower_to_space_3lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+        //    ConvectorsPower_to_space_3lvl.Image = bitmapImage_3lvl;
 
-            PushButtonData ConvectorsPower_to_space_4lvl = new PushButtonData("ConvectorsPower_to_space_4lvl", 
-                "ConvectorsPower_to_space_4lvl", 
-                thisAssemblyPath,
-                "Technopark.Commands.ConvectorsPower_to_space_4lvl");
-            ConvectorsPower_to_space_4lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_4lvl.Image = bitmapImage_4lvl;
+        //    PushButtonData ConvectorsPower_to_space_4lvl = new PushButtonData("ConvectorsPower_to_space_4lvl", 
+        //        "ConvectorsPower_to_space_4lvl", 
+        //        thisAssemblyPath,
+        //        "Technopark.Commands.ConvectorsPower_to_space_4lvl");
+        //    ConvectorsPower_to_space_4lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+        //    ConvectorsPower_to_space_4lvl.Image = bitmapImage_4lvl;
 
-            PushButtonData ConvectorsPower_to_space_5lvl = new PushButtonData("ConvectorsPower_to_space_5lvl", 
-                "ConvectorsPower_to_space_5lvl", 
-                thisAssemblyPath,
-                "Technopark.Commands.ConvectorsPower_to_space_5lvl");
-            ConvectorsPower_to_space_5lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_5lvl.Image = bitmapImage_5lvl;
+        //    PushButtonData ConvectorsPower_to_space_5lvl = new PushButtonData("ConvectorsPower_to_space_5lvl", 
+        //        "ConvectorsPower_to_space_5lvl", 
+        //        thisAssemblyPath,
+        //        "Technopark.Commands.ConvectorsPower_to_space_5lvl");
+        //    ConvectorsPower_to_space_5lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+        //    ConvectorsPower_to_space_5lvl.Image = bitmapImage_5lvl;
 
-            PushButtonData ConvectorsPower_to_space_6lvl = new PushButtonData("ConvectorsPower_to_space_6lvl", 
-                "ConvectorsPower_to_space_6lvl", 
-                thisAssemblyPath,
-                "Technopark.Commands.ConvectorsPower_to_space_6lvl");
-            ConvectorsPower_to_space_6lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
-            ConvectorsPower_to_space_6lvl.Image = bitmapImage_6lvl;
+        //    PushButtonData ConvectorsPower_to_space_6lvl = new PushButtonData("ConvectorsPower_to_space_6lvl", 
+        //        "ConvectorsPower_to_space_6lvl", 
+        //        thisAssemblyPath,
+        //        "Technopark.Commands.ConvectorsPower_to_space_6lvl");
+        //    ConvectorsPower_to_space_6lvl.ToolTip = "Запись мощности конвекторов из приборов в Space";
+        //    ConvectorsPower_to_space_6lvl.Image = bitmapImage_6lvl;
 
-            PushButtonData Shaded = new PushButtonData("Shaded", "Shaded", thisAssemblyPath, "StackedButton.Commands.Shaded");
-            Shaded.ToolTip = "Change visual style to Shaded";
-            Shaded.Image = bitmapImage;
+        //    PushButtonData Shaded = new PushButtonData("Shaded", "Shaded", thisAssemblyPath, "StackedButton.Commands.Shaded");
+        //    Shaded.ToolTip = "Change visual style to Shaded";
+        //    Shaded.Image = bitmapImage;
 
-            PushButtonData Realistic = new PushButtonData("Realistic", "Realistic", thisAssemblyPath, "StackedButton.Commands.Realistic");
-            Realistic.ToolTip = "Change visual style to Realistic";
-            Realistic.Image = bitmapImage;
+        //    PushButtonData Realistic = new PushButtonData("Realistic", "Realistic", thisAssemblyPath, "StackedButton.Commands.Realistic");
+        //    Realistic.ToolTip = "Change visual style to Realistic";
+        //    Realistic.Image = bitmapImage;
 
-            IList<RibbonItem> ribbonItemsA = panel.AddStackedItems(ConvectorsPower_to_space_1lvl, ConvectorsPower_to_space_2lvl, ConvectorsPower_to_space_3lvl);
-            IList<RibbonItem> ribbonItemsB = panel.AddStackedItems(ConvectorsPower_to_space_4lvl, ConvectorsPower_to_space_5lvl, ConvectorsPower_to_space_6lvl);
+        //    IList<RibbonItem> ribbonItemsA = panel.AddStackedItems(ConvectorsPower_to_space_1lvl, ConvectorsPower_to_space_2lvl, ConvectorsPower_to_space_3lvl);
+        //    IList<RibbonItem> ribbonItemsB = panel.AddStackedItems(ConvectorsPower_to_space_4lvl, ConvectorsPower_to_space_5lvl, ConvectorsPower_to_space_6lvl);
 
-        }
+        //}
 
         public Result OnShutdown(UIControlledApplication application)
           {

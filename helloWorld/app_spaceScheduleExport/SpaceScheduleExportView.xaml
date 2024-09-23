@@ -4,75 +4,88 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:app_spaceScheduleExport"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
             d:DataContext= "{d:DesignInstance local:SpaceScheduleExportViewModel}"
 		    Background="#FF73777B" 
-            MinWidth="450"
-            MaxWidth="650"
-            MinHeight="400"
-            MaxHeight="400"
+            MinWidth="700"
+            MaxWidth="700"
+            MinHeight="450"
+            MaxHeight="450"
             HorizontalAlignment="Left" 
 		    Title="Экспорт пространств из модели для расчетов" 
-		    Cursor="AppStarting" Height="400" Width="630">
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <TextBlock Margin="15"
-                       Width="150"
-                       Text="Описание работы:"
-                       />
-            <TextBlock Margin="15"
-                       Width="380"
-                       Text="Экспорт пространств из модели для расчетов" 
-                       TextWrapping="Wrap"
-                       />
-        </StackPanel>
+		    Cursor="Arrow" >
+    
+    <xctk:BusyIndicator IsBusy="{Binding IsBusy}" >
+        <Grid>
+            <Border Margin="14,10,14,10" CornerRadius="7" 
+                    BorderBrush="DarkGray"  BorderThickness="2" 
+                    Grid.ColumnSpan="2">
 
-        <StackPanel Orientation="Horizontal" 
+                <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock Margin="15"
+                               Width="150"
+                               Text="Описание работы:"
+                               />
+                    <TextBlock Margin="15"
+                               Width="380"
+                               Text="Экспорт пространств из модели для расчетов" 
+                               TextWrapping="Wrap"
+                               />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Left">
+                    <TextBlock Margin="15" 
+                                   Text="Выберете Workset: "
+                                   Width="150"/>
+                    <ComboBox ItemsSource="{Binding Worksets}"
+                                  SelectedItem="{Binding SelectedWorkset}"
+                              Height="32"
+                                  DisplayMemberPath="Name"
+                                  Margin="5" 
+                                  Width="250" 
+                                  HorizontalAlignment="Left"/>
+                    <TextBlock Margin="15" 
+                                   Text=""
+                                   Width="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
+                            HorizontalAlignment="Left">
+                    <TextBlock Margin="15" 
+                                   Text="Выберете Level: "
+                                   Width="150"/>
+                    <ComboBox ItemsSource="{Binding Levels}"
+                                  SelectedItem="{Binding SelectedLevel}"
+                                    Height="32"
+                                  DisplayMemberPath="Name"
+                                  Margin="5" 
+                                  Width="250" 
+                                  HorizontalAlignment="Left"/>
+                    <TextBlock Margin="15" 
+                                   Text="Ручной выбор уровня, на котором нужно рассчитать "
+                                   Width="150" TextWrapping="WrapWithOverflow"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
-                           Text="Выберете Workset: "
-                           Width="150"/>
-            <ComboBox ItemsSource="{Binding Worksets}"
-                          SelectedItem="{Binding SelectedWorkset}"
-                      Height="32"
-                          DisplayMemberPath="Name"
-                          Margin="5" 
-                          Width="230" 
-                          HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
-                           Text=""
-                           Width="150"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
-                           Text="Выберете Level: "
-                           Width="150"/>
-            <ComboBox ItemsSource="{Binding Levels}"
-                          SelectedItem="{Binding SelectedLevel}"
+                    <TextBlock Margin="15" 
+                            Text="Выбор места сохранения: "
+                            TextWrapping="Wrap"
+                            Width="150"/>
+                        <TextBox Text="{Binding Folder}"
                             Height="32"
-                          DisplayMemberPath="Name"
-                          Margin="5" 
-                          Width="230" 
-                          HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
-                           Text="Ручной выбор уровня, на котором нужно рассчитать "
-                           Width="150" TextWrapping="WrapWithOverflow"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
-                           Text="Выберете путь сохранения: "
-                           Width="150"/>
-            <TextBox Text="{Binding Folder}"
-                            Height="32"
-                          Margin="5" 
-                          Width="230" 
-                          HorizontalAlignment="Left"/>
+                            Margin="5" 
+                            Width="250" 
+                            HorizontalAlignment="Left"/>
+                    <Button Command="{Binding Dialog_Command}" 
+                    Margin="15" 
+                    Padding="5" 
+                    Content="Browse" Width="100" Height="30" 
+                    />
+                </StackPanel>
 
-        </StackPanel>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="585">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="585" Height="85">
             <Button Command="{Binding ExportSpaceWithInfo_relay}" 
                     Margin="15" 
                     Padding="5" 
@@ -89,7 +102,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     >
-            <TextBlock Text="v2024.0.50_MID"
+            <TextBlock Text="{Binding Version}"
                        TextBlock.FontSize="10"
                        Height="16"
                        VerticalAlignment="Bottom"
@@ -110,4 +123,10 @@
         </StackPanel>
 
     </StackPanel>
+
+            </Border>
+
+        </Grid>
+    </xctk:BusyIndicator>
+
 </Window>
