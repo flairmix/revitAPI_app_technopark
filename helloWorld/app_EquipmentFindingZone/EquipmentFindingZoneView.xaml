@@ -10,17 +10,19 @@
 		    d:DesignWidth="600" 
             d:DataContext= "{d:DesignInstance local:EquipmentFindingZoneViewModel}"
 		    Background="#FF73777B" 
-            MinWidth="450"
-            MaxWidth="600"
-            MinHeight="500"
-            MaxHeight="500"
+            MinWidth="650"
+            MaxWidth="650"
+            MinHeight="450"
+            MaxHeight="450"
             HorizontalAlignment="Left" 
 		    Title="Копирование параметра ADSK_Зона в приборы" 
-		    Cursor="AppStarting">
+		    Cursor="Arrow">
     
     <xctk:BusyIndicator IsBusy="{Binding isBusy}">
         <Grid>
-        <StackPanel>
+            <Border Margin="14,10,14,10" CornerRadius="7" BorderBrush="DarkGray"  BorderThickness="2" Grid.ColumnSpan="2">
+
+                <StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Margin="15"
                            Width="150"
@@ -131,6 +133,7 @@
                 </Image>
             </StackPanel>
         </StackPanel>
+                </Border>
         </Grid>
     </xctk:BusyIndicator>
 </Window>

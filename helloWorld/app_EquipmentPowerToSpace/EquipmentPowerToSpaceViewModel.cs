@@ -236,7 +236,8 @@ namespace app_EquipmentPowerToSpace
                     IList<Element> convectors = new FilteredElementCollector(doc)
                         .OfCategory(SelectedBuildInCategory)
                         .WhereElementIsNotElementType().ToList()
-                        .Where(x => x.WorksetId.IntegerValue == SelectedWorkset.Id.IntegerValue && x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
+                        .Where(x => x.WorksetId.IntegerValue == SelectedWorkset.Id.IntegerValue 
+                            && x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
                         .ToList();
 
                     IList<Element> spaces = new FilteredElementCollector(doc)

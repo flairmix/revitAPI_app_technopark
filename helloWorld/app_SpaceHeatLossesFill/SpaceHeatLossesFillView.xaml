@@ -15,7 +15,7 @@
             MinHeight="650"
             MaxHeight="650"
             HorizontalAlignment="Left" 
-		    Title="Заполнение параметров пространства из файла" 
+		    Title="Запись теплопотерь из файла в пространства" 
 		    Cursor="Arrow">
 
     <xctk:BusyIndicator IsBusy="{Binding IsBusy}" >
@@ -24,7 +24,9 @@
                 <ColumnDefinition Width="473*"/>
                 <ColumnDefinition Width="27*"/>
             </Grid.ColumnDefinitions>-->
-            <Border Margin="14,10,14,10" CornerRadius="7" BorderBrush="DarkGray"  BorderThickness="2" Grid.ColumnSpan="2">
+            <Border Margin="14,10,14,10" CornerRadius="7" 
+                    BorderBrush="DarkGray"  BorderThickness="2" 
+                    Grid.ColumnSpan="2">
                 <StackPanel Grid.ColumnSpan="1">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <TextBlock Margin="15"
@@ -33,137 +35,81 @@
                            />
                         <TextBlock Margin="15"
                            Width="380"
-                           Text="Ассоциация наружный стен здания с пространствами" 
+                           Text="Запись теплопотерь из файла в пространства" 
                            TextWrapping="Wrap"
                            />
                     </StackPanel>
+
                     <Separator/>
                     <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
                         <TextBlock Margin="15" 
-                               Text="Выберете Link со стенами: "
-                               Width="150"
-                           TextWrapping="Wrap"/>
-                        <ComboBox ItemsSource="{Binding DocumentLinks}"
-                              SelectedItem="{Binding SelectedLinkWithWalls}"
-                          Height="32"
-                              DisplayMemberPath="Title"
-                              Margin="5" 
-                              Width="250" 
-                              HorizontalAlignment="Left"/>
-                        <TextBlock Margin="15" 
-                               Text=""
-                               Width="150"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left">
-                        <TextBlock Margin="15" 
-                               Text="Выберете Phase: "
-                               Width="150"/>
-                        <ComboBox ItemsSource="{Binding Phases}"
-                              SelectedItem="{Binding SelectedPhase}"
-                          Height="32"
-                      
-                              DisplayMemberPath="Name"
-                              Margin="5" 
-                              Width="250" 
-                              HorizontalAlignment="Left"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left">
-                        <TextBlock Margin="15" 
-                               Text="Выберете Level (floor): "
-                               Width="150"/>
-                        <ComboBox ItemsSource="{Binding Levels}"
-                              SelectedItem="{Binding SelectedLevelFloor}"
-                                Height="32"
-                              DisplayMemberPath="Name"
-                              Margin="5" 
-                              Width="250" 
-                              HorizontalAlignment="Left"/>
-                        <TextBlock Margin="15" 
-                               Text="Выберете Level (ceiling): "
-                               Width="150"/>
-                        <ComboBox ItemsSource="{Binding Levels}"
-                              SelectedItem="{Binding SelectedLevelCeiling}"
-                                Height="32"
-                              DisplayMemberPath="Name"
-                              Margin="5" 
-                              Width="250" 
-                              HorizontalAlignment="Left"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock Margin="15" 
-                                       Text="Отступ от нижнего уровня "
-                                       Width="150"/>
-                        <TextBox Text="{Binding SelectedLevelFloorIndent}"
-                                 
-                                      Height="32"
-                                      Margin="5" 
-                                      Width="250" 
-                                      HorizontalAlignment="Left"/>
-                        <TextBlock Margin="15" 
-                                       Text="Отступ от верхнего уровня "
-                                       Width="150"/>
-                        <TextBox Text="{Binding SelectedLevelCeilingIndent}"
-                                      Height="32"
-                                      Margin="5" 
-                                      Width="250" 
-                                      HorizontalAlignment="Left"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left">
-                        <TextBlock Margin="15" 
-                               Text="Параметр стен с ориентацией: "
+                               Text="Выбор файла с теплопотерями: "
                                TextWrapping="Wrap"
                                Width="150"/>
-                        <ComboBox ItemsSource="{Binding ParametersWallsObservable}"
-                                SelectedItem="{Binding SelectedParameterWall}"
-                                Height="32"
-                                  IsEditable="True"
-                              DisplayMemberPath="Definition.Name"
-                              Margin="5" 
-                              Width="250" 
-                              HorizontalAlignment="Left"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <TextBlock Margin="15" 
-                                       Text="Радиус поиска пространства, м. "
-                                   TextWrapping="Wrap"
-                                       Width="150"/>
-                        <TextBox Text="{Binding SelectedRadiusOfFind}"
-                                      Height="32"
-                                      Margin="5" 
-                                      Width="250" 
-                                      HorizontalAlignment="Left"/>
-
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left">
-                        <TextBlock Margin="15" 
-                               Text="Выбор места сохранения: "
-                               TextWrapping="Wrap"
-                               Width="150"/>
-                        <TextBox Text="{Binding PathLevelOutputFolder}"
+                        <TextBox Text="{Binding PathToFileForReading}"
                                 Height="32"
                               Margin="5" 
-                              Width="250" 
+                              Width="500" 
                               HorizontalAlignment="Left"/>
-                        <Button Command="{Binding Dialog_Command}" 
+                        <Button Command="{Binding DialogShow}" 
                         Margin="15" 
                         Padding="5" 
                         Content="Browse" Width="100" Height="30" 
                         />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left">
+                        <TextBlock Margin="15" 
+                               Text="Separator csv файла: "
+                               TextWrapping="Wrap"
+                               Width="150"/>
+                        <TextBox Text="{Binding CsvSeparator}"
+                                TextAlignment="Center"
+                                 FontSize="16"
+                                Height="32"
+                                 Margin="5" 
+                                  Width="50" 
+                                HorizontalAlignment="Left"/>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left">
+                        <TextBlock Margin="15" 
+                               Text="Выберете Level: "
+                               Width="150"/>
+                        <ComboBox ItemsSource="{Binding Levels}"
+                              SelectedItem="{Binding SelectedLevel}"
+                                Height="32"
+                              DisplayMemberPath="Name"
+                              Margin="5" 
+                              Width="230" 
+                              HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" 
+                   HorizontalAlignment="Left">
+                        <TextBlock Margin="15" 
+                          Text="Выберете параметр куда: "
+                          Width="150"/>
+                        <ComboBox ItemsSource="{Binding SpaceParameters}"
+                            SelectedItem="{Binding SelectedParameterSpace}"
+                            Height="32"
+                            IsEditable="True"
+                             DisplayMemberPath="Definition.Name"
+                             Margin="5" 
+                             Width="230" 
+                             HorizontalAlignment="Left"/>
+                        <TextBlock Margin="15" 
+                              Text="Параметр в Space "
+                              Width="150"/>
+                    </StackPanel>
+
 
 
                     <Separator/>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="888" Height="90">
-                        <Button Command="{Binding CollectExternalWallInfo_Command}" 
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="888" Height="102">
+                        <Button Command="{Binding WriteParameterToSpace}" 
                         Margin="15" 
                         Padding="5" 
                         Content="Запуск" Width="100" Height="30" 
@@ -171,7 +117,7 @@
                         <TextBlock Text="{Binding Status}"
                        TextWrapping="Wrap"
                        Margin="15" 
-                       Width="734"/>
+                       Width="734" Height="78"/>
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"

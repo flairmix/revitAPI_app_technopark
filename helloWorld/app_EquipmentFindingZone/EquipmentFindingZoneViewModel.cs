@@ -24,7 +24,7 @@ namespace app_EquipmentFindingZone
         private Phase _selectedPhase;
         private BuiltInCategory _selectedBuildInCategory;
         string _status;
-        private string _version = "ver_240911_0.50_MID";
+        private string _version = "ver_240923_0.6_MID";
 
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_EquipmentFindingZoneViewModel_"
             + DateTime.Now.ToString("yyMMdd_HHmmss") +".txt";

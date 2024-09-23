@@ -18,10 +18,14 @@ namespace ApplicationNamespace
 {
     public class Application : IExternalApplication
     {
+
+        public string __version;
         
         // Both OnStartup and OnShutdown must be implemented as public method
         public Result OnStartup(UIControlledApplication application)
         {
+
+            __version = "ver_240923_0.6_MID";
 
             RibbonPanel panel = RibbonPanel(application);
             string thisAssemblyPath = Assembly.GetExecutingAssembly().Location;

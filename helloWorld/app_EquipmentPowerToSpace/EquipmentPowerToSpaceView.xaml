@@ -13,70 +13,71 @@
             MinHeight="600"            
             MaxWidth="650"
             MaxHeight="600"
-        
             HorizontalAlignment="Left" 
 		    Title="Копирование мощности конвекторов в пространства" 
 		    Cursor="Arrow">
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <TextBlock Margin="15"
+    <Grid>
+        <Border Margin="14,10,14,10" CornerRadius="7" BorderBrush="DarkGray"  BorderThickness="2" Grid.ColumnSpan="2">
+
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                    <TextBlock Margin="15"
                        Width="150"
                        Text="Описание работы:"
                        />
-            <TextBlock Margin="15"
+                    <TextBlock Margin="15"
                        Width="380"
                        Text="Копирование мощности конвекторов в пространства " 
                        TextWrapping="Wrap"
                        />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="590">
+                    <TextBlock Margin="15" 
                            Text="Выберете элемент: "
                            Width="150"/>
-            <Button Command="{Binding GetElement}" 
-                    Margin="15" 
+                    <Button Command="{Binding GetElement}" 
+                    Margin="5" 
                     Content="Выбор элемента" Width="100" Height="30" 
                     />
-
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Выберете Workset: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding Worksets}"
+                    <ComboBox ItemsSource="{Binding Worksets}"
                           SelectedItem="{Binding SelectedWorkset}"
                       Height="32"
                           DisplayMemberPath="Name"
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text=""
                            Width="150"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Выберете Level: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding Levels}"
+                    <ComboBox ItemsSource="{Binding Levels}"
                           SelectedItem="{Binding SelectedLevel}"
                             Height="32"
                           DisplayMemberPath="Name"
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Ручной выбор уровня, на котором нужно рассчитать "
                            Width="150" TextWrapping="WrapWithOverflow"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Выберете Phase: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding Phases}"
+                    <ComboBox ItemsSource="{Binding Phases}"
                           SelectedItem="{Binding SelectedPhase}"
                       Height="32"
                       
@@ -84,31 +85,31 @@
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Фаза проекта актуальная "
                            Width="150"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Выберете категорию: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding BuiltInCategory_Categories}"
+                    <ComboBox ItemsSource="{Binding BuiltInCategory_Categories}"
                           SelectedItem="{Binding SelectedBuildInCategory}"
                       Height="32"
                       Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text=" "
                            Width="150"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Выберете параметр откуда: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding Parameters}"
+                    <ComboBox ItemsSource="{Binding Parameters}"
                       SelectedItem="{Binding SelectedParameter}"
                     DisplayMemberPath="Definition.Name"
                       IsEditable="True"
@@ -116,15 +117,15 @@
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <TextBlock Margin="15"
+                    <TextBlock Margin="15"
                            Width="150"><Run Language="ru-ru" Text="Параметр оборудования"/></TextBlock>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left">
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Выберете параметр куда: "
                            Width="150"/>
-            <ComboBox ItemsSource="{Binding ParametersSpace}"
+                    <ComboBox ItemsSource="{Binding ParametersSpace}"
                         SelectedItem="{Binding SelectedParameterSpace}"
                       Height="32"
                       IsEditable="True"
@@ -132,45 +133,47 @@
                           Margin="5" 
                           Width="230" 
                           HorizontalAlignment="Left"/>
-            <TextBlock Margin="15" 
+                    <TextBlock Margin="15" 
                            Text="Параметр в Space "
                            Width="150"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding WriteConvectorsPowerToSpace}" 
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Command="{Binding WriteConvectorsPowerToSpace}" 
                     Margin="15" 
                     Padding="5" 
                     Content="Запуск" Width="100" Height="30" 
                     />
-            <TextBlock Text="{Binding Status}"
+                    <TextBlock Text="{Binding Status}"
                        TextWrapping="Wrap"
                        Margin="15" 
                        Width="415"/>
 
-        </StackPanel>
+                </StackPanel>
 
-        <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     >
-            <TextBlock Text="{Binding Version}"
+                    <TextBlock Text="{Binding Version}"
                            TextBlock.FontSize="10"
                            Height="16"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
                            Margin="10"
                            />
-            <Image Height="50" 
+                    <Image Height="50" 
                        Margin="15"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Bottom"
                        >
-                <Image.Source>
-                    <BitmapImage DecodePixelWidth="300" 
+                        <Image.Source>
+                            <BitmapImage DecodePixelWidth="300" 
                                  UriSource="/helloWorld;component/Resources/ATP_tlp_4c.png" />
-                </Image.Source>
-            </Image>
-        </StackPanel>
+                        </Image.Source>
+                    </Image>
+                </StackPanel>
 
-    </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

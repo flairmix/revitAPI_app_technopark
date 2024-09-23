@@ -16,7 +16,7 @@
             MaxHeight="650"
             HorizontalAlignment="Left" 
 		    Title="Ассоциация наружных стен здания с пространствами" 
-		    Cursor="AppStarting">
+		    Cursor="Arrow">
 
     <xctk:BusyIndicator IsBusy="{Binding IsBusy}" >
         <Grid>

@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="app_OrientWalls\OrientedWall.cs" />
     <Compile Include="app_OrientWalls\WallOrientCommand.cs" />
+    <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillCommand.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillViewModel.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillView.xaml.cs">
       <DependentUpon>SpaceHeatLossesFillView.xaml</DependentUpon>
