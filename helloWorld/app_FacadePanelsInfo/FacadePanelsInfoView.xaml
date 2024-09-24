@@ -7,11 +7,11 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="650" 
-		    d:DesignWidth="950" 
+		    d:DesignWidth="1050" 
             d:DataContext= "{d:DesignInstance local:FacadePanelsInfoViewModel}"
 		    Background="#FF73777B" 
-            MinWidth="900"
-            MaxWidth="950"
+            MinWidth="1050"
+            MaxWidth="1050"
             MinHeight="650"
             MaxHeight="650"
             HorizontalAlignment="Left" 
@@ -37,7 +37,21 @@
                            TextWrapping="Wrap"
                            />
                     </StackPanel>
+                    <!--<Separator/>
+                    <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left">
+                        <TextBlock Margin="15" 
+                               Text="Ищем пространства/стены: "
+                               Width="151"
+                           TextWrapping="Wrap" Height="23"/>
+                        <ComboBox ItemsSource="{Binding WallsOrRooms}" 
+                                 SelectedItem="{Binding SelectedSpaceOrRooms}" 
+                                  Margin="5"
+                                 Height="32"
+                                  Width="250"/>
+                    </StackPanel>-->
                     <Separator/>
+                    
                     <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
                         <TextBlock Margin="15" 
@@ -51,9 +65,22 @@
                               Margin="5" 
                               Width="250" 
                               HorizontalAlignment="Left"/>
-                        <TextBlock Margin="15" 
-                               Text=""
-                               Width="150"/>
+                        <!--<TextBlock Margin="15" 
+                               Text="Doc в котором ищем: "
+                               Width="150"
+                           TextWrapping="Wrap"/>-->
+                        <!--<ComboBox ItemsSource="{Binding DocumentLinks}"
+                              SelectedItem="{Binding SelectedDocWhereWeFind}"
+                              Height="32"
+                              DisplayMemberPath="Title"
+                              Margin="5" 
+                              Width="250" 
+                              HorizontalAlignment="Left"/>
+                        <Button Command="{Binding AddDocsToFindList}" 
+                        Margin="15" 
+                        Padding="5" 
+                        Content="Add" Width="59" Height="30" 
+                        />-->
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left">
@@ -62,7 +89,7 @@
                                Width="150"/>
                         <ComboBox ItemsSource="{Binding Phases}"
                               SelectedItem="{Binding SelectedPhase}"
-                          Height="32"
+                                Height="32"
                       
                               DisplayMemberPath="Name"
                               Margin="5" 
