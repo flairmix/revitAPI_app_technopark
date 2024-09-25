@@ -112,22 +112,22 @@ namespace app_SpaceHeatLossesFill
         {
             Element element = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_MEPSpaces)
                 .WhereElementIsNotElementType()
-                .Where(x => x != null 
-                    && x.LevelId.IntegerValue == SelectedLevel.LevelId.IntegerValue
-                    && !x.Parameters.IsEmpty).First();
-            
+                .Where(x => x != null
+                    && x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue
+                    && !x.Parameters.IsEmpty).Last();
+
             SpaceParameters.Clear();
 
             ParameterSet parameterSet = element.Parameters;
-                    
+
             foreach (Parameter paramObj in parameterSet)
-            {
-                var parameter = (Parameter)paramObj;
-                if (!parameter.IsReadOnly && parameter.StorageType != StorageType.ElementId)
-                {
-                    SpaceParameters.Add(parameter);
-                }
-            }
+                    {
+                        var parameter = (Parameter)paramObj;
+                        if (!parameter.IsReadOnly && parameter.StorageType != StorageType.ElementId)
+                        {
+                            SpaceParameters.Add(parameter);
+                        }
+                    }          
             SpaceParameters.OrderBy(x => x.Definition.Name).ToList();
         }
 
@@ -176,16 +176,17 @@ namespace app_SpaceHeatLossesFill
                     {
                         try
                         {
-                            double  heatLoosesWas = space.LookupParameter(SelectedParameterSpace.Definition.Name).AsDouble();
-                            double heatLooses = UnitUtils.ConvertToInternalUnits(Int32.Parse(spaceHeatLosses[space.LookupParameter("Number").AsString()]), UnitTypeId.Watts);
+                            double heatLoosesWas = UnitUtils.ConvertFromInternalUnits(space.LookupParameter(SelectedParameterSpace.Definition.Name).AsInteger(), UnitTypeId.Watts);
+                            
+                            int heatLooses = Int32.Parse(spaceHeatLosses[space.LookupParameter("Number").AsString()]);
 
-                            if  (heatLoosesWas != heatLooses)
+                            if  (Math.Abs(heatLoosesWas - heatLooses) > 5)
                             {
                                 space.LookupParameter(SelectedParameterSpace.Definition.Name)
                                     .Set(UnitUtils.ConvertToInternalUnits(heatLooses, UnitTypeId.Watts));
                                 
                                 SpacesChange++;
-                                log.WriteLine(space.Name + "_" + heatLoosesWas + " - " +heatLooses);
+                                log.WriteLine(space.Name + "_" + heatLoosesWas + " - " + heatLooses);
                             } else
                             {
                                 SpacesNOChange++;
