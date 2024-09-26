@@ -11,7 +11,7 @@ using System.IO;
 using app_FacadePanelsInfo;
 using ApplicationNamespace;
 
-namespace app_SpaceHeatLossesFill
+namespace app_SpaceHeatLossesFill_Old
 {
     [Transaction(TransactionMode.Manual)]
     public class SpaceHeatLossesFill : IExternalCommand
