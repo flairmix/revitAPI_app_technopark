@@ -133,7 +133,6 @@ namespace app_EquipmentFindingZone
             string p_ADSK_Zone = "ADSK_Зона";
             int countConvectorZoneChanges = 0;
             int countConvectorZoneNoChanges = 0;
-            string convectorsNotWithZone = "";
 
             string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
             string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");

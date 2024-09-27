@@ -435,11 +435,11 @@ namespace app_FacadePanelsInfo
                                 string checkAround = null;
                                 if (SelectedSpaceOrRooms == "Spaces")
                                 {
-                                    checkAround = CheckSpacesAroundOLD(_doc, center, finderRadius, logFile, phase);
+                                    checkAround = CheckSpacesAround(_doc, center, finderRadius, logFile, phase);
                                 }
                                 else if (SelectedSpaceOrRooms == "Rooms")
                                 {
-                                    checkAround = CheckRoomsAroundOLD(_doc, center, finderRadius, logFile, phase);
+                                    checkAround = CheckSpacesAround(_doc, center, finderRadius, logFile, phase);
                                 }
 
 
@@ -468,40 +468,43 @@ namespace app_FacadePanelsInfo
             catch (Exception) { }
         }
 
-        // TODO change to spin by angle with sin and cos angle 
-        private string CheckSpacesAround(Document _doc, XYZ point, double radius_ft, StreamWriter logs, Phase phase)
+        // TESTs need
+        private string CheckSpacesAround(Document _doc, 
+                                        XYZ point, 
+                                        double radius_ft, 
+                                        StreamWriter logs, 
+                                        Phase phase, 
+                                        int radiusFindingStep_ft = 2,
+                                        double angleOfRotate = Math.PI / 2)
         {
-            double angleToRotate = Math.PI / 2;
             try
             {
                 if (_doc.GetSpaceAtPoint(point, phase) != null)
                 {
+                    logs.WriteLine("finded at point");
+
                     string zone = _doc.GetSpaceAtPoint(point, phase).LookupParameter("ADSK_Зона").AsString();
                     string spaceName = _doc.GetSpaceAtPoint(point, phase).Name.ToString();
                     return zone + "," + spaceName;
                 }
 
-                double prev_X = point.X;
-                double prev_Y = point.Y;
-
-                for (int radiusDelta = 1; radiusDelta < (int)radius_ft; radiusDelta += (int)(radius_ft / 10))
+                for (int radiusDelta = 1; radiusDelta < (int)radius_ft; radiusDelta += radiusFindingStep_ft)
                 {
-                    for (int angleDelta = 1; angleDelta < 5; angleDelta++)
+                    XYZ localVector = new XYZ(0.0, 1.0, 0.0) * radiusDelta;
+
+                    for (double angleDelta = 0; angleDelta < Math.PI*2; angleDelta+= angleOfRotate)
                     {
-                        double rotatedX = prev_X * Math.Cos(angleToRotate* angleDelta) - prev_Y * Math.Sin(angleToRotate * angleDelta);
-                        double rotatedY = prev_X * Math.Sin(angleToRotate* angleDelta) + prev_Y * Math.Cos(angleToRotate * angleDelta);
+                        double rotatedX = localVector.X * Math.Cos(angleDelta) - localVector.X * Math.Sin(angleDelta);
+                        double rotatedY = localVector.Y * Math.Sin(angleDelta) + localVector.Y * Math.Cos(angleDelta);
 
-                        XYZ checkPlace = new XYZ(rotatedX, rotatedY, point.Z).Normalize() * radiusDelta;
+                        XYZ localVectorRotated = new XYZ(rotatedX, rotatedY, localVector.Z);
 
-                        if (_doc.GetSpaceAtPoint(checkPlace, phase) != null)
+                        if (_doc.GetSpaceAtPoint((point + localVectorRotated), phase) != null)
                         {
-                            string zone = _doc.GetSpaceAtPoint(checkPlace, phase).LookupParameter("ADSK_Зона").AsString();
-                            string spaceName = _doc.GetSpaceAtPoint(checkPlace, phase).Name.ToString();
+                            string zone = _doc.GetSpaceAtPoint((point + localVectorRotated), phase).LookupParameter("ADSK_Зона").AsString();
+                            string spaceName = _doc.GetSpaceAtPoint((point + localVectorRotated), phase).Name.ToString();
                             return zone + "," + spaceName;
                         }
-
-                        prev_X = rotatedX;
-                        prev_Y = rotatedY;
                     } 
                 }
             }
@@ -523,7 +526,7 @@ namespace app_FacadePanelsInfo
                     return zone + "," + spaceName;
                 }
 
-                for (double i = 1.0; i < diff; i += (diff/10))
+                for (double i = 1.0; i < diff; i ++)
                 {
 
                     XYZ checkPlaceUp = new XYZ(point.X + i, point.Y, point.Z);
