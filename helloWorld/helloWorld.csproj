@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="app_EquipmentFindingZone\EquipmentFindingZoneViewModel.cs" />
     <Compile Include="app_EquipmentPowerToSpace\EquipmentPowerToSpaceViewModel.cs" />
+    <Compile Include="GeneralModel\HVAC_Wall.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />
     <Compile Include="app_EquipmentFindingZone\EquipmentFindingZone.cs" />

@@ -468,21 +468,18 @@ namespace app_FacadePanelsInfo
             catch (Exception) { }
         }
 
-        // TESTs need
         private string CheckSpacesAround(Document _doc, 
                                         XYZ point, 
                                         double radius_ft, 
                                         StreamWriter logs, 
                                         Phase phase, 
-                                        int radiusFindingStep_ft = 2,
+                                        int radiusFindingStep_ft = 3,
                                         double angleOfRotate = Math.PI / 2)
         {
             try
             {
                 if (_doc.GetSpaceAtPoint(point, phase) != null)
                 {
-                    logs.WriteLine("finded at point");
-
                     string zone = _doc.GetSpaceAtPoint(point, phase).LookupParameter("ADSK_Зона").AsString();
                     string spaceName = _doc.GetSpaceAtPoint(point, phase).Name.ToString();
                     return zone + "," + spaceName;
@@ -490,19 +487,20 @@ namespace app_FacadePanelsInfo
 
                 for (int radiusDelta = 1; radiusDelta < (int)radius_ft; radiusDelta += radiusFindingStep_ft)
                 {
-                    XYZ localVector = new XYZ(0.0, 1.0, 0.0) * radiusDelta;
+                    XYZ localVector = new XYZ(0.0, 1.0, 0.0).Multiply(radiusDelta);
 
                     for (double angleDelta = 0; angleDelta < Math.PI*2; angleDelta+= angleOfRotate)
                     {
-                        double rotatedX = localVector.X * Math.Cos(angleDelta) - localVector.X * Math.Sin(angleDelta);
-                        double rotatedY = localVector.Y * Math.Sin(angleDelta) + localVector.Y * Math.Cos(angleDelta);
+                        // counter clockwise rotation of vector
+                        XYZ localVectorRotated = new XYZ((localVector.X * Math.Cos(angleDelta) - localVector.Y * Math.Sin(angleDelta)),
+                                                        (localVector.X * Math.Sin(angleDelta) + localVector.Y * Math.Cos(angleDelta)), 
+                                                        localVector.Z
+                                                        );
 
-                        XYZ localVectorRotated = new XYZ(rotatedX, rotatedY, localVector.Z);
-
-                        if (_doc.GetSpaceAtPoint((point + localVectorRotated), phase) != null)
+                        if (_doc.GetSpaceAtPoint(point.Add(localVectorRotated), phase) != null)
                         {
-                            string zone = _doc.GetSpaceAtPoint((point + localVectorRotated), phase).LookupParameter("ADSK_Зона").AsString();
-                            string spaceName = _doc.GetSpaceAtPoint((point + localVectorRotated), phase).Name.ToString();
+                            string zone = _doc.GetSpaceAtPoint(point.Add(localVectorRotated), phase).LookupParameter("ADSK_Зона").AsString();
+                            string spaceName = _doc.GetSpaceAtPoint(point.Add(localVectorRotated), phase).Name.ToString();
                             return zone + "," + spaceName;
                         }
                     } 
