@@ -47,7 +47,10 @@ namespace app_FacadePanelsInfo
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_panels_from_level.txt";
         private string _pathLevelOutputFolder;
 
+        private string _selectedSpaceOrRooms;
+
         private Document _selectedLinkWithWalls;
+        private Document _selectedDocWhereWeFind;
         private Level _selectedLevelFloor;
         private Workset _selectedWorksetWithSpaces;
         private Level _selectedLevelCeiling;
@@ -76,13 +79,22 @@ namespace app_FacadePanelsInfo
             _selectedRadiusOfFind = 5.0;
             CollectPhases(doc);
 
+            DocumentLinks.Add(doc);
+            _selectedDocWhereWeFind = doc;
+
+            WallsOrRooms.Add("Spaces");
+            WallsOrRooms.Add("Rooms");
+            _selectedSpaceOrRooms = WallsOrRooms[0];
+
             CollectExternalWallInfo_Command = new RelayCommand(CollectExternalWallInfo, TypeCheckingInputs);
             Dialog_Command = new RelayCommand(Dialog, TypeCheckingInputs);
+            AddDocsToFindList = new RelayCommand(DocsToFindList, x => true);
         }
 
 
         public RelayCommand CollectExternalWallInfo_Command { get; set; }
         public RelayCommand Dialog_Command { get; set; }
+        public RelayCommand AddDocsToFindList { get; set; }
 
         public Document SelectedLinkWithWalls
         {
@@ -91,6 +103,30 @@ namespace app_FacadePanelsInfo
             {
                 _selectedLinkWithWalls = value;
                 CollectParametersWallsObservable(value);  
+                OnPropertyChanged();
+            }
+        }        
+        
+
+
+        public IList<Workset> WorksetsWithSpaces { get; set; } = new List<Workset>();
+
+        public ObservableCollection<string> WallsOrRooms { get; set; } = new ObservableCollection<string>();
+
+        public IList<Level> Levels { get; set; } = new List<Level>();
+        public IList<Phase> Phases { get; set; } = new List<Phase>();
+        public ObservableCollection<Document> DocumentLinks { get; set; } = new ObservableCollection<Document>();
+        public ObservableCollection<Parameter> ParametersWallsObservable { get; set; } = new ObservableCollection<Parameter>();
+        public ObservableCollection<Document> DocsWhereWeFind { get; set; } = new ObservableCollection<Document>();
+
+
+
+        public Document SelectedDocWhereWeFind
+        {
+            get => _selectedLinkWithWalls;
+            set
+            {
+                _selectedDocWhereWeFind = value;
                 OnPropertyChanged();
             }
         }
@@ -102,7 +138,17 @@ namespace app_FacadePanelsInfo
                 _selectedLevelFloor = value;
                 OnPropertyChanged();
             }
-        }        
+        }
+
+        public string SelectedSpaceOrRooms
+        {
+            get => _selectedSpaceOrRooms;
+            set
+            {
+                _selectedSpaceOrRooms = value;
+                OnPropertyChanged();
+            }
+        }
         public Level SelectedLevelCeiling
         {
             get => _selectedLevelCeiling;
@@ -111,7 +157,7 @@ namespace app_FacadePanelsInfo
                 _selectedLevelCeiling = value;
                 OnPropertyChanged();
             }
-        }        
+        }
         public double SelectedLevelFloorIndent
         {
             get => _selectedLevelFloorIndent;
@@ -120,7 +166,7 @@ namespace app_FacadePanelsInfo
                 _selectedLevelFloorIndent = value;
                 OnPropertyChanged();
             }
-        }        
+        }
         public double SelectedLevelCeilingIndent
         {
             get => _selectedLevelCeilingIndent;
@@ -129,7 +175,7 @@ namespace app_FacadePanelsInfo
                 _selectedLevelCeilingIndent = value;
                 OnPropertyChanged();
             }
-        }         
+        }
         public double SelectedRadiusOfFind
         {
             get => _selectedRadiusOfFind;
@@ -138,7 +184,7 @@ namespace app_FacadePanelsInfo
                 _selectedRadiusOfFind = value;
                 OnPropertyChanged();
             }
-        }       
+        }
         public Workset SelectedWorksetWithSpaces
         {
             get => _selectedWorksetWithSpaces;
@@ -156,7 +202,7 @@ namespace app_FacadePanelsInfo
                 _selectedPhase = value;
                 OnPropertyChanged();
             }
-        }        
+        }
         public Parameter SelectedParameterWall
         {
             get => _selectedParameterWall;
@@ -183,7 +229,7 @@ namespace app_FacadePanelsInfo
                 _pathLevelOutputFolder = value;
                 OnPropertyChanged();
             }
-        }        
+        }
         public string Status
         {
             get => _status;
@@ -198,12 +244,15 @@ namespace app_FacadePanelsInfo
             get => _version;
         }
 
+        public void DocsToFindList(object obj)
+        {
+            DocsWhereWeFind.Add(SelectedDocWhereWeFind);
+            Status = $"Документ \"{_selectedDocWhereWeFind.Title }\" добавлен в список документов, " +
+                $"в которых мы ищем Помещения или Пространства" ;
+        }
 
-        public IList<Workset> WorksetsWithSpaces { get; set; } = new List<Workset>();
-        public IList<Level> Levels { get; set; } = new List<Level>();
-        public IList<Phase> Phases { get; set; } = new List<Phase>();
-        public IList<Document> DocumentLinks { get; set; } = new List<Document>();
-        public ObservableCollection<Parameter> ParametersWallsObservable { get; set; } = new ObservableCollection<Parameter>();
+
+
 
         private void CollectWorksetsWithSpaces(Document doc)
         {
@@ -269,30 +318,6 @@ namespace app_FacadePanelsInfo
         }
 
 
-        public event EventHandler CloseRequest;
-        private void RaiseCloseRequest()
-        {
-            CloseRequest?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler HideRequest;
-        private void RaiseHideRequest()
-        {
-            HideRequest?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler ShowRequest;
-        private void RaiseShowRequest()
-        {
-            ShowRequest?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
 
         public void CollectExternalWallInfo(object obj)
         {
@@ -351,18 +376,31 @@ namespace app_FacadePanelsInfo
                 logFile.WriteLine("walls found - " + walls.Count.ToString());  //log
                 logFile.WriteLine("doors found - " + doors.Count.ToString());  //log
 
-                foreach (var door in doors)
+                foreach (var door in doors) 
                 {
-                    LocationPoint doorLocation = door.Location as LocationPoint;
+                    LocationPoint doorLocationReal = door.Location as LocationPoint;
 
-                    if ((doorLocation.Point.Z + 7.0) > hightLimitDown && (doorLocation.Point.Z + 7.0) < hightLimitUp)
+                    XYZ doorLocation = new XYZ(doorLocationReal.Point.X, doorLocationReal.Point.Y, doorLocationReal.Point.Z + 1.0);
+
+                    string checkAround = null;
+
+                    if (SelectedSpaceOrRooms == "Spaces")
+                    {
+                        checkAround = CheckSpacesAroundOLD(_doc, doorLocation, finderRadius, logFile, phase);
+                    } else if (SelectedSpaceOrRooms == "Rooms")
+                    {
+                        checkAround = CheckRoomsAroundOLD(_doc, doorLocation, finderRadius, logFile, phase);
+                    }
+
+
+                    if ((doorLocation.Z + 7.0) > hightLimitDown && (doorLocation.Z + 7.0) < hightLimitUp)
                     {
                         outputFile.WriteLine(door.Id.ToString()
                                         + "," + door.Name.ToString().Replace(',', '.')
-                                        + "," + Math.Round(doorLocation.Point.X, 2).ToString().Replace(',', '.')
-                                        + "," + Math.Round(doorLocation.Point.Y, 2).ToString().Replace(',', '.')
-                                        + "," + Math.Round(doorLocation.Point.Z, 2).ToString().Replace(',', '.')
-                                        + "," + CheckSpacesAroundOLD(_doc, doorLocation.Point, finderRadius, logFile, phase)
+                                        + "," + Math.Round(doorLocationReal.Point.X, 2).ToString().Replace(',', '.')
+                                        + "," + Math.Round(doorLocationReal.Point.Y, 2).ToString().Replace(',', '.')
+                                        + "," + Math.Round(doorLocationReal.Point.Z, 2).ToString().Replace(',', '.')
+                                        + "," + checkAround
                                         + "," + Math.Round(UnitUtils.ConvertFromInternalUnits(door.LookupParameter("Площадь проема").AsDouble(), UnitTypeId.SquareMeters), 3)
                                         .ToString().Replace(',', '.')
                                         + "," + R_wall["door"].ToString().Replace(",", ".")
@@ -394,6 +432,17 @@ namespace app_FacadePanelsInfo
                             {
                                 XYZ center = wallSolid.ComputeCentroid();
 
+                                string checkAround = null;
+                                if (SelectedSpaceOrRooms == "Spaces")
+                                {
+                                    checkAround = CheckSpacesAround(_doc, center, finderRadius, logFile, phase);
+                                }
+                                else if (SelectedSpaceOrRooms == "Rooms")
+                                {
+                                    checkAround = CheckSpacesAround(_doc, center, finderRadius, logFile, phase);
+                                }
+
+
                                 if (center.Z > hightLimitDown 
                                     && center.Z < hightLimitUp 
                                     && wall.LookupParameter(SelectedParameterWall.Definition.Name).AsString().Length > 0)
@@ -403,7 +452,7 @@ namespace app_FacadePanelsInfo
                                         + "," + Math.Round(center.X, 2).ToString().Replace(',', '.')
                                         + "," + Math.Round(center.Y, 2).ToString().Replace(',', '.')
                                         + "," + Math.Round(center.Z, 2).ToString().Replace(',', '.')
-                                        + "," + CheckSpacesAroundOLD(_doc, center, finderRadius, logFile, phase)
+                                        + "," + checkAround
                                         + "," + Math.Round(UnitUtils.ConvertFromInternalUnits(wall.LookupParameter("Area")
                                                                 .AsDouble(), UnitTypeId.SquareMeters), 3).ToString().Replace(',', '.')
                                         + "," + R_wall[wall.Name.ToString()].ToString().Replace(",", ".")
@@ -419,10 +468,14 @@ namespace app_FacadePanelsInfo
             catch (Exception) { }
         }
 
-        // TODO change to spin by angle with sin and cos angle 
-        private string CheckSpacesAround(Document _doc, XYZ point, double radius_ft, StreamWriter logs, Phase phase)
+        private string CheckSpacesAround(Document _doc, 
+                                        XYZ point, 
+                                        double radius_ft, 
+                                        StreamWriter logs, 
+                                        Phase phase, 
+                                        int radiusFindingStep_ft = 3,
+                                        double angleOfRotate = Math.PI / 2)
         {
-            double angleToRotate = Math.PI / 2;
             try
             {
                 if (_doc.GetSpaceAtPoint(point, phase) != null)
@@ -432,27 +485,24 @@ namespace app_FacadePanelsInfo
                     return zone + "," + spaceName;
                 }
 
-                double prev_X = point.X;
-                double prev_Y = point.Y;
-
-                for (int radiusDelta = 1; radiusDelta < (int)radius_ft; radiusDelta += (int)(radius_ft / 10))
+                for (int radiusDelta = 1; radiusDelta < (int)radius_ft; radiusDelta += radiusFindingStep_ft)
                 {
-                    for (int angleDelta = 1; angleDelta < 5; angleDelta++)
+                    XYZ localVector = new XYZ(0.0, 1.0, 0.0).Multiply(radiusDelta);
+
+                    for (double angleDelta = 0; angleDelta < Math.PI*2; angleDelta+= angleOfRotate)
                     {
-                        double rotatedX = prev_X * Math.Cos(angleToRotate* angleDelta) - prev_Y * Math.Sin(angleToRotate * angleDelta);
-                        double rotatedY = prev_X * Math.Sin(angleToRotate* angleDelta) + prev_Y * Math.Cos(angleToRotate * angleDelta);
+                        // counter clockwise rotation of vector
+                        XYZ localVectorRotated = new XYZ((localVector.X * Math.Cos(angleDelta) - localVector.Y * Math.Sin(angleDelta)),
+                                                        (localVector.X * Math.Sin(angleDelta) + localVector.Y * Math.Cos(angleDelta)), 
+                                                        localVector.Z
+                                                        );
 
-                        XYZ checkPlace = new XYZ(rotatedX, rotatedY, point.Z).Normalize() * radiusDelta;
-
-                        if (_doc.GetSpaceAtPoint(checkPlace, phase) != null)
+                        if (_doc.GetSpaceAtPoint(point.Add(localVectorRotated), phase) != null)
                         {
-                            string zone = _doc.GetSpaceAtPoint(checkPlace, phase).LookupParameter("ADSK_Зона").AsString();
-                            string spaceName = _doc.GetSpaceAtPoint(checkPlace, phase).Name.ToString();
+                            string zone = _doc.GetSpaceAtPoint(point.Add(localVectorRotated), phase).LookupParameter("ADSK_Зона").AsString();
+                            string spaceName = _doc.GetSpaceAtPoint(point.Add(localVectorRotated), phase).Name.ToString();
                             return zone + "," + spaceName;
                         }
-
-                        prev_X = rotatedX;
-                        prev_Y = rotatedY;
                     } 
                 }
             }
@@ -474,13 +524,13 @@ namespace app_FacadePanelsInfo
                     return zone + "," + spaceName;
                 }
 
-                for (double i = 1.0; i < diff; i += 5.0)
+                for (double i = 1.0; i < diff; i ++)
                 {
 
-                    XYZ checkPlaceUp = new XYZ(point.X + i, point.Y, point.Z - 4.0);
-                    XYZ checkPlaceDown = new XYZ(point.X - i, point.Y, point.Z - 4.0);
-                    XYZ checkPlaceRight = new XYZ(point.X, point.Y + i, point.Z - 4.0);
-                    XYZ checkPlaceLeft = new XYZ(point.X, point.Y - i, point.Z - 4.0);
+                    XYZ checkPlaceUp = new XYZ(point.X + i, point.Y, point.Z);
+                    XYZ checkPlaceDown = new XYZ(point.X - i, point.Y, point.Z);
+                    XYZ checkPlaceRight = new XYZ(point.X, point.Y + i, point.Z);
+                    XYZ checkPlaceLeft = new XYZ(point.X, point.Y - i, point.Z);
 
                     if (_doc.GetSpaceAtPoint(checkPlaceUp, phase) != null)
                     {
@@ -512,8 +562,47 @@ namespace app_FacadePanelsInfo
             {
             }
             return ("not found, not found");
-        }
+        }        
+        
+        private string CheckRoomsAroundOLD(Document _doc, XYZ point, double diff, StreamWriter logs, Phase phase)
+        {
+            try
+            {
+                if (_doc.GetRoomAtPoint(point, phase) != null)
+                {
+                    return _doc.GetRoomAtPoint(point, phase).Name.ToString();
+                }
 
+                for (int i = 1; i < diff; i += 5)
+                {
+                    XYZ checkPlaceUp = new XYZ(point.X + i, point.Y, point.Z - 4.0);
+                    XYZ checkPlaceDown = new XYZ(point.X - i, point.Y, point.Z - 4.0);
+                    XYZ checkPlaceRight = new XYZ(point.X, point.Y + i, point.Z - 4.0);
+                    XYZ checkPlaceLeft = new XYZ(point.X, point.Y - i, point.Z - 4.0);
+
+                    if (_doc.GetRoomAtPoint(checkPlaceUp, phase) != null)
+                    {
+                        return _doc.GetRoomAtPoint(checkPlaceUp, phase).Name.ToString();
+                    }
+                    else if (_doc.GetRoomAtPoint(checkPlaceDown, phase) != null)
+                    {
+                        return _doc.GetRoomAtPoint(checkPlaceDown, phase).Name.ToString();
+                    }
+                    else if (_doc.GetRoomAtPoint(checkPlaceRight, phase) != null)
+                    {
+                        return _doc.GetRoomAtPoint(checkPlaceRight, phase).Name.ToString();
+                    }
+                    else if (_doc.GetRoomAtPoint(checkPlaceLeft, phase) != null)
+                    {
+                        return _doc.GetRoomAtPoint(checkPlaceLeft, phase).Name.ToString();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return ("not found, not found");
+        }
 
 
         private void Dialog(object obj)
@@ -540,5 +629,33 @@ namespace app_FacadePanelsInfo
                 PathLevelOutputFolder = dlg.FileName;
             }
         }
+
+
+
+        public event EventHandler CloseRequest;
+        private void RaiseCloseRequest()
+        {
+            CloseRequest?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler HideRequest;
+        private void RaiseHideRequest()
+        {
+            HideRequest?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler ShowRequest;
+        private void RaiseShowRequest()
+        {
+            ShowRequest?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
     }
 }

@@ -27,7 +27,7 @@ namespace ApplicationNamespace
             "       - оставить главные заголовки - headers, остальное все выключить " + Environment.NewLine +
             "6 - В папке с расчетами запустить '11899_расчет теплопотерь.exe' " + Environment.NewLine +
             "7 - На выходе получится csv файл, который можно загрузить в excel'  " + Environment.NewLine +
-            "(ver_240911_0.50_MID)";
+            "(ver_240923_0.60_MID)";
 
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)

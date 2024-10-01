@@ -24,7 +24,7 @@ namespace app_EquipmentFindingZone
         private Phase _selectedPhase;
         private BuiltInCategory _selectedBuildInCategory;
         string _status;
-        private string _version = "ver_240911_0.50_MID";
+        private string _version = "ver_240923_0.6_MID";
 
         readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_EquipmentFindingZoneViewModel_"
             + DateTime.Now.ToString("yyMMdd_HHmmss") +".txt";
@@ -133,7 +133,6 @@ namespace app_EquipmentFindingZone
             string p_ADSK_Zone = "ADSK_Зона";
             int countConvectorZoneChanges = 0;
             int countConvectorZoneNoChanges = 0;
-            string convectorsNotWithZone = "";
 
             string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
             string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");

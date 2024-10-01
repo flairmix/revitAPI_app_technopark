@@ -22,9 +22,10 @@ namespace app_spaceScheduleExport
 {
     public class SpaceScheduleExportViewModel : INotifyPropertyChanged
     {
+        readonly string _pathLogsFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\app_spaceScheduleExport\";
         private Workset _selectedWorkset;
         private Level _selectedLevel;
-        readonly string _version = "v2024.0.40_MID";
+        private string _version ;
         string _folderPath;
         string _status;
 
@@ -43,34 +44,25 @@ namespace app_spaceScheduleExport
             }
         }
 
-        //private string _busyText;
-        ////Busy Text Content
-        //public string BusyText
-        //{
-        //    get { return _busyText; }
-        //    set
-        //    {
-        //        _busyText = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
-        readonly string folderPathDefault = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\";
 
         Document doc = RevitAPI.Document;
 
-        public SpaceScheduleExportViewModel (string pathFolderForSave)
+        public SpaceScheduleExportViewModel ( )
         {
             CollectWorksets(doc);
             CollectLevels(doc);
             IsBusy = false;
+            _version = "ver_240918_0.60_MID";
 
-            _folderPath = pathFolderForSave;
+            _folderPath = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs";
 
             ExportSpaceWithInfo_relay = new RelayCommand(ExportSpaceWithInfo, ExportSpaceWithInfo_CanExecute);
+            Dialog_Command = new RelayCommand(Dialog, x=>true);
+
         }
 
         public RelayCommand ExportSpaceWithInfo_relay { get; set; }
+        public RelayCommand Dialog_Command { get; set; }
 
         public string Folder
         {
@@ -108,6 +100,10 @@ namespace app_spaceScheduleExport
                 OnPropertyChanged();
             }
         }
+        public string Version
+        {
+            get => _version;
+        }
 
 
         public IList<Workset> Worksets { get; set; } = new List<Workset>();
@@ -122,25 +118,26 @@ namespace app_spaceScheduleExport
             Levels = new FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Levels).ToElements().Select(x => x as Level).ToList();
         }
 
-
         public void ExportSpaceWithInfo(object obj)
         {
+            string datelog = DateTime.Now.ToLocalTime().ToString("yyMMdd_HHmmss");
+            string user_log = doc.Application.Username;
+            string pathlog = _pathLogsFolder + $"app_spaceScheduleExport{datelog}_{user_log}_log.txt";
 
-            string datelog = DateTime.Now.ToLocalTime().ToString("yyyyMMdd_HHmmss");
-            string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
-            string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
-            string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
-
-            string pathlog = folderPathDefault + datelog + "log.txt";
             string pathOutputFile = Folder + @"\" + SelectedLevel.Name + "_MID_SpaceLoadsScheduleHeating.csv";
 
             IList<string> columnsNamesSpace = new List<string>() {
-            "Level", "ADSK_Зона", "Name", "Number", "Area", "Room: Number",
-            "Room: Name", "ADSK_Температура в помещении",
-            "ADSK_Теплопотери", "ADSK_Тепловая мощность"};
+                "Level", "ADSK_Зона", "Name", "Number", "Area", "Room: Number",
+                "Room: Name", "ADSK_Температура в помещении",
+                "ADSK_Теплопотери", "ADSK_Тепловая мощность"};
 
             using (StreamWriter log = new StreamWriter(pathlog))
             {
+                log.WriteLine("app used - " + "app_spaceScheduleExport" + Environment.NewLine +
+                    "document used - " + doc.PathName + Environment.NewLine +
+                    "user - " + doc.Application.Username + Environment.NewLine +
+                    "date - " + DateTime.Now.ToLocalTime().ToString("yyMMdd_ddd_HHmmss"));
+                
                 using (StreamWriter outputFile = new StreamWriter(pathOutputFile))
                 {
                     IList<Element> spaces = new FilteredElementCollector(doc)
@@ -176,24 +173,46 @@ namespace app_spaceScheduleExport
                         }
                         catch (Exception e)
                         {
-                            log.Write(space.Name + e);
+                            log.Write(space.Name + e.Message);
                         }
 
                         outputFile.WriteLine(lineResult);
-
-
                     }
                 }
             }
-            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec + Environment.NewLine + pathOutputFile;
+            Status = "Успех - " + datelog + Environment.NewLine + pathOutputFile;
         }
 
         public bool ExportSpaceWithInfo_CanExecute(object obj)
         {
-            return SelectedWorkset != null && SelectedLevel != null;
-             
+            return SelectedWorkset != null 
+                && SelectedLevel != null
+                && Folder != null;
         }
 
+
+        private void Dialog(object obj)
+        {
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "Выберите место сохранения файла:";
+            dlg.IsFolderPicker = true;
+            dlg.InitialDirectory = _folderPath;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.DefaultDirectory = _folderPath;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                Folder = dlg.FileName;
+            }
+        }
 
 
         public event EventHandler CloseRequest;

@@ -8,14 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using System.IO;
+using app_FacadePanelsInfo;
+using ApplicationNamespace;
 
-namespace app_SpaceHeatLossesFill
+namespace app_SpaceHeatLossesFill_Old
 {
     [Transaction(TransactionMode.Manual)]
     public class SpaceHeatLossesFill : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
+
             string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log.txt";
             string folderPath = @"\\atptlp.local\dfs\MOS-TLP\PROJEKTE\11899\05_HAUSTECHNIK\01_Planung\05_Ausfuehrungsplanung\01_HVaC\03_Calculations" +
                                     @"\08_Отопление и теплоснабжение" +

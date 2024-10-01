@@ -29,12 +29,10 @@ namespace app_EquipmentPowerToSpace
         private Parameter _selectedParameter;
         private Parameter _selectedParameterSpace;
         string _status;
-        private string _version = "ver_240920_0.60_MID";
+        private string _version = "ver_240926_0.62_MID";
         private Reference _reference;
 
-        readonly string pathLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\
-            log_app_EquipmentPowerToSpace\log_EquipmentPowerToSpaceViewModel_"
-            + DateTime.Now.ToString("yyMMdd_HHmmss") + ".txt";
+        readonly string _pathFolderLogs = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs\log_EquipmentPowerToSpace\";
 
         Document doc = RevitAPI.Document;
 
@@ -221,13 +219,14 @@ namespace app_EquipmentPowerToSpace
         public void Write_DoubleParameter_to_space_cumulatively(object obj)
         {
 
-            string datelog_status_hour = DateTime.Now.ToLocalTime().ToString("HH");
-            string datelog_status_min = DateTime.Now.ToLocalTime().ToString("mm");
-            string datelog_status_sec = DateTime.Now.ToLocalTime().ToString("ss");
+            string datelog_status = DateTime.Now.ToLocalTime().ToString("yyMMdd_ddd_HHmmss");
+            string user_log = doc.Application.Username;
+            string pathLog = _pathFolderLogs + $"log_EquipmentPowerToSpace_{datelog_status}_{user_log}_log.txt";
+
             int convectorsCount = 0;
             int convectorsLostCount = 0;
 
-            using (StreamWriter log = new StreamWriter(pathLogs))
+            using (StreamWriter log = new StreamWriter(pathLog))
             {
                 using (Transaction tr = new Transaction(doc, "CopyParameter"))
                 {
@@ -236,9 +235,10 @@ namespace app_EquipmentPowerToSpace
                     IList<Element> convectors = new FilteredElementCollector(doc)
                         .OfCategory(SelectedBuildInCategory)
                         .WhereElementIsNotElementType().ToList()
-                        .Where(x => x.WorksetId.IntegerValue == SelectedWorkset.Id.IntegerValue && x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
+                        .Where(x => x.WorksetId.IntegerValue == SelectedWorkset.Id.IntegerValue 
+                            && x.LevelId.IntegerValue == SelectedLevel.Id.IntegerValue)
                         .ToList();
-
+                    
                     IList<Element> spaces = new FilteredElementCollector(doc)
                             .OfCategory(BuiltInCategory.OST_MEPSpaces)
                             .WhereElementIsNotElementType()
@@ -308,7 +308,7 @@ namespace app_EquipmentPowerToSpace
                         }
                         else
                         {
-                            log.WriteLine(convectors[i].Id +" - " + convectors[i].LookupParameter("ADSK_Зона").AsString() +  " - did't found Space");
+                            log.WriteLine(convectors[i].Id + " - " + convectors[i].LookupParameter("ADSK_Зона").AsString() + " - did't found Space");
                             convectorsLostCount++;
                         }
                     }
@@ -316,7 +316,7 @@ namespace app_EquipmentPowerToSpace
                     tr.Commit();
                 }
             }
-            Status = "Успех - " + datelog_status_hour + ":" + datelog_status_min + ":" + datelog_status_sec 
+            Status = "Успех - " + datelog_status
                 + Environment.NewLine + "конвекторов найдено: " + convectorsCount 
                 + Environment.NewLine + "конвекторов не нашедших space: " + convectorsLostCount;
         }
