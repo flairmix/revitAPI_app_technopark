@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 namespace app_FacadePanelsInfo
 {
     [Transaction(TransactionMode.Manual)]
-    public class FacadePanelsInfo : IExternalCommand
+    public class FacadePanelsInfo_old : IExternalCommand
     {
         readonly IDictionary<string, double> R_wall = new Dictionary<string, double>(){
             {"EWS11", 0.710},
