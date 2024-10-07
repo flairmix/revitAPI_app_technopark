@@ -43,15 +43,10 @@ namespace app_EnergyAnalysis
                         .WhereElementIsNotElementType()
                         .Select(x=> x as EnergyAnalysisSpace).ToList();                      
                     
-                    log.WriteLine($"analyticalSpaces.Count - {analyticalSpaces.Count()}");
-
                     IList<EnergyAnalysisSurface> analyticalSurfaces = new FilteredElementCollector(doc)
                         .OfCategory(BuiltInCategory.OST_AnalyticSurfaces)
                         .WhereElementIsNotElementType()
                         .Select(x=> x as EnergyAnalysisSurface).ToList();
-
-                    log.WriteLine($"analyticalSurfaces.Count - {analyticalSurfaces.Count()}");
-
             
 
                     foreach (EnergyAnalysisSurface surface in analyticalSurfaces)
@@ -60,7 +55,7 @@ namespace app_EnergyAnalysis
                         {
                             if (surface.Type == gbXMLSurfaceType.SurfaceAir)
                             {
-                                log.WriteLine(surface.SurfaceName + " --- " + surface.SurfaceType.ToString());
+                                log.WriteLine(surface.SurfaceName + "," + surface.LookupParameter("exterior_facade").AsInteger());
                             }
                         }
                         catch (Exception)
