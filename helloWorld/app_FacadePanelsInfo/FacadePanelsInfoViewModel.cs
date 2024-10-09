@@ -445,7 +445,9 @@ namespace app_FacadePanelsInfo
 
                                 if (center.Z > hightLimitDown 
                                     && center.Z < hightLimitUp 
-                                    && wall.LookupParameter(SelectedParameterWall.Definition.Name).AsString().Length > 0)
+                                    && wall.LookupParameter(SelectedParameterWall.Definition.Name).AsString().Length > 0
+                                    && SelectedParameterWall.AsString() != ""
+                                    && SelectedParameterWall.AsString() != null)
                                 {
                                     outputFile.WriteLine(wall.Id.ToString() + ","
                                         + wall.Name.ToString().Replace(',', '.')
