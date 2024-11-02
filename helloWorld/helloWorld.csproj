@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app_EnergyAnalysis\EnergyAnalysis.cs" />
     <Compile Include="app_FacadePanelsInfo\FacadePanelsInfo.cs" />
     <Compile Include="app_FacadePanelsInfo\FacadePanelsInfoViewModel.cs" />
     <Compile Include="app_FacadePanelsInfo\FacadePanelsInfoView.xaml.cs">
@@ -98,6 +99,7 @@
     </Compile>
     <Compile Include="app_EquipmentFindingZone\EquipmentFindingZoneViewModel.cs" />
     <Compile Include="app_EquipmentPowerToSpace\EquipmentPowerToSpaceViewModel.cs" />
+    <Compile Include="GeneralModel\gbXML_Model.cs" />
     <Compile Include="GeneralModel\HVAC_Wall.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RevitAPI.cs" />

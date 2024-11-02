@@ -172,7 +172,10 @@ namespace app_EquipmentPowerToSpace
             foreach (Parameter paramObj in parameterSet)
             {
                 var parameter = (Parameter)paramObj;
-                if (!parameter.IsReadOnly && parameter.StorageType != StorageType.ElementId)
+                if (!parameter.IsReadOnly 
+                    && parameter.StorageType != StorageType.ElementId
+                    && (parameter.Definition.Name.Contains("ADSK") || parameter.Definition.Name.Contains("atp-tlp"))
+                    )
                 {
                     Parameters.Add(parameter);
                 }
@@ -188,7 +191,11 @@ namespace app_EquipmentPowerToSpace
             foreach (Parameter paramObj in parameterSet)
             {
                 var parameter = (Parameter)paramObj;
-                if (!parameter.IsReadOnly && parameter.StorageType != StorageType.ElementId)
+                if (!parameter.IsReadOnly 
+                    && parameter.StorageType != StorageType.ElementId
+                    && (parameter.Definition.Name.Contains("ADSK") || parameter.Definition.Name.Contains("atp-tlp"))
+                    )
+                    
                 {
                     ParametersSpace.Add(parameter);
                 }
@@ -298,8 +305,9 @@ namespace app_EquipmentPowerToSpace
                                 double cool_power_was_conv = spaceWhereConvector.LookupParameter(SelectedParameterSpace.Definition.Name).AsDouble();
 
                                 spaceWhereConvector.LookupParameter(SelectedParameterSpace.Definition.Name)
-                                    .Set(cool_power_was_conv + convectors[i].LookupParameter(SelectedParameter.Definition.Name).AsDouble());
+                                    .Set(cool_power_was_conv + UnitUtils.ConvertFromInternalUnits(convectors[i].LookupParameter(SelectedParameter.Definition.Name).AsDouble(), UnitTypeId.Watts));
                                 convectorsCount ++;
+
                             }
                             catch (Exception e)
                             {

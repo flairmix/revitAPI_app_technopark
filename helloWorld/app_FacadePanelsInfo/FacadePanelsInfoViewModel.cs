@@ -69,7 +69,7 @@ namespace app_FacadePanelsInfo
         public FacadePanelsInfoViewModel()
         {
             _isBusy = false;
-            _version = "ver_240918_0.60_MID";
+            _version = "ver_241004_0.65_MID";
             _pathLevelOutputFolder = @"\\atptlp.local\dfs\MOS-TLP\GROUPS\ALLGEMEIN\06_HKLS\MID\logs";
             CollectLinkDocuments(doc);
             CollectWorksetsWithSpaces(doc);
