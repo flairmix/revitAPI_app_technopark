@@ -80,6 +80,11 @@
     </Compile>
     <Compile Include="app_OrientWalls\OrientedWall.cs" />
     <Compile Include="app_OrientWalls\WallOrientCommand.cs" />
+    <Compile Include="app_MostLoadedBranch\MostLoadedBranchCommand.cs" />
+    <Compile Include="app_MostLoadedBranch\MostLoadedBranchView.xaml.cs">
+      <DependentUpon>MostLoadedBranchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="app_MostLoadedBranch\MostLoadedBranchViewModel.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillCommand.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillViewModel.cs" />
     <Compile Include="app_SpaceHeatLossesFill\SpaceHeatLossesFillView.xaml.cs">
@@ -156,6 +161,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="app_FacadePanelsInfo\FacadePanelsInfoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="app_MostLoadedBranch\MostLoadedBranchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -174,7 +174,9 @@ namespace app_EquipmentPowerToSpace
                 var parameter = (Parameter)paramObj;
                 if (!parameter.IsReadOnly 
                     && parameter.StorageType != StorageType.ElementId
-                    && (parameter.Definition.Name.Contains("ADSK") || parameter.Definition.Name.Contains("atp-tlp"))
+                    && (parameter.Definition.Name.Contains("ADSK") 
+                    || parameter.Definition.Name.Contains("atp-tlp")
+                    || parameter.Definition.Name.Contains("MC"))
                     )
                 {
                     Parameters.Add(parameter);
